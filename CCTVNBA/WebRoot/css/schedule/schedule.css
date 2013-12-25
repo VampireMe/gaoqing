@@ -1,0 +1,58 @@
+
+/**
+* 赛程页面的样式
+* author: 高青
+* date: 2013-12-12
+* version: 0.0.0.1
+*/
+
+/*tabs 最外层 div 样式*/
+#schedule_outerFrameID{
+	width: 800px;
+	height: 700px;
+	margin: 30px auto;
+	/*background-color: #EDF9F0 ;*/
+	background-color: #CDAA7D;
+}
+
+/*按日更新赛程 div 样式*/
+#schedule_everydayUpdateID{
+	width: 780px;
+	height: 550px;
+	/*background-color: #EDF9F0;*/
+	background-color: #E0FFFF;
+}
+
+/*按月更新赛程 div 样式*/
+#schedule_monthUpdateID{
+	width: 780px;
+	height: 550px;
+	background-color: #EDF9F0;
+}
+
+/*更多更新赛程 div 样式*/
+#schedule_moreUpdateID{
+	width: 780px;
+	height: 550px;
+	background-color: #EDF9F0;
+}
+
+/*每日更新模块下的 条件区域 div 样式*/
+#everyday_conditionSectionID{
+	width: 80%;
+	height: 60px;
+	margin: 10px 30px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

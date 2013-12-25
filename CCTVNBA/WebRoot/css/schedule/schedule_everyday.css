@@ -1,0 +1,41 @@
+
+/**
+* 赛程更新下 的  每日更新赛程模块
+* author: 高青
+* date: 2013-12-12
+* version: 0.0.0.1
+*/
+
+/* 条件区域 div 样式*/
+#conditionSectionID{
+	width: 80%;
+	height: 40px;
+	margin: 20px 50px 10px;
+}
+
+/*数据区域 div 样式*/
+#dataSectionID{
+	width:95%;
+	height:460px;
+	margin: auto;
+}
+
+/*数据区域的 事件 div 样式*/
+#dataSection_eventID{
+	width:80%;
+	height: 28px;
+	padding: 10px 20px 5px 15px;
+	vertical-align: center;
+}
+
+/*内部表格的样式*/
+#dataTableID{
+	width: 100%;
+}
+
+
+
+
+
+
+
