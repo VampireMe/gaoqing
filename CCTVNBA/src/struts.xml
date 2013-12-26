@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+	<!-- 开发模式配置   Start -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="true" />
+    <!-- 开发模式配置   End -->
+
+    <package name="default" namespace="/" extends="struts-default,json-default">
+
+        <default-action-ref name="index" />
+		
+		<!-- 全局错误页面配置  Start -->
+        <global-results>
+            <result name="error">/error.jsp</result>
+        </global-results>
+        <!-- 全局错误页面配置  End -->
+		
+		<!--  全局异常处理配置 Start -->
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+        <!--  全局异常处理配置 End -->
+		
+		<!--  更新赛程  Start -->
+        <action name="updateSchedule" class = "com.ctvit.nba.action.ScheduleAction">
+            <result name = "updateSchedule" type = "json"></result>
+        </action>
+        
+        <!-- 每日赛程更新 -->
+        <action name="everydaySchedule" class = "com.ctvit.nba.action.ScheduleAction">
+            <result name = "everydayScheduleJson" type = "json"></result>
+        </action>
+        
+        <!-- 更新赛程  End -->
+        
+        
+    </package>
+    <!-- Add packages here -->
+
+</struts>
