@@ -37,14 +37,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		//当前模块下的更新方式
 		String updateMethod = XMLUtil.getUpdateMethod(urlByKindsCondition);
 		
-		//得到  播放地址
-		String broadcastName = "";
-		try {
-			broadcastName = (String)mapParam.get("broadcastName");
-		} catch (Exception e) {
-			//当参数中，没有  播放地址  参数时
-			broadcastName = null;
-		}
 		/*
 		 * 根据提供的地址，查询赛程数据
 		 */

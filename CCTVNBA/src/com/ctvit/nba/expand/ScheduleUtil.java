@@ -148,7 +148,7 @@ public class ScheduleUtil {
 		schedule.setHomeTeamID(Integer.toString(getValueByKey(jsonObject, "HomeTeamID")));
 		
 		//首先判断传递过来的 标识参数是否为空
-		if (tRemarkerAndParamsMap == null) {
+		if (tRemarkerAndParamsMap == null || tRemarkerAndParamsMap.size() == 0) {
 			
 		} else {
 			//得到对象标识
@@ -162,6 +162,8 @@ public class ScheduleUtil {
 				schedule.setBestVedio(updateSchedule.getBestVedio());
 				schedule.setBestImage(updateSchedule.getBestImage());
 				schedule.setRemarker(updateSchedule.getRemarker());
+				
+				tRemarkerAndParamsMap.remove(remarkerID);
 			}
 		}
 		//附加赛程信息
