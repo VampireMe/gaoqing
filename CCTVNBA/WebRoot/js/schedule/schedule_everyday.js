@@ -79,6 +79,33 @@ $(document).ready(function(){
 		iconCls: "icon-reload"
 	});
 	
+	//记录编辑状态和非编辑状态的变量
+	var editStatusOrNot = "",
+	
+	//验证是否通过变量
+	validPass = "";
+	 
+	/**
+	 * 拓展验证的类型，在“视频集锦、组图地址”验证为合法的链接地址
+	 * 2013-12-26
+	 * author: 高青
+	 */
+	$.extend($.fn.validatebox.defaults.rules,{
+		
+		//验证为合法的链接地址
+		url: {
+			//验证规则
+			validator: function(value, param){
+				//验证的正则表达式
+				var reg = new RegExp("^[Hh]([Tt]){2}[Pp][Ss]?://.*\..*$");
+				
+				return reg.test(value);
+			},
+			//不通过时的提示信息
+			message: "请填写正确的链接地址！"
+		}
+	});
+	
 	/**
 	 * 绑定表格
 	 * author: 高青
@@ -140,8 +167,9 @@ $(document).ready(function(){
 				//视频集锦
 				{field: 'BestVedio', title: '视频集锦', align: 'center' , width: 200,
 					 editor: {
-						 type: 'text',
+						 type: 'validatebox',
 						 options: {
+							 validType: 'url['+this.index+']',
 							 width: 200,
 							 height: 30
 						 }
@@ -151,8 +179,9 @@ $(document).ready(function(){
 				//组图地址
 				{field: 'BestImage', title: '组图地址', align: 'center'  , width: 200,
 					 editor: {
-						 type: 'text',
+						 type: 'validatebox',
 						 options: {
+							 validType: 'url',
 							 width: 200,
 							 height: 30
 						 }
@@ -169,18 +198,57 @@ $(document).ready(function(){
 							 height: 30
 						 }
 					 }
-				 }
+				 },
+				 
+				 //隐藏列
+				 {field: 'hiddenColumn',hidden: true,
+				  editor: {
+					  type: 'text'
+				  }}
 			   ]],
 			   
 			   //双击事件
 			   onDblClickCell: function(rowIndex, field, value){
 				   $(this).datagrid("beginEdit",rowIndex);
+				   
+				   //得到隐藏的列
+					var currentObj = $("td[field = 'hiddenColumn']")[rowIndex];
+					//将其索引放到其中
+					$(currentObj).val(rowIndex);
+				   
+				   //如果当前行的隐藏列的值不为空，则该列正在编辑
+				   if($(currentObj).val() !== null && $(currentObj).val() !== ""){
+					   $(this).datagrid("checkRow", rowIndex);
+				   }
+			   },
+			   
+			   //单击当前列事件
+			   onClickCell: function(rowIndex, field, value){
+				   //得到隐藏的列
+					var currentObj = $("td[field = 'hiddenColumn']")[rowIndex];
+					
+				   
+				   //如果当前行的隐藏列的值不为空，则该列正在编辑
+				   if($(currentObj).val() !== null && $(currentObj).val() !== ""){
+					   
+				   }
 			   },
 			   
 			   //加载完后的事件
 			   onLoadSuccess: function(json){
 				   if(json.total === 0){
 					   $.messager.alert('提示信息', '当前日期没有比赛，请重新选择！', 'info');
+				   }
+			   },
+			   
+			   //单击行事件
+			   onClickRow: function(rowIndex, rowData){
+				   //得到当前行的隐藏列
+				   var currentObj = $("td[field = 'hiddenColumn']")[rowIndex];
+				   
+				   //如果当前行的隐藏列的值不为空，则该列正在编辑
+				   if($(currentObj).val() !== null && $(currentObj).val() !== ""){
+					   $(this).datagrid("checkRow", rowIndex);
 				   }
 			   },
 			   
@@ -218,6 +286,7 @@ $(document).ready(function(){
 	 * author: 高青
 	 */
 	function maintain(){
+		
 		//得到选中的表格对象
 		var tableCheckedObject = table.datagrid('getChecked');
 		
@@ -230,8 +299,16 @@ $(document).ready(function(){
 				//得到当前选中的行的索引值
 				var index = table.datagrid("getRowIndex", tableCheckedObject[i] );
 				
+				//保持选中该行
+				table.datagrid("checkRow", index);
+				
 				//开始当前行的编辑状态
 				table.datagrid("beginEdit", index);
+				
+				//得到隐藏的列
+				var currentObj = $("td[field = 'hiddenColumn']")[index];
+				//将其索引放到其中
+				$(currentObj).val(index);
 			}
 		}
 	}
@@ -254,6 +331,9 @@ $(document).ready(function(){
 			
 			//取消所有选中的项
 			table.datagrid("unselectAll");
+			
+			//重置验证参数
+			validPass = "";
 		}
 	}
 	
@@ -275,7 +355,6 @@ $(document).ready(function(){
 	//得到  更新到外网  按钮对象
 	var update2OuterButton = $("#update2Outer");
 	update2OuterButton.on("click", function(){
-		
 		/*
 		 * 得到所有选中行的数据，并将该数据传到后台，存储到数据库和 XML 文件中
 		 */
@@ -288,17 +367,34 @@ $(document).ready(function(){
 			//停止编辑
 			endEditMethod(i);
 			
+			//得到当前选中的行的索引值
+			var index = table.datagrid("getRowIndex", tableObject[i] );
+			
+			//验证当前行
+			validPass += table.datagrid("validateRow", index) + ",";
+			
 			//组织好参数
 			params += "schedule.scheduleID="+tableObject[i].ScheduleID + "&" + 
-					  "schedule.remarker="+tableObject[i].Remarker + "&" + 
-					  "schedule.bestImage="+tableObject[i].BestImage + "&" + 
-					  "schedule.bestVedio="+tableObject[i].BestVedio + "&" +
-					  "schedule.broadcastName="+tableObject[i].BroadcastName + "&";
+			"schedule.remarker="+tableObject[i].Remarker + "&" + 
+			"schedule.bestImage="+tableObject[i].BestImage + "&" + 
+			"schedule.bestVedio="+tableObject[i].BestVedio + "&" +
+			"schedule.broadcastName="+tableObject[i].BroadcastName + "&";
 		}
 		//将 时间参数绑定上
 		var paramsSub = params.concat("date=" + getSpecifiedFormmaterDate($date.val()))
-							  .concat("&moduleName=schedule");
+		.concat("&moduleName=schedule");
 		
+		//正则表达式对象
+		var regexp = new RegExp('false');
+		
+	//验证通过
+	if(validPass !== "" && regexp.test(validPass)){
+	
+	$.messager.alert("提示信息", "请确认填写正确的维护信息！", "info", function(){
+		//重置验证参数
+		validPass = "";
+	});
+	}else{
 		//提交到后台
 		$.ajax({
 			type: 'post',
@@ -311,23 +407,35 @@ $(document).ready(function(){
 					$.messager.alert("提示信息", "更新到外网成功！", "info");
 					//将编辑后的数据，同步到当前表格中
 					table.datagrid("acceptChanges");
+					
+					//重置参数
+					params = "";
 				}else{
 					$.messager.alert("提示信息", "更新到外网失败，请重试！", "info");
+					
 					//将编辑后的数据，同步到当前表格中
 					table.datagrid("rejectChanges");
 				}
 				//取消所有选中的项
 				table.datagrid("unselectAll");
+				
+				//重置参数
+				params = "";
+				
+				//重置验证参数
+				validPass = "";
 			},
 			error: function(error){
 				$.messager.alert("提示信息", "更新到外网失败，请重试！", "info");
 				table.datagrid("rejectChanges");
 				
+				//重置参数
+				params = "";
+				
 				//取消所有选中的项
 				table.datagrid("unselectAll");
 			}
 		});
-	});
-	
+	}});
 	
 });
