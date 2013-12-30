@@ -3,16 +3,12 @@
  */
 package com.ctvit.nba.action;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
@@ -23,14 +19,13 @@ import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleParamEnum;
 import com.ctvit.nba.service.ScheduleService;
 import com.ctvit.nba.service.impl.ScheduleServiceImpl;
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * 赛程 Action
  * @author 高青
  * 2013-11-28
  */
-public class ScheduleAction extends ActionSupport{
+public class ScheduleAction extends BaseAction{
 
 	/**可序列化标识编号*/
 	private static final long serialVersionUID = 1L;
@@ -108,25 +103,8 @@ public class ScheduleAction extends ActionSupport{
 			
 			json = jsonArray.toString();
 			
-			//将信息写到前端
-			try {
-				
-				//设置输出格式
-				response.setContentType("text/html;charset=utf-8");
-				//初始化该对象
-				writer = response.getWriter();
-				response.getWriter().print(json);
-				writer.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}finally{
-				try {
-					response.getWriter().close();
-				} catch (IOException e) {
-					logger.info("json 数据流开始关闭出现异常");
-					e.printStackTrace();
-				}
-			}
+			//将数据写到前台
+			this.writeJson2Web(json);
 			return "everydayScheduleJson";
 		}else {
 			return ERROR;
@@ -180,13 +158,13 @@ public class ScheduleAction extends ActionSupport{
 				for (int i = 0; i < scheduleIDArray.length; i++) {
 					Schedule tempSchedule = new Schedule();
 					
-					tempSchedule.setScheduleID(scheduleIDArray[i]);
+					tempSchedule.setScheduleID(scheduleIDArray[i].trim());
 					tempSchedule.setBroadcastName(broadcastNameArray[i]);
 					tempSchedule.setBestVedio(bestVedioArray[i]);
 					tempSchedule.setBestImage(bestImageArray[i]);
 					tempSchedule.setRemarker(remarkerArray[i]);
 					
-					updateScheduleMap.put(scheduleIDArray[i], tempSchedule);
+					updateScheduleMap.put(scheduleIDArray[i].trim(), tempSchedule);
 				}
 			} 
 		}else {
@@ -214,6 +192,9 @@ public class ScheduleAction extends ActionSupport{
 		if (updateRemarker == 1) {
 			successRemarker = "success";
 		}
+		//将数据写到前台
+		this.writeJson2Web(successRemarker);
+		
 		return "updateSchedule";
 	}
 
