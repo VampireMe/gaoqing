@@ -47,13 +47,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 		/*
 		 * 更新到数据库
 		 */
-		//scheduleDao.updateSchedule2DB(scheduleListByURL);
+		scheduleDao.updateSchedule2DB(scheduleListByURL);
 		
 		/*
 		 * 更新指定  XML 文件
 		 */
-		List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
-		flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+		//List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
+		//flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
 		
 		return flag;
 	}

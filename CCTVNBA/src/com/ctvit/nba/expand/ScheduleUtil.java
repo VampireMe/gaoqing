@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import com.ctvit.nba.entity.Schedule;
@@ -138,8 +141,8 @@ public class ScheduleUtil {
 		schedule.setStatusENName(jsonObject.getString("StatusENName"));
 		schedule.setVisitingTeamID(Integer.toString(getValueByKey(jsonObject, "VisitingTeamID")));
 		schedule.setVisitingCNAlias(jsonObject.getString("VisitingCNAlias"));
-		schedule.setMatchLocalTime(new Date(jsonObject.getLong("MatchLocalTime")));
-		schedule.setMatchGTM8Time(new Date(jsonObject.getLong("MatchGTM8Time")));
+		schedule.setMatchLocalTime(switchDate(jsonObject.getLong("MatchLocalTime")));
+		schedule.setMatchGTM8Time(switchDate(jsonObject.getLong("MatchGTM8Time")));
 		schedule.setTotalQuarters(getValueByKey(jsonObject, "TotalQuarters"));
 		schedule.setVisitingCNName(jsonObject.getString("VisitingCNName"));
 		schedule.setVisitingENAlias(jsonObject.getString("VisitingENAlias"));
@@ -170,6 +173,33 @@ public class ScheduleUtil {
 		//schedule.setScheduleExpands(ScheduleExpands);
 		
 		return schedule;
+	}
+	
+	public static Date switchDate(Long longDate){
+		Date date = null;
+		
+		if (longDate != null ) {
+			//得到 DateTime 对象
+			DateTime dateTime = new DateTime(longDate);
+			
+			//将 DateTime 格式化后，转为 Date 类型
+			Integer year = dateTime.getYear();
+			Integer month = dateTime.getMonthOfYear();
+			Integer day = dateTime.getDayOfMonth();
+			Integer hour = dateTime.getHourOfDay();
+			Integer minute = dateTime.getMinuteOfHour();
+			Integer second = dateTime.getSecondOfMinute();
+			
+			String dateString = year.toString() + "-" +  month.toString() + "-" + 
+								day.toString() + " " + hour.toString() + ":" + minute.toString() + 
+								":" + second.toString();
+			
+			//格式化对象
+			DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+			date = dtf.parseDateTime(dateString).toDate();
+		}
+		
+		return date;
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * 数据库链接常用类
@@ -18,9 +19,6 @@ public class JDBCUtil {
 	
 	/**数据库链接的对象*/
 	private static Connection connection = null;
-	
-	/**发送sql语句的对象*/
-	private static PreparedStatement preparedStatement = null;
 	
 	/**
 	 * 建立数据库链接
@@ -33,10 +31,10 @@ public class JDBCUtil {
 		 String linkURL = XMLUtil.getPath("dbLinkURL");
 		
 		 //数据库链接用户名
-		 String username = "scott";
+		 String username = "cms";
 		
 		 //数据库链接用户名密码
-		 String password = "tiger";
+		 String password = "cms";
 		
 		 try {
 			 //加载驱动
@@ -59,15 +57,37 @@ public class JDBCUtil {
 	 * @author 高青
 	 * 2013-12-2
 	 * @param connection Connection链接数据库对象
-	 * @param sql sql语句
+	 * @return statement Statement对象
+	 */
+	public static Statement getStatement(Connection connection){
+		//发送sql语句的对象
+		Statement statement = null;
+		
+		try {
+			//发送 sql 语句
+			statement = connection.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return statement;
+	} 
+	
+	/**
+	 * 发送  sql 语句
+	 * @author 高青
+	 * 2013-12-2
+	 * @param connection Connection链接数据库对象
+	 * @param sql 发送的 sql 语句
 	 * @return preparedStatement PreparedStatement对象
 	 */
 	public static PreparedStatement getPreparedStatement(Connection connection, String sql){
+		//发送sql语句的对象
+		PreparedStatement preparedStatement = null;
+		
 		try {
 			//发送 sql 语句
 			preparedStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return preparedStatement;
@@ -95,6 +115,42 @@ public class JDBCUtil {
 		if (preparedStatement != null) {
 			try {
 				preparedStatement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		//关闭数据库链接
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 关闭数据库链接及发送  sql 的流
+	 * @author 高青
+	 * 2013-12-2
+	 * @param connection 数据库链接对象
+	 * @param preparedStatement 发送 sql 的对象 
+	 * @param resultSet 封装结果的  ResultSet 对象
+	 */
+	public static void closeConnection(Connection connection, Statement statement, 
+			ResultSet resultSet){
+		//关闭封装结果的对象
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		//关闭发送sql链接的对象
+		if (statement != null) {
+			try {
+				statement.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
