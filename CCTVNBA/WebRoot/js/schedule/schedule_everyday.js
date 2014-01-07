@@ -132,20 +132,21 @@ $(document).ready(function(){
 			//参数
 			queryParams:{
 				moduleName: 'schedule',
-				date: getSpecifiedFormmaterDate($date.val())
+				date: getSpecifiedFormmaterDate($date.val()),
+				updateMethod: 'date'
 			},
 			
 			//固定列定义
 			frozenColumns: [[
-			                 {field: 'ScheduleID', checkbox: true, width: 40}
+			                 {field: 'scheduleID', checkbox: true, width: 40}
 			                 ]],
 		    columns:[[  
-		        {field:'HomeCNAlias',title:'主队名称', align: 'center', width: 100},  
-		        {field:'VisitingCNAlias',title:'客队名称', align: 'center', width: 100},  
-		        {field:'StatusCNName',title:'比赛状态', align: 'center', width: 100},
+		        {field:'homeCNAlias',title:'主队名称', align: 'center', width: 100},  
+		        {field:'visitingCNAlias',title:'客队名称', align: 'center', width: 100},  
+		        {field:'statusCNName',title:'比赛状态', align: 'center', width: 100},
 		       
 		       //直播地址
-				{field: 'BroadcastName', title: '直播地址', align: 'center' , width: 200,
+				{field: 'broadcastName', title: '直播地址', align: 'center' , width: 200,
 		        	editor: {
 						 type: 'combobox',
 						 options: {
@@ -165,7 +166,7 @@ $(document).ready(function(){
 				 },
 				
 				//视频集锦
-				{field: 'BestVedio', title: '视频集锦', align: 'center' , width: 200,
+				{field: 'bestVedio', title: '视频集锦', align: 'center' , width: 200,
 					 editor: {
 						 type: 'validatebox',
 						 options: {
@@ -177,7 +178,7 @@ $(document).ready(function(){
 				 },
 				
 				//组图地址
-				{field: 'BestImage', title: '组图地址', align: 'center'  , width: 200,
+				{field: 'bestImage', title: '组图地址', align: 'center'  , width: 200,
 					 editor: {
 						 type: 'validatebox',
 						 options: {
@@ -189,7 +190,7 @@ $(document).ready(function(){
 				 },
 				
 				//备注
-				{field: 'Remarker', title: '备注', align: 'center', width: 200,
+				{field: 'remarker', title: '备注', align: 'center', width: 200,
 				//设置当前列为 输入框
 					 editor: {
 						 type: 'text',
@@ -275,6 +276,7 @@ $(document).ready(function(){
 		if($date.val() === "请选择日期" || $date.val() === ""){
 			$.messager.alert("提示信息","请选择更新的日期！", "info");
 		}else{
+			
 			//加载表格及其数据
 			tableMethod();
 		}
@@ -326,6 +328,17 @@ $(document).ready(function(){
 		if(tableCheckedObject.length === 0){
 			$.messager.alert("提示信息", "没有正在维护的数据！", "info");
 		}else{
+			
+			//得到当前行的 序列号值
+			for(var i = 0; i < tableCheckedObject.length; i++ ){
+				//得到当前选中的行的索引值
+				var index = table.datagrid("getRowIndex", tableCheckedObject[i] );
+				
+				//得到隐藏的列
+				var currentObj = $("td[field = 'hiddenColumn']")[index];
+				//将隐藏列置空
+				$(currentObj).val("");
+			}
 			//取消之前的操作
 			table.datagrid("rejectChanges");
 			
@@ -334,6 +347,8 @@ $(document).ready(function(){
 			
 			//重置验证参数
 			validPass = "";
+			
+			
 		}
 	}
 	
@@ -364,25 +379,26 @@ $(document).ready(function(){
 		var params = "";
 		
 		for(var i = 0; i < tableObject.length; i++){
-			//停止编辑
-			endEditMethod(i);
 			
 			//得到当前选中的行的索引值
 			var index = table.datagrid("getRowIndex", tableObject[i] );
+			
+			//停止编辑
+			endEditMethod(index);
 			
 			//验证当前行
 			validPass += table.datagrid("validateRow", index) + ",";
 			
 			//组织好参数
-			params += "schedule.scheduleID="+tableObject[i].ScheduleID + "&" + 
-			"schedule.remarker="+tableObject[i].Remarker + "&" + 
-			"schedule.bestImage="+tableObject[i].BestImage + "&" + 
-			"schedule.bestVedio="+tableObject[i].BestVedio + "&" +
-			"schedule.broadcastName="+tableObject[i].BroadcastName + "&";
+			params += "schedule.scheduleID="+tableObject[i].scheduleID + "&" + 
+			"schedule.remarker="+tableObject[i].remarker + "&" + 
+			"schedule.bestImage="+tableObject[i].bestImage + "&" + 
+			"schedule.bestVedio="+tableObject[i].bestVedio + "&" +
+			"schedule.broadcastName="+tableObject[i].broadcastName + "&";
 		}
 		//将 时间参数绑定上
 		var paramsSub = params.concat("date=" + getSpecifiedFormmaterDate($date.val()))
-		.concat("&moduleName=schedule");
+		.concat("&moduleName=schedule").concat("&updateMethod=date");
 		
 		//正则表达式对象
 		var regexp = new RegExp('false');
@@ -404,7 +420,12 @@ $(document).ready(function(){
 			success: function(str){
 				//更新成功
 				if(str === "success"){
-					$.messager.alert("提示信息", "更新到外网成功！", "info");
+					$.messager.alert("提示信息", "更新到外网成功！", "info",function(){
+						table.datagrid("load", {updateMethod: 'date', 
+												date: getSpecifiedFormmaterDate($date.val()),
+												loadRemarker: 'load',
+												moduleName: 'schedule'});
+					});
 					//将编辑后的数据，同步到当前表格中
 					table.datagrid("acceptChanges");
 					

@@ -51,7 +51,7 @@ public class BaseAction extends ActionSupport{
 			response.getWriter().print(t);
 			writer.flush();
 			
-			logger.info("写出数据成功！");
+			logger.info("写出数据" + t.toString() + "成功！");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{

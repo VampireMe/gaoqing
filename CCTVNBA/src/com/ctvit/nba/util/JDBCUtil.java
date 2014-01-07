@@ -21,12 +21,18 @@ public class JDBCUtil {
 	private static Connection connection = null;
 	
 	/**
+	 * 构造函数私有化
+	 */
+	private JDBCUtil(){}
+	
+	/**
 	 * 建立数据库链接
 	 * @author 高青
 	 * 2013-12-2
 	 * @return connection Connection链接对象
 	 */
 	public static Connection getConnection(){
+		
 		//数据库链接地址
 		 String linkURL = XMLUtil.getPath("dbLinkURL");
 		
@@ -36,18 +42,22 @@ public class JDBCUtil {
 		 //数据库链接用户名密码
 		 String password = "cms";
 		
-		 try {
-			 //加载驱动
-			Class.forName(XMLUtil.getPath("dbLinkDriver"));
-			
-			try {
-				//建立链接
-				connection = DriverManager.getConnection(linkURL, username, password);
-			} catch (SQLException e) {
+		//如果该数据链接对象不为空，表明已经连接过，否则，进行实例化
+		 if (connection == null) {
+				
+			 try {
+				 //加载驱动
+				Class.forName(XMLUtil.getPath("dbLinkDriver"));
+				
+				try {
+					//建立链接
+					connection = DriverManager.getConnection(linkURL, username, password);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 		return connection;
 	}

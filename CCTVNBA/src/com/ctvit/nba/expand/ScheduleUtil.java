@@ -113,11 +113,12 @@ public class ScheduleUtil {
 	 * 将JSONObject对象数据，封装到 Schedule 对象中f
 	 * @author 高青
 	 * 2013-12-2
+	 * @param updateMethod 更新方式
 	 * @param jsonObject JSONObject对象
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return schedule 封装数据后的Schedule对象
 	 */
-	public static Schedule getSchedule(JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
+	public static Schedule getSchedule(String updateMethod, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
 		//初始化数据
 		Schedule schedule = new Schedule();
 		
@@ -165,10 +166,12 @@ public class ScheduleUtil {
 				schedule.setBestVedio(updateSchedule.getBestVedio());
 				schedule.setBestImage(updateSchedule.getBestImage());
 				schedule.setRemarker(updateSchedule.getRemarker());
+				schedule.setOther(updateSchedule.getOther());
 				
 				tRemarkerAndParamsMap.remove(remarkerID);
 			}
 		}
+		schedule.setOther(updateMethod);
 		//附加赛程信息
 		//schedule.setScheduleExpands(ScheduleExpands);
 		

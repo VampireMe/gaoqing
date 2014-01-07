@@ -241,12 +241,13 @@ public class XMLUtil {
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
+	 * @param updateMethod 更新方式
 	 * @param partURL 部分链接地址
 	 * @param url 完整链接地址和
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return tlist 相应类型的数据对象
 	 */
-	public static <T> List<T> getTListByURL(String moduleName, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
+	public static <T> List<T> getTListByURL(String moduleName, String updateMethod, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
 		//初始化对象
 		List<T> tlist = new ArrayList<T>();
 		
@@ -258,7 +259,7 @@ public class XMLUtil {
 				//得到一个 JSONObject 对象
 				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
 				
-				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName);
+				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, updateMethod);
 				
 				//将当前的  Schedule 对象，放到 List<Schedule> 中
 				tlist.add(t);
@@ -305,10 +306,11 @@ public class XMLUtil {
 	 * @param jsonObject 封装数据的JSONArray对象
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @param moduleName 模块名称
+	 * @param updateMethod 更新方式
 	 * @return T
 	 */
 	public static <T> T getEntityByJSONObject(JSONObject jsonObject, Map<String, T> tRemarkerAndParamsMap,
-										String moduleName) throws Exception {
+										String moduleName, String updateMethod) throws Exception {
 		T t = null;
 		//包的前缀名
 		String packagePrefixName = getPath("packagePrefixName");
@@ -329,8 +331,8 @@ public class XMLUtil {
 		t = (T) forNameClass.newInstance();
 		
 		//调用特定的方法
-		Method getMethod = forNameClass.getMethod(invokeMethodName, JSONObject.class, Map.class);		
-		t = (T) getMethod.invoke(t, jsonObject, tRemarkerAndParamsMap);		
+		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class, Map.class);		
+		t = (T) getMethod.invoke(t, updateMethod, jsonObject, tRemarkerAndParamsMap);		
 				
 		return t;
 	}

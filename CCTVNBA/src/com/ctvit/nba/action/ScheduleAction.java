@@ -5,6 +5,7 @@ package com.ctvit.nba.action;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleParamEnum;
 import com.ctvit.nba.service.ScheduleService;
 import com.ctvit.nba.service.impl.ScheduleServiceImpl;
+import com.ctvit.nba.util.JDBCUtil;
 
 /**
  * 赛程 Action
@@ -42,7 +44,10 @@ public class ScheduleAction extends BaseAction{
 	/**显示第几页的数据*/
 	private String pageNumber;
 	
-	/**日期*/
+	/**更新方式*/
+	private String updateMethod;
+	
+	/**更新日期*/
 	private String date;
 	
 	/**赛程的   Service 类*/
@@ -60,21 +65,12 @@ public class ScheduleAction extends BaseAction{
 	/**操作成功的标识*/
 	private String successRemarker = "failure";
 	
+	/** 是否重新加载 */
+	private String loadRemarker;
+	
 	{
 		scheduleService = new ScheduleServiceImpl();
 		response = ServletActionContext.getResponse();
-	}
-	
-	/**
-	 * 将赛程信息 ，更新到数据库中及外网的文件中
-	 * @author 高青
-	 * 2013-12-23
-	 * @return updateScheduleStr 当前方法放回标识
-	 */
-	public String updateSchedule2File(){
-		
-		
-		return "updateScheduleStr";
 	}
 	
 	/**
@@ -84,7 +80,7 @@ public class ScheduleAction extends BaseAction{
 	 * @param null
 	 * @return everydayScheduleJson struts页面返回标识
 	 */
-	public String getEverydayScheduleJson(){
+	public void getEverydayScheduleJson(){
 		//输出对象
 		PrintWriter writer = null;
 		
@@ -95,19 +91,28 @@ public class ScheduleAction extends BaseAction{
 		if (date != null && !date.equals("")) {
 			mapParam.put(ScheduleParamEnum.date.getName(), date);
 			
+			//如果是重新加载，就不执行更新操作
+			if (loadRemarker == null) {
+				//将当前日期下的赛程，初始化到数据库中
+				try {
+					scheduleService.updateSchedule(moduleName, mapParam, null);
+				} catch (Exception e) {
+					logger.info("数据写入数据库和 xml 文件中，发生异常");
+					e.printStackTrace();
+				}
+			}
+			
 			//得到相应的 json 数据
-			String urlJson = scheduleService.getURLScheduleJSON(moduleName, mapParam);
+			List<Schedule> schedules = scheduleService.getSchedules(updateMethod, date);
 			
-			JSONObject jsonObject = new JSONObject(urlJson);
-			JSONArray jsonArray = jsonObject.getJSONArray("Schedules");
-			
+			JSONArray jsonArray = new JSONArray(schedules);
 			json = jsonArray.toString();
 			
 			//将数据写到前台
 			this.writeJson2Web(json);
-			return "everydayScheduleJson";
 		}else {
-			return ERROR;
+			json = null;
+			this.writeJson2Web(json);
 		}
 	}
 	
@@ -179,40 +184,25 @@ public class ScheduleAction extends BaseAction{
 	 * 2013-11-28
 	 * @return updateSchedule 页面跳转标识：更新赛程
 	 */
-	public String updateSchedule() {
+	public void updateSchedule() {
 		//得到处理后的 更新参数对象
 		Map<String, Schedule> updateScheduleMap = getUpdateScheduleMap(schedule);
 		
-		//将参数封装到  Map 对象中
-		Map<String, String> mapParam = new HashMap<String, String>();
-		mapParam.put("date", date);
+		//执行结果标识
+		int updateRemarker =0;
 		
-		int updateRemarker = scheduleService.updateSchedule(moduleName, mapParam, updateScheduleMap);
+		//更新到数据库、xml 文件中
+		if (updateMethod != null && updateMethod.length() != 0) {
+			updateRemarker = scheduleService.updateSchedule(moduleName, updateMethod.trim(), date, updateScheduleMap);
+		}
 		
 		if (updateRemarker == 1) {
 			successRemarker = "success";
 		}
 		//将数据写到前台
 		this.writeJson2Web(successRemarker);
-		
-		return "updateSchedule";
 	}
-
-	/**
-	 * @return the date
-	 */
-	@JSON(serialize  = false)
-	public String getDate() {
-		return date;
-	}
-
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(String date) {
-		this.date = date;
-	}
-
+	
 	/**
 	 * @return the moduleName
 	 */
@@ -297,4 +287,50 @@ public class ScheduleAction extends BaseAction{
 	public void setSuccessRemarker(String successRemarker) {
 		this.successRemarker = successRemarker;
 	}
+
+	/**
+	 * @return the updateMethod
+	 */
+	@JSON(serialize = false )
+	public String getUpdateMethod() {
+		return updateMethod;
+	}
+
+	/**
+	 * @param updateMethod the updateMethod to set
+	 */
+	public void setUpdateMethod(String updateMethod) {
+		this.updateMethod = updateMethod;
+	}
+
+	/**
+	 * @return the date
+	 */
+	@JSON(serialize = false)
+	public String getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	/**
+	 * @return the loadRemarker
+	 */
+	@JSON(serialize = false)
+	public String getLoadRemarker() {
+		return loadRemarker;
+	}
+
+	/**
+	 * @param loadRemarker the loadRemarker to set
+	 */
+	public void setLoadRemarker(String loadRemarker) {
+		this.loadRemarker = loadRemarker;
+	}
+	
 }

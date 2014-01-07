@@ -9,7 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -70,8 +74,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			
 			flag = 0;
 			e.printStackTrace();
-		}finally{
-			JDBCUtil.closeConnection(connection, statement, null);
 		}
 		return flag;
 	}
@@ -270,6 +272,159 @@ public class ScheduleDaoImpl implements ScheduleDao {
 					+schedule.getOther()+"') ";
 		}
 		return sql;
+	}
+
+	@Override
+	public int maintainSchedule(Connection connection, Map<String, Schedule> tRemarkerAndParamsMap) {
+		//成功标示符
+		int flag = 0;
+		
+		//数据库连接对象
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			connection.setAutoCommit(false);
+			
+			//根据传递过来  tRemarkerAndParamsMap 得到数据库中相应的信息
+			if (tRemarkerAndParamsMap != null && tRemarkerAndParamsMap.size() != 0) {
+				Set<String> keySet = tRemarkerAndParamsMap.keySet();
+				Iterator<String> iterator = keySet.iterator();
+				
+				String sql = "update TAB_NBA_SCHEDULE set BroadcastName = ?, BestVedio = ?, " +
+							 "BestImage = ?, Remarker = ? where ScheduleID = ? ";
+				preparedStatement = JDBCUtil.getPreparedStatement(connection, sql);
+				
+				try {
+					while (iterator.hasNext()) {
+						//得到 key
+						String key = iterator.next();
+						//得到 Schedule 对象
+						Schedule schedule = tRemarkerAndParamsMap.get(key);
+						
+						//绑定参数
+						preparedStatement.setString(1, schedule.getBroadcastName());
+						preparedStatement.setString(2, schedule.getBestVedio());
+						preparedStatement.setString(3, schedule.getBestImage());
+						preparedStatement.setString(4, schedule.getRemarker());
+						preparedStatement.setString(5, schedule.getScheduleID());
+						
+						preparedStatement.addBatch();
+					}
+					//执行更新
+					int[] executeBatch = preparedStatement.executeBatch();
+					connection.commit();
+					
+					flag = 1;
+					
+					//日志记录
+					log.info("更新 " + executeBatch.length + "条数据，成功！");
+				} catch (SQLException e) {
+					log.info("维护赛程信息出现异常！");
+					e.printStackTrace();
+				}finally{
+					JDBCUtil.closeConnection(null, preparedStatement, null);
+				}
+			}
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		return flag;
+	}
+	
+	@Override
+	public List<Schedule> getScheduleById(Connection connection, String updateMethod, String date) {
+		//Schedule 集合对象
+		List<Schedule> schedules = new ArrayList<Schedule>();
+		
+		//判断参数是否为空
+		if (date != null) {
+			
+			//数据操作对象
+			PreparedStatement preparedStatement = null;
+			ResultSet querySet = null;
+			
+			//查询制定 id 下的赛程数据
+			try {
+				//sql 语句
+				String sql = "select * from TAB_NBA_SCHEDULE Where Other = ? and MATCHGTM8TIME = to_date(?, 'yyyy-MM-dd') ";
+				preparedStatement = JDBCUtil.getPreparedStatement(connection, sql);
+				//绑定参数
+				preparedStatement.setString(1, updateMethod);
+				preparedStatement.setString(2, date);
+				
+				querySet = preparedStatement.executeQuery();
+				
+				while (querySet.next()) {
+					Schedule schedule = new Schedule();
+					schedule = setScheduleFromResultSet(querySet);
+					
+					//添加到 Schedule 集合数据对象中
+					schedules.add(schedule);
+				}
+			} catch (SQLException e) {
+				log.info("根据 主键 id 查询赛程信息出现异常！");
+				e.printStackTrace();
+			}finally{
+				JDBCUtil.closeConnection(null, preparedStatement, querySet);
+			}
+		}
+		return schedules;
+	}
+	
+	/**
+	 * 从 ResultSet 对象中得到数据，封装到 Schedule 中
+	 * @author 高青
+	 * 2014-1-3
+	 * @param resultSet ResultSet对象
+	 * @return schedule Schedule对象
+	 */
+	public Schedule setScheduleFromResultSet(ResultSet resultSet){
+		Schedule schedule = new Schedule();
+		
+		try {
+			//将 resultSet 中的数据，封装到 schedule 中
+			schedule.setHomeCNAlias(resultSet.getString("HomeCNAlias"));
+			schedule.setVisitingENName(resultSet.getString("VisitingENName"));
+			schedule.setHomeENName(resultSet.getString("HomeENName"));
+			schedule.setHomeCNName(resultSet.getString("HomeCNName"));
+			schedule.setVisitingSmallLogo(resultSet.getString("VisitingSmallLogo"));
+			schedule.setHomeLargerLogo(resultSet.getString("HomeLargerLogo"));
+			
+			schedule.setHomeTeamScore(resultSet.getInt("HomeTeamScore"));
+			schedule.setVisitingLargerLogo(resultSet.getString("VisitingLargerLogo"));
+			schedule.setHomeSmallLogo(resultSet.getString("HomeSmallLogo"));
+			
+			schedule.setScheduleID(resultSet.getString("ScheduleID"));
+			schedule.setVisitingTeamScore(resultSet.getInt("VisitingTeamScore"));
+			
+			schedule.setHomeENAlias(resultSet.getString("HomeENAlias"));
+			schedule.setStatusCNName(resultSet.getString("StatusCNName"));
+			schedule.setStatusENName(resultSet.getString("StatusENName"));
+			schedule.setVisitingTeamID(resultSet.getString("VisitingTeamID"));
+			schedule.setVisitingCNAlias(resultSet.getString("VisitingCNAlias"));
+			schedule.setMatchLocalTime(resultSet.getDate("MatchLocalTime"));
+			schedule.setMatchGTM8Time(resultSet.getDate("MatchGTM8Time"));
+			schedule.setTotalQuarters(resultSet.getInt("TotalQuarters"));
+			schedule.setVisitingCNName(resultSet.getString("VisitingCNName"));
+			schedule.setVisitingENAlias(resultSet.getString("VisitingENAlias"));
+			schedule.setMatchTypeCNName(resultSet.getString("MatchTypeCNName"));
+			schedule.setMatchTypeENName(resultSet.getString("MatchTypeENName"));
+			schedule.setHomeTeamID(resultSet.getString("HomeTeamID"));
+			
+			schedule.setBroadcastName(resultSet.getString("BroadcastName"));
+			schedule.setBestVedio(resultSet.getString("BestVedio"));
+			schedule.setBestImage(resultSet.getString("BestImage"));
+			schedule.setRemarker(resultSet.getString("Remarker"));
+			schedule.setHomeScore(resultSet.getInt("HomeScore"));
+			schedule.setVisitingScore(resultSet.getInt("VisitingScore"));
+			schedule.setQuarter(resultSet.getInt("Quarter"));
+			schedule.setOther(resultSet.getString("Other"));
+		} catch (SQLException e) {
+			log.info("从数据库查询数据，封装到  Schedule 对象中，出现异常！");
+			e.printStackTrace();
+		}
+		return schedule;
 	}
 
 }

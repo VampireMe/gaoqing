@@ -3,10 +3,15 @@
  */
 package com.ctvit.nba.service.impl;
 
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 import com.ctvit.nba.dao.ScheduleDao;
@@ -14,8 +19,10 @@ import com.ctvit.nba.dao.impl.ScheduleDaoImpl;
 import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleUtil;
 import com.ctvit.nba.service.ScheduleService;
+import com.ctvit.nba.util.JDBCUtil;
 import com.ctvit.nba.util.URLContentUtil;
 import com.ctvit.nba.util.XMLUtil;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * 赛程更新 Service 的实现类
@@ -23,6 +30,12 @@ import com.ctvit.nba.util.XMLUtil;
  * 2013-11-28
  */
 public class ScheduleServiceImpl implements ScheduleService {
+	
+	/** 日志对象 */
+	private Logger log = Logger.getLogger(ScheduleServiceImpl.class);
+	
+	/** 判断执行次数的 Map 对象 */
+	private static Map<String, Map<String, Integer>> countMap = new HashMap<String, Map<String,Integer>>();
 	
 	/**赛程 的  Dao 类*/
 	private ScheduleDao scheduleDao = new ScheduleDaoImpl();
@@ -42,19 +55,47 @@ public class ScheduleServiceImpl implements ScheduleService {
 		 */
 		String partURL = XMLUtil.getPartURL(urlByKindsCondition);
 		String url = urlByKindsCondition.get(updateMethod).get(partURL);
-		List<Schedule> scheduleListByURL = XMLUtil.getTListByURL(moduleName, partURL, url, tRemarkerAndParamsMap);
+		List<Schedule> scheduleListByURL = XMLUtil.getTListByURL(moduleName, updateMethod, partURL, url, tRemarkerAndParamsMap);
 		
-		/*
-		 * 更新到数据库
-		 */
-		scheduleDao.updateSchedule2DB(scheduleListByURL);
+		//判断当前更新方式下，是否初始化过数据
+		String key = (String) mapParam.get(updateMethod);
+		Map<String, Integer> map = countMap.get(updateMethod);
 		
-		/*
-		 * 更新指定  XML 文件
-		 */
-		//List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
-		//flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
-		
+		if (map == null) {
+			/*
+			 * 更新到数据库
+			 */
+			scheduleDao.updateSchedule2DB(scheduleListByURL);
+			
+			/*
+			 * 更新指定  XML 文件
+			 */
+			List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
+			flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+			
+			Map<String, Integer> innerMap = new HashMap<String, Integer>();
+			innerMap.put(key, 1);
+			countMap.put(updateMethod, innerMap);
+		}else {
+			if (map.get(key) == null) {
+				/*
+				 * 更新到数据库
+				 */
+				scheduleDao.updateSchedule2DB(scheduleListByURL);
+				
+				/*
+				 * 更新指定  XML 文件
+				 */
+				List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
+				flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+				
+				Map<String, Integer> innerMap = new HashMap<String, Integer>();
+				innerMap.put(key, 1);
+				countMap.put(updateMethod, innerMap);
+			}else {
+				log.info("当前更新方式为：" + updateMethod + ",更新的 key 为：" + key + ",已经初始化过数据，不在初始化了！");
+			}
+		}
 		return flag;
 	}
 	
@@ -191,6 +232,46 @@ public class ScheduleServiceImpl implements ScheduleService {
 		
 		jsonSchedule = URLContentUtil.getURLContent(completeURL);
 		return jsonSchedule;
+	}
+
+	@Override
+	public int updateSchedule(String moduleName, String updateMethod, String date,
+			Map<String, Schedule> tRemarkerAndParamsMap) {
+		int flag = 0;
+		
+		//建立数据库连接
+		Connection connection = JDBCUtil.getConnection();
+		
+		//更新到数据库中
+		int maintainFlag = scheduleDao.maintainSchedule(connection, tRemarkerAndParamsMap);
+		
+		//得到 Schedule 集合对象
+		List<Schedule> schedules = getSchedules(updateMethod, date);
+		
+		/*
+		 * 将得到更改后的 Schedule集合对象更新到 xml 文件中
+		 */
+		List<Element> childrenElementList = getChildrenElementList(schedules);
+		flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+		
+		return flag;
+	}
+	
+	@Override
+	public List<Schedule> getSchedules(String updateMethod, String date) {
+		//得到数据库更新后的数据对象集合
+		List<Schedule> schedules = new ArrayList<Schedule>();
+		
+		//建立数据库连接
+		Connection connection = JDBCUtil.getConnection();
+		
+		try {
+			schedules = scheduleDao.getScheduleById(connection, updateMethod, date);
+		} catch (Exception e) {
+			log.info("查询类别为：" + updateMethod + "的，标识为：" + date + "的数据出现异常！");
+			e.printStackTrace();
+		}
+		return schedules;
 	}
 
 }
