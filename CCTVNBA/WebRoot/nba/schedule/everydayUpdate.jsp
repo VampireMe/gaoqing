@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a class = "easyui-linkbutton" id = "update2Outer"
 									data-options = "iconCls:'icon-redo' "
 								   >更&nbsp;新&nbsp;到&nbsp;外&nbsp;网</a>
-				<a class = "easyui-linkbutton" 
+				<a class = "easyui-linkbutton" id = "matchBasicInfo"
 									data-options = "iconCls:'icon-print' "
 								   >比&nbsp;赛&nbsp;基&nbsp;本&nbsp;信&nbsp;息</a>
 				<a class = "easyui-linkbutton" 
@@ -62,6 +62,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<!-- 内部  content End -->
 	</form>
+	
+	<!-- 比赛基本信息模块  Start -->
+	<div id="basicInfoOuter">  
+    	Dialog Content.  
+	</div>  
+	
+	<!--<div id = "basicInfoOuter" class = "easyui-window" title = "比赛信息" 
+		style = "width:600px;height:400px;"  
+        data-options = "iconCls:'icon-save',modal:true, closed: true">  
+	    <div class = "easyui-layout" data-options = "fit:true">  
+	        <div id = "basicInfoControl" data-options = "region:'north',split:true" style = "height:100px">
+	        	<a class = "easyui-linkbutton" data-options = "">获得该场比赛的基本信息</a> &nbsp;&nbsp;
+				<a class = "easyui-linkbutton" data-options = "">获得双方对阵信息和换人列表</a> &nbsp;&nbsp;
+				<a class = "easyui-linkbutton" data-options = "">主队客队最近几场比赛信息</a> &nbsp;&nbsp;
+	        </div>  
+	        <div id = "basicInfoData" data-options = "region:'center'">  
+	            The Content.  
+	        </div>  
+	    </div>  
+	</div>  
+	
+	
+	
+	
+	
+	
+	--><!-- 比赛基本信息模块  End -->
+	
 </div>
 
 <!-- js框架 文件引用   start -->

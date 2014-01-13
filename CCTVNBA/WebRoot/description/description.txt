@@ -1,0 +1,5 @@
+一、赛程模块的通用变量名意义：
+	
+	1、moduleName: 整体的模块名称，如赛程模块下的 moduleName 为：schedule
+	
+	2、innerUpdateModule:整体的模块下的内部更新的模块，其值是在各个 Enum 中定义好的，如：DATE_SCHEDULE_LIST

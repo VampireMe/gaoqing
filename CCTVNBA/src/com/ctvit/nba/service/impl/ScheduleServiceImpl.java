@@ -19,6 +19,7 @@ import com.ctvit.nba.dao.impl.ScheduleDaoImpl;
 import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleUtil;
 import com.ctvit.nba.service.ScheduleService;
+import com.ctvit.nba.util.CommonUtil;
 import com.ctvit.nba.util.JDBCUtil;
 import com.ctvit.nba.util.URLContentUtil;
 import com.ctvit.nba.util.XMLUtil;
@@ -34,33 +35,39 @@ public class ScheduleServiceImpl implements ScheduleService {
 	/** 日志对象 */
 	private Logger log = Logger.getLogger(ScheduleServiceImpl.class);
 	
-	/** 判断执行次数的 Map 对象 */
+	/** 判断执行次数的 Map 对象（外部 key 放唯一查询标识，内部 key 放唯一查询条件标识，在外部和内部形成唯一区别标识） */
 	private static Map<String, Map<String, Integer>> countMap = new HashMap<String, Map<String,Integer>>();
 	
 	/**赛程 的  Dao 类*/
 	private ScheduleDao scheduleDao = new ScheduleDaoImpl();
 
 	@Override
-	public <T> int updateSchedule(String moduleName, Map<String, T> mapParam,  Map<String, Schedule> tRemarkerAndParamsMap) {
+	public <T> int updateSchedule(String moduleName, Map<String, Map<String, T>> uniqueRemarkerAndConditionMap,  Map<String, Schedule> tRemarkerAndParamsMap) {
 		int flag = 0;
 		
 		//得到 访问链接地址
-		Map<String, Map<String, String>> urlByKindsCondition = ScheduleUtil.getURLByKindsCondition(moduleName, mapParam);
+		Map<String, Map<String, String>> urlByKindsCondition = ScheduleUtil.getURLByKindsCondition(moduleName, uniqueRemarkerAndConditionMap);
 		
-		//当前模块下的更新方式
-		String updateMethod = XMLUtil.getUpdateMethod(urlByKindsCondition);
+		//链接地址标识
+		String partURLRemarker = XMLUtil.getInnerUpdateModule(urlByKindsCondition);
 		
 		/*
 		 * 根据提供的地址，查询赛程数据
 		 */
 		String partURL = XMLUtil.getPartURL(urlByKindsCondition);
-		String url = urlByKindsCondition.get(updateMethod).get(partURL);
-		List<Schedule> scheduleListByURL = XMLUtil.getTListByURL(moduleName, updateMethod, partURL, url, tRemarkerAndParamsMap);
+		String url = urlByKindsCondition.get(partURLRemarker).get(partURL);
+		List<Schedule> scheduleListByURL = XMLUtil.getTListByURL(moduleName, partURLRemarker, partURL, url, tRemarkerAndParamsMap);
 		
 		//判断当前更新方式下，是否初始化过数据
-		String key = (String) mapParam.get(updateMethod);
-		Map<String, Integer> map = countMap.get(updateMethod);
+		Map<String, Integer> map = countMap.get(partURLRemarker);
 		
+		/*
+		 * 组织 查询条件标识 
+		 */
+		String selectConditionRemarker = CommonUtil.getConditionRemarker(uniqueRemarkerAndConditionMap);
+		
+		//更新到 XML 文件的更新标识(当前的 链接地址+查询条件条件标识，形成唯一的 XML 文件)
+		String xmlUpdateRemarker = partURLRemarker + "_" + selectConditionRemarker;
 		if (map == null) {
 			/*
 			 * 更新到数据库
@@ -71,13 +78,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 			 * 更新指定  XML 文件
 			 */
 			List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
-			flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+			flag = XMLUtil.updateData2XML(moduleName, xmlUpdateRemarker, childrenElementList);
 			
 			Map<String, Integer> innerMap = new HashMap<String, Integer>();
-			innerMap.put(key, 1);
-			countMap.put(updateMethod, innerMap);
+			
+			//将查询条件标识作为 key ，形成唯一的区分查询标识
+			innerMap.put(selectConditionRemarker, 1);
+			countMap.put(partURLRemarker, innerMap);
 		}else {
-			if (map.get(key) == null) {
+			if (map.get(selectConditionRemarker) == null) {
 				/*
 				 * 更新到数据库
 				 */
@@ -87,13 +96,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 				 * 更新指定  XML 文件
 				 */
 				List<Element> childrenElementList = getChildrenElementList(scheduleListByURL);
-				flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+				flag = XMLUtil.updateData2XML(moduleName, xmlUpdateRemarker, childrenElementList);
 				
 				Map<String, Integer> innerMap = new HashMap<String, Integer>();
-				innerMap.put(key, 1);
-				countMap.put(updateMethod, innerMap);
+				innerMap.put(selectConditionRemarker, 1);
+				countMap.put(selectConditionRemarker, innerMap);
 			}else {
-				log.info("当前更新方式为：" + updateMethod + ",更新的 key 为：" + key + ",已经初始化过数据，不在初始化了！");
+				log.info("当前更新方式为：" + partURLRemarker + ",更新的 key 为：" + selectConditionRemarker + ",已经初始化过数据，不在初始化了！");
 			}
 		}
 		return flag;
@@ -219,25 +228,30 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public String getURLScheduleJSON(String moduleName, Map<String, String> paramMap) {
+	public String getURLScheduleJSON(String moduleName, Map<String, Map<String, String>> uniqueRemarkerAndConditionMap) {
 		String jsonSchedule = "";
 		//得到相应的 url
-		Map<String, Map<String, String>> urlByKindsCondition = ScheduleUtil.getURLByKindsCondition(moduleName, paramMap);
+		Map<String, Map<String, String>> urlByKindsCondition = ScheduleUtil.getURLByKindsCondition(moduleName, uniqueRemarkerAndConditionMap);
 		//得到更新方式
-		String updateMethod = XMLUtil.getUpdateMethod(urlByKindsCondition);
+		String innerUpdateModule = XMLUtil.getInnerUpdateModule(urlByKindsCondition);
 		//得到部分链接地址
 		String partURL = XMLUtil.getPartURL(urlByKindsCondition);
 		//得到 url 
-		String completeURL = urlByKindsCondition.get(updateMethod).get(partURL);
+		String completeURL = urlByKindsCondition.get(innerUpdateModule).get(partURL);
 		
 		jsonSchedule = URLContentUtil.getURLContent(completeURL);
 		return jsonSchedule;
 	}
 
 	@Override
-	public int updateSchedule(String moduleName, String updateMethod, String date,
-			Map<String, Schedule> tRemarkerAndParamsMap) {
+	public <T> int updateSchedule2Outer(String moduleName, Map<String, Schedule> tRemarkerAndParamsMap, Map<String, Map<String, T>> uniqueRemarkerAndConditionMap) {
 		int flag = 0;
+		
+		//得到唯一链接模块标识
+		String uniqueMoeduleRemarker = CommonUtil.getMapKey(uniqueRemarkerAndConditionMap);
+		
+		//得到更新条件date
+		String date = (String) uniqueRemarkerAndConditionMap.get(uniqueMoeduleRemarker).get("date");
 		
 		//建立数据库连接
 		Connection connection = JDBCUtil.getConnection();
@@ -246,19 +260,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 		int maintainFlag = scheduleDao.maintainSchedule(connection, tRemarkerAndParamsMap);
 		
 		//得到 Schedule 集合对象
-		List<Schedule> schedules = getSchedules(updateMethod, date);
+		List<Schedule> schedules = getSchedules(uniqueMoeduleRemarker, date);
 		
 		/*
 		 * 将得到更改后的 Schedule集合对象更新到 xml 文件中
 		 */
 		List<Element> childrenElementList = getChildrenElementList(schedules);
-		flag = XMLUtil.updateData2XML(moduleName, updateMethod, childrenElementList);
+		
+		//得到更新到 xml 文件的标识变量
+		String xmlFolderRemarker = uniqueMoeduleRemarker + "_" + CommonUtil.getConditionRemarker(uniqueRemarkerAndConditionMap);
+		flag = XMLUtil.updateData2XML(moduleName, xmlFolderRemarker, childrenElementList);
 		
 		return flag;
 	}
 	
 	@Override
-	public List<Schedule> getSchedules(String updateMethod, String date) {
+	public List<Schedule> getSchedules(String innerUpdateModule, String date) {
 		//得到数据库更新后的数据对象集合
 		List<Schedule> schedules = new ArrayList<Schedule>();
 		
@@ -266,9 +283,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Connection connection = JDBCUtil.getConnection();
 		
 		try {
-			schedules = scheduleDao.getScheduleById(connection, updateMethod, date);
+			schedules = scheduleDao.getScheduleById(connection, innerUpdateModule, date);
 		} catch (Exception e) {
-			log.info("查询类别为：" + updateMethod + "的，标识为：" + date + "的数据出现异常！");
+			log.info("查询类别为：" + innerUpdateModule + "的，标识为：" + date + "的数据出现异常！");
 			e.printStackTrace();
 		}
 		return schedules;

@@ -21,40 +21,39 @@ public interface ScheduleService {
 	 * 2013-11-28
 	 * @param moduleName 当前模块名称
 	 * @param mapParam 参数 Map 对象
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @param tRemarkerAndParamsMap 更新唯一标识和查询条件map对象的集合数据
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
-	public <T> int updateSchedule(String moduleName, Map<String, T> mapParam , Map<String, Schedule> tRemarkerAndParamsMap);
+	public <T> int updateSchedule(String moduleName,  Map<String, Map<String, T>> uniqueRemarkerAndConditionMap , Map<String, Schedule> tRemarkerAndParamsMap);
 	
 	/**
 	 * 赛程维护操作
 	 * @author 高青
 	 * 2014-1-2
-	 * @param moduleName 当前模块名称
-	 * @param updateMethod 更新方式
+	 * @param uniqueRemarkerAndConditionMap 更新唯一标识和查询条件map对象的集合数据
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
-	public int updateSchedule(String moduleName, String updateMethod, String date, Map<String, Schedule> tRemarkerAndParamsMap);
+	public <T> int updateSchedule2Outer(String moduleName, Map<String, Schedule> tRemarkerAndParamsMap, Map<String, Map<String, T>> uniqueRemarkerAndConditionMap);
 	
 	/**
 	 * 得到链接下的赛程json数据
 	 * @author 高青
 	 * 2013-12-13
 	 * @param moduleName 模块名称
-	 * @param paramMap 参数的 map 对象
+	 * @param uniqueRemarkerAndConditionMap 更新唯一标识和查询条件map对象的集合数据 
 	 * @return String json字符串
 	 */
-	public String getURLScheduleJSON(String moduleName, Map<String, String> paramMap);
+	public String getURLScheduleJSON(String moduleName,  Map<String, Map<String, String>> uniqueRemarkerAndConditionMap);
 	
 	/**
 	 * 得到 Sschedule 数据集合
 	 * @author 高青
 	 * 2014-1-6
-	 * @param updateMethod 更新方式
+	 * @param innerUpdateModule 更新方式
 	 * @param date 更新的日期
 	 * @return List<Schedule>  Sschedule 数据集合
 	 */
-	public List<Schedule> getSchedules(String updateMethod, String date);
+	public List<Schedule> getSchedules(String innerUpdateModule, String date);
 	
 }

@@ -133,7 +133,7 @@ $(document).ready(function(){
 			queryParams:{
 				moduleName: 'schedule',
 				date: getSpecifiedFormmaterDate($date.val()),
-				updateMethod: 'date'
+				innerUpdateModule: 'SCHEDULES'
 			},
 			
 			//固定列定义
@@ -398,7 +398,7 @@ $(document).ready(function(){
 		}
 		//将 时间参数绑定上
 		var paramsSub = params.concat("date=" + getSpecifiedFormmaterDate($date.val()))
-		.concat("&moduleName=schedule").concat("&updateMethod=date");
+		.concat("&moduleName=schedule").concat("&innerUpdateModule=SCHEDULES");
 		
 		//正则表达式对象
 		var regexp = new RegExp('false');
@@ -414,14 +414,14 @@ $(document).ready(function(){
 		//提交到后台
 		$.ajax({
 			type: 'post',
-			url: 'updateSchedule!updateSchedule.action',
+			url: 'updateSchedule!updateSchedule2Outer.action',
 			data: paramsSub,
 			dataType: 'text',
 			success: function(str){
 				//更新成功
 				if(str === "success"){
 					$.messager.alert("提示信息", "更新到外网成功！", "info",function(){
-						table.datagrid("load", {updateMethod: 'date', 
+						table.datagrid("load", {innerUpdateModule: 'SCHEDULES', 
 												date: getSpecifiedFormmaterDate($date.val()),
 												loadRemarker: 'load',
 												moduleName: 'schedule'});
@@ -458,5 +458,105 @@ $(document).ready(function(){
 			}
 		});
 	}});
+	
+	/**
+	 * 比赛基本信息部分
+	 */
+	
+	/**
+	 * 单击比赛基本操作
+	 * 2014-01-08
+	 * @author: 高青
+	 * @returns subScheduleIDs 赛程ID字符串集合
+	 */
+	function getCheckedScheduleID(){
+		//得到选中的赛程数据的 id 
+		var checkedSchedule = table.datagrid("getChecked");
+		
+		var initScheduleIDs = "",
+			subScheduleIDs = "";
+		
+		for ( var i = 0; i < checkedSchedule.length; i++) {
+			//得到赛程编号的字符集
+			initScheduleIDs += checkedSchedule[i].scheduleID + ",";
+		}
+		//将最后一个“，”截取掉
+		subScheduleIDs = initScheduleIDs.substring(0, initScheduleIDs.length - 1);
+		
+		return subScheduleIDs;
+	}
+	
+	/**
+	 * ajax 请求的方法
+	 * 2014-01-08
+	 * @author: 高青
+	 * @param jsonObj json格式的参数对象
+	 */
+	function ajaxMethod(jsonObj){
+		$.ajax({
+			type: 'get',
+			async: true,
+			dateType: 'json',
+			url: '',
+			data: jsonObj,
+			success: function(){
+				$.messager.alert("提示信息", "更新成功！", "info");
+			},
+			error: function(){
+				$.messager.alert("提示信息", "更新失败，请重试！", "info");
+			}
+		});
+	}
+	
+	//得到 比赛基本信息 按钮对象
+	var $matchBasicInfo = $("#matchBasicInfo");
+	
+	//初始化 比赛信息面板
+	$("#basicInfoOuter").dialog({
+		title: '比赛信息',
+		width: 800,
+		height: 550,
+		modal: true,
+		closed: true,
+		minimizable: true,
+		maximizable: true,
+		closable: true,
+		resizable: true,
+		toolbar: [{
+			text: '获得该场比赛的基本信息',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleStr = getCheckedScheduleID();
+				
+				//执行请求
+				ajaxMethod({});
+				
+				alert(getCheckedScheduleID());
+			}
+		}, '-', {
+			text: '获得双方对阵信息和换人列表',
+			iconCls: 'icon-print',
+			handler: function(){
+				
+			}
+		}, '-', {
+			text: '主队客队最近几场比赛信息',
+			iconCls: 'icon-print',
+			handler: function(){}
+		}]
+	});
+	
+	//绑定单击事件
+	$matchBasicInfo.bind("click", function(){
+		var checkedSchedule = table.datagrid("getChecked");
+		//判断是否选中赛程
+		if(checkedSchedule.length === 0){
+			$.messager.alert("提示信息", "请选择赛程！" ,"info");
+		}else{
+			$("#basicInfoOuter").dialog('open');
+		}
+		
+	});
 	
 });

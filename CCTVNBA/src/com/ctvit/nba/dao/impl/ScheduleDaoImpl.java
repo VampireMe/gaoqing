@@ -333,7 +333,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 	
 	@Override
-	public List<Schedule> getScheduleById(Connection connection, String updateMethod, String date) {
+	public List<Schedule> getScheduleById(Connection connection, String innerUpdateModule, String date) {
 		//Schedule 集合对象
 		List<Schedule> schedules = new ArrayList<Schedule>();
 		
@@ -350,7 +350,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 				String sql = "select * from TAB_NBA_SCHEDULE Where Other = ? and MATCHGTM8TIME = to_date(?, 'yyyy-MM-dd') ";
 				preparedStatement = JDBCUtil.getPreparedStatement(connection, sql);
 				//绑定参数
-				preparedStatement.setString(1, updateMethod);
+				preparedStatement.setString(1, innerUpdateModule);
 				preparedStatement.setString(2, date);
 				
 				querySet = preparedStatement.executeQuery();

@@ -96,17 +96,17 @@ public class ScheduleUtilTest {
 	@Test
 	public void testGetURLByKindsCondition() {
 		
-		//得到 updateMethod_partURL_url_map 对象
-		Map<String, Map<String, String>> updateMethod_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
+		//得到 innerUpdateModule_partURL_url_map 对象
+		Map<String, Map<String, String>> innerUpdateModule_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
 		
 		//得到更新方式
-		String updateMethod = XMLUtil.getUpdateMethod(updateMethod_partURL_url_map);
+		String innerUpdateModule = XMLUtil.getInnerUpdateModule(innerUpdateModule_partURL_url_map);
 		
 		//得到部分链接地址
-		String partURL = XMLUtil.getPartURL(updateMethod_partURL_url_map);
+		String partURL = XMLUtil.getPartURL(innerUpdateModule_partURL_url_map);
 		
 		//得到  url 地址
-		String url = updateMethod_partURL_url_map.get(updateMethod).get(partURL);
+		String url = innerUpdateModule_partURL_url_map.get(innerUpdateModule).get(partURL);
 		
 		System.out.println(url + "\t" +  "******");
 		
@@ -119,17 +119,17 @@ public class ScheduleUtilTest {
 	 */
 	@Test
 	public void testGetSchedulesByURL() {
-		//得到 updateMethod_partURL_url_map 对象
-		Map<String, Map<String, String>> updateMethod_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
+		//得到 innerUpdateModule_partURL_url_map 对象
+		Map<String, Map<String, String>> innerUpdateModule_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
 		
 		//得到更新方式
-		String updateMethod = XMLUtil.getUpdateMethod(updateMethod_partURL_url_map);
+		String innerUpdateModule = XMLUtil.getInnerUpdateModule(innerUpdateModule_partURL_url_map);
 		
 		//得到部分链接地址
-		String partURL = XMLUtil.getPartURL(updateMethod_partURL_url_map);
+		String partURL = XMLUtil.getPartURL(innerUpdateModule_partURL_url_map);
 		
 		//得到  url 地址
-		String url = updateMethod_partURL_url_map.get(updateMethod).get(partURL);
+		String url = innerUpdateModule_partURL_url_map.get(innerUpdateModule).get(partURL);
 		
 		List<Schedule> schedulesByURL = XMLUtil.getTListByURL("schedule", partURL, url, null);
 		

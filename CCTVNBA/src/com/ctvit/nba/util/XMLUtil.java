@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -129,14 +131,14 @@ public class XMLUtil {
 	 * 2013-12-4
 	 * @param season 赛季
 	 * @param moduleName 模块名
-	 * @param updateMethod 更新方式
+	 * @param innerUpdateModule 更新方式
 	 * @return fileName xml文件名 
 	 */
-	public static String getFileName(String season, String moduleName, String updateMethod){
+	public static String getFileName(String season, String moduleName, String innerUpdateModule){
 		String fileName = "";
 		
 		//得到  xml 的文件名
-		fileName = "NBA_" + season + "_" + moduleName + "_" + updateMethod  + ".xml";
+		fileName = "NBA_" + season + "_" + moduleName + "_" + innerUpdateModule  + ".xml";
 		
 		return fileName;
 	}
@@ -145,34 +147,34 @@ public class XMLUtil {
 	 * 从当前  map 对象中，得到更新方式
 	 * @author 高青
 	 * 2013-12-4
-	 * @param url_updateMethod_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
-	 * @return updateMethod 更新方式
+	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
+	 * @return innerUpdateModule 更新方式
 	 */
-	public static String getUpdateMethod(Map<String, Map<String, String>> url_updateMethod_partURL_Map){
+	public static String getInnerUpdateModule(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
 		//更新方式
-		String updateMethod = "";
+		String innerUpdateModule = "";
 		
-		Set<String> keySet = url_updateMethod_partURL_Map.keySet();
+		Set<String> keySet = url_innerUpdateModule_partURL_Map.keySet();
 		
 		for (String string : keySet) {
-			updateMethod = string;
+			innerUpdateModule = string;
 		}
-		return updateMethod;
+		return innerUpdateModule;
 	}
 	
 	/**
 	 * 得到  map 对象中 的 partURL
 	 * @author 高青
 	 * 2013-12-5
-	 * @param url_updateMethod_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
+	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
 	 * @return partURL 部分链接地址
 	 */
-	public static String getPartURL(Map<String, Map<String, String>> url_updateMethod_partURL_Map){
+	public static String getPartURL(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
 		String partURL = "";
 		
 		//得到更新方式
-		String updateMethod = getUpdateMethod(url_updateMethod_partURL_Map);
-		Map<String, String> map = url_updateMethod_partURL_Map.get(updateMethod);
+		String innerUpdateModule = getInnerUpdateModule(url_innerUpdateModule_partURL_Map);
+		Map<String, String> map = url_innerUpdateModule_partURL_Map.get(innerUpdateModule);
 		Set<String> keySet = map.keySet();
 		
 		for (String string : keySet) {
@@ -185,17 +187,17 @@ public class XMLUtil {
 	 * 得到完整的 url 地址
 	 * @author 高青
 	 * 2013-12-13
-	 * @param url_updateMethod_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
+	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
 	 * @return completeURL 完整的url 地址
 	 */
-	public static String getCompleteURL(Map<String, Map<String, String>> url_updateMethod_partURL_Map){
+	public static String getCompleteURL(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
 		String completeURL = "";
 		//得到更新方式
-		String updateMethod = getUpdateMethod(url_updateMethod_partURL_Map);
+		String innerUpdateModule = getInnerUpdateModule(url_innerUpdateModule_partURL_Map);
 		//得到部分地址链接
-		String partURL = getPartURL(url_updateMethod_partURL_Map);
+		String partURL = getPartURL(url_innerUpdateModule_partURL_Map);
 		//得到完整的 url 地址
-		completeURL = url_updateMethod_partURL_Map.get(updateMethod).get(partURL);
+		completeURL = url_innerUpdateModule_partURL_Map.get(innerUpdateModule).get(partURL);
 		
 		return completeURL;
 	}
@@ -205,18 +207,18 @@ public class XMLUtil {
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
-	 * @param updateMethod 更新方式
+	 * @param innerUpdateModule 更新方式
 	 * @param childrenElementList 子元素节点集合
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
-	public static int updateData2XML(String moduleName, String updateMethod, List<Element> childrenElementList){
+	public static int updateData2XML(String moduleName, String innerUpdateModule, List<Element> childrenElementList){
 		int xmlFlag = 0;
 		
 		//根元素
 		Element root = new Element("Msg");
 		root.setAttribute(moduleName + "Description", "更新数据");
 		root.setAttribute("module", moduleName);
-		root.setAttribute("updateMethod", updateMethod);
+		root.setAttribute("innerUpdateModule", innerUpdateModule);
 		
 		
 		//生成  document 对象，并设置好  根元素
@@ -224,9 +226,20 @@ public class XMLUtil {
 		
 		root.addContent(childrenElementList);
 		
-		//得到 按天更新赛程的文件夹路径及文件名
-		String dayFolder = XMLUtil.getFileFolder(moduleName + "_" +  updateMethod + "_folder");
-		String fileName = XMLUtil.getFileName("2013-2014", moduleName, updateMethod);
+		/*
+		 * 得到 按天更新赛程的文件夹路径及文件名
+		 */
+		//得到其中的链接标识，作为组织文件存储的文件夹路径
+		Pattern pattern = Pattern.compile("\\b\\w+?(?=_)"); //匹配第一个"_"前的字符
+		Matcher matcher = pattern.matcher(innerUpdateModule);
+		String partURLRemarker = "";
+		while (matcher.find()) {
+			partURLRemarker = matcher.group();
+		}
+		matcher.reset();
+		
+		String dayFolder = XMLUtil.getFileFolder(moduleName + "_" +  partURLRemarker.toLowerCase() + "_folder");
+		String fileName = XMLUtil.getFileName("2013-2014", moduleName, innerUpdateModule);
 		
 		//生成 XML 文件
 		xmlFlag = XMLUtil.generateXMLFile(document, dayFolder, fileName);
@@ -241,13 +254,13 @@ public class XMLUtil {
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
-	 * @param updateMethod 更新方式
+	 * @param innerUpdateModule 更新方式
 	 * @param partURL 部分链接地址
 	 * @param url 完整链接地址和
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return tlist 相应类型的数据对象
 	 */
-	public static <T> List<T> getTListByURL(String moduleName, String updateMethod, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
+	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
 		//初始化对象
 		List<T> tlist = new ArrayList<T>();
 		
@@ -259,7 +272,7 @@ public class XMLUtil {
 				//得到一个 JSONObject 对象
 				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
 				
-				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, updateMethod);
+				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, innerUpdateModule);
 				
 				//将当前的  Schedule 对象，放到 List<Schedule> 中
 				tlist.add(t);
@@ -306,11 +319,11 @@ public class XMLUtil {
 	 * @param jsonObject 封装数据的JSONArray对象
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @param moduleName 模块名称
-	 * @param updateMethod 更新方式
+	 * @param innerUpdateModule 更新方式
 	 * @return T
 	 */
 	public static <T> T getEntityByJSONObject(JSONObject jsonObject, Map<String, T> tRemarkerAndParamsMap,
-										String moduleName, String updateMethod) throws Exception {
+										String moduleName, String innerUpdateModule) throws Exception {
 		T t = null;
 		//包的前缀名
 		String packagePrefixName = getPath("packagePrefixName");
@@ -332,7 +345,7 @@ public class XMLUtil {
 		
 		//调用特定的方法
 		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class, Map.class);		
-		t = (T) getMethod.invoke(t, updateMethod, jsonObject, tRemarkerAndParamsMap);		
+		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject, tRemarkerAndParamsMap);		
 				
 		return t;
 	}

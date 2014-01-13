@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ctvit.nba.entity.Schedule;
-import com.ctvit.nba.expand.ScheduleParamEnum;
+import com.ctvit.nba.expand.ScheduleEnum;
 import com.ctvit.nba.service.ScheduleService;
 import com.ctvit.nba.service.impl.ScheduleServiceImpl;
 import com.ctvit.nba.util.JDBCUtil;
@@ -45,7 +45,7 @@ public class ScheduleAction extends BaseAction{
 	private String pageNumber;
 	
 	/**更新方式*/
-	private String updateMethod;
+	private String innerUpdateModule;
 	
 	/**更新日期*/
 	private String date;
@@ -68,9 +68,18 @@ public class ScheduleAction extends BaseAction{
 	/** 是否重新加载 */
 	private String loadRemarker;
 	
+	/** 更新唯一标识和查询条件map对象的集合数据 */
+	private Map<String, Map<String, String>> uniqueRemarkerAndConditionMap;
+	
+	/** 查询条件的 map 对象 */
+	private Map<String, String> innerConditionMap;
+	
+	//实例化对象的同时，初始化所需的对象
 	{
 		scheduleService = new ScheduleServiceImpl();
 		response = ServletActionContext.getResponse();
+		uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+		innerConditionMap = new HashMap<String, String>();
 	}
 	
 	/**
@@ -84,18 +93,15 @@ public class ScheduleAction extends BaseAction{
 		//输出对象
 		PrintWriter writer = null;
 		
-		//绑定参数
-		Map<String, String> mapParam = new HashMap<String, String>();
-		
 		//当日期不为空时
 		if (date != null && !date.equals("")) {
-			mapParam.put(ScheduleParamEnum.date.getName(), date);
+			uniqueRemarkerAndConditionMap = getUniqueRemarkerAndConditionMap(innerUpdateModule);
 			
 			//如果是重新加载，就不执行更新操作
 			if (loadRemarker == null) {
 				//将当前日期下的赛程，初始化到数据库中
 				try {
-					scheduleService.updateSchedule(moduleName, mapParam, null);
+					scheduleService.updateSchedule(moduleName, uniqueRemarkerAndConditionMap, null);
 				} catch (Exception e) {
 					logger.info("数据写入数据库和 xml 文件中，发生异常");
 					e.printStackTrace();
@@ -103,7 +109,7 @@ public class ScheduleAction extends BaseAction{
 			}
 			
 			//得到相应的 json 数据
-			List<Schedule> schedules = scheduleService.getSchedules(updateMethod, date);
+			List<Schedule> schedules = scheduleService.getSchedules(innerUpdateModule, date);
 			
 			JSONArray jsonArray = new JSONArray(schedules);
 			json = jsonArray.toString();
@@ -184,7 +190,7 @@ public class ScheduleAction extends BaseAction{
 	 * 2013-11-28
 	 * @return updateSchedule 页面跳转标识：更新赛程
 	 */
-	public void updateSchedule() {
+	public void updateSchedule2Outer() {
 		//得到处理后的 更新参数对象
 		Map<String, Schedule> updateScheduleMap = getUpdateScheduleMap(schedule);
 		
@@ -192,8 +198,11 @@ public class ScheduleAction extends BaseAction{
 		int updateRemarker =0;
 		
 		//更新到数据库、xml 文件中
-		if (updateMethod != null && updateMethod.length() != 0) {
-			updateRemarker = scheduleService.updateSchedule(moduleName, updateMethod.trim(), date, updateScheduleMap);
+		if (innerUpdateModule != null && innerUpdateModule.length() != 0) {
+			//得到更新唯一标识和查询条件map对象的集合数据
+			uniqueRemarkerAndConditionMap = getUniqueRemarkerAndConditionMap(innerUpdateModule);
+			
+			updateRemarker = scheduleService.updateSchedule2Outer(moduleName, updateScheduleMap, uniqueRemarkerAndConditionMap);
 		}
 		
 		if (updateRemarker == 1) {
@@ -289,21 +298,6 @@ public class ScheduleAction extends BaseAction{
 	}
 
 	/**
-	 * @return the updateMethod
-	 */
-	@JSON(serialize = false )
-	public String getUpdateMethod() {
-		return updateMethod;
-	}
-
-	/**
-	 * @param updateMethod the updateMethod to set
-	 */
-	public void setUpdateMethod(String updateMethod) {
-		this.updateMethod = updateMethod;
-	}
-
-	/**
 	 * @return the date
 	 */
 	@JSON(serialize = false)
@@ -331,6 +325,57 @@ public class ScheduleAction extends BaseAction{
 	 */
 	public void setLoadRemarker(String loadRemarker) {
 		this.loadRemarker = loadRemarker;
+	}
+
+	/** @return the uniqueRemarkerAndConditionMap */
+	@JSON(serialize=false)
+	public Map<String, Map<String, String>> getUniqueRemarkerAndConditionMap(String updateModule) {
+		//初始化对象
+		uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+		
+		if (updateModule != null) {
+			
+			// 得到  内部 查询条件的Map 对象
+			innerConditionMap = getInnerConditionMap();
+			
+			//将当前的更新模块 和内部查询条件的 Map 对象放到当前对象中
+			uniqueRemarkerAndConditionMap.put(ScheduleEnum.getScheduleEnumByName(updateModule).toString(), innerConditionMap);
+		}
+		return uniqueRemarkerAndConditionMap;
+	}
+
+	/** @param uniqueRemarkerAndConditionMap the uniqueRemarkerAndConditionMap to set */
+	public void setUniqueRemarkerAndConditionMap(Map<String, Map<String, String>> uniqueRemarkerAndConditionMap) {
+		this.uniqueRemarkerAndConditionMap = uniqueRemarkerAndConditionMap;
+	}
+
+	/** @return the innerConditionMap */
+	@JSON(serialize=false)
+	public Map<String, String> getInnerConditionMap() {
+		//初始化对象
+		innerConditionMap = new HashMap<String, String>();
+		
+		//每日赛程
+		if (date != null) {
+			innerConditionMap.put("date", date);
+		}
+		return innerConditionMap;
+	}
+
+	/** @param innerConditionMap the innerConditionMap to set */
+	public void setInnerConditionMap(Map<String, String> innerConditionMap) {
+		this.innerConditionMap = innerConditionMap;
+	}
+
+	/** @return the innerUpdateModule */
+	@JSON(serialize=false)
+	public String getInnerUpdateModule() {
+		return innerUpdateModule;
+	}
+
+	/** @param innerUpdateModule the innerUpdateModule to set */
+	public void setInnerUpdateModule(String innerUpdateModule) {
+		this.innerUpdateModule = innerUpdateModule;
 	}
 	
 }
