@@ -34,7 +34,7 @@ public class JDBCUtil {
 	public static Connection getConnection(){
 		
 		//数据库链接地址
-		 String linkURL = XMLUtil.getPath("dbLinkURL");
+		 String linkURL = CommonUtil.getPath("dbLinkURL");
 		
 		 //数据库链接用户名
 		 String username = "cms";
@@ -47,7 +47,7 @@ public class JDBCUtil {
 				
 			 try {
 				 //加载驱动
-				Class.forName(XMLUtil.getPath("dbLinkDriver"));
+				Class.forName(CommonUtil.getPath("dbLinkDriver"));
 				
 				try {
 					//建立链接

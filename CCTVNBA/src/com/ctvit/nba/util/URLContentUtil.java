@@ -7,9 +7,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -18,6 +27,129 @@ import java.net.URL;
  * 2013-12-2
  */
 public class URLContentUtil {
+	
+	/** 日志对象 */
+	private static Logger log = Logger.getLogger(URLContentUtil.class);
+	
+	/**
+	 * <p>根据 URL 地址，得到内容，并将其封装到 JSONObject 对象中<p>
+	 * 适合用于没有实体类的模块，且不用将数据保存到数据库的情况下
+	 * @author 高青
+	 * 2014-1-15
+	 * @param url url地址
+	 * @return urlJsonObject url路径中 JSONObject 格式的内容
+	 */
+	public static JSONObject getURLJsonObject(String url){
+		//得到 url 内容
+		String urlContent = getURLContent(url);
+		
+		//将 url 转为 JSONObject 对象
+		JSONObject urlJsonObject = new JSONObject(urlContent);
+		
+		return urlJsonObject;
+	}
+	
+	
+	/**
+	 * 根据URL地址，得到相应的  数据对象
+	 * @author 高青
+	 * 2013-11-29
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModule 更新方式
+	 * @param partURL 部分链接地址
+	 * @param url 完整链接地址和
+	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @return tlist 相应类型的数据对象
+	 */
+	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
+		//初始化对象
+		List<T> tlist = new ArrayList<T>();
+		
+		try {
+			//得到  jsonArray 对象
+			JSONArray tJsonArray = getJsonArray(url,partURL);
+			
+			for (int i = 0; i < tJsonArray.length(); i++) {
+				//得到一个 JSONObject 对象
+				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
+				
+				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, innerUpdateModule);
+				
+				//将当前的  Schedule 对象，放到 List<Schedule> 中
+				tlist.add(t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tlist;
+	}
+	
+	/**
+	 * 运用反射的机制，调用对应的方法，并返回相应的 实体类 对象
+	 * @author 高青
+	 * 2013-12-5
+	 * @param <T> 动态实体类
+	 * @param jsonObject 封装数据的JSONArray对象
+	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModule 更新方式
+	 * @return T
+	 */
+	public static <T> T getEntityByJSONObject(JSONObject jsonObject, Map<String, T> tRemarkerAndParamsMap,
+										String moduleName, String innerUpdateModule) throws Exception {
+		T t = null;
+		//包的前缀名
+		String packagePrefixName = CommonUtil.getPath("packagePrefixName");
+		
+		//将传递的 模块名称 的首字母改为大写
+		String changedModuleName = moduleName.substring(0, 1).toUpperCase() + moduleName.substring(1);
+		
+		//调用的方法名称
+		String invokeMethodName = "get" + changedModuleName;
+		
+		//最终的类的全路径
+		String changedModuleNameUtil = changedModuleName + "Util";
+		String finalClassPath = packagePrefixName + changedModuleNameUtil;
+		
+		Class<?> forNameClass = Class.forName(finalClassPath);
+		
+		//实例化对应的类
+		t = (T) forNameClass.newInstance();
+		
+		//调用特定的方法
+		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class, Map.class);		
+		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject, tRemarkerAndParamsMap);		
+				
+		return t;
+	}
+	
+	/**
+	 * 通过  字符串的 json 数据，得到其相应的  jsonArray 对象
+	 * @author 高青
+	 * 2013-12-2
+	 * @param url  json 字符串
+	 * @return jsonArray JSONArray对象
+	 */
+	public static JSONArray getJsonArray(String url, String partURL){
+		//初始化数据
+		JSONArray jsonArray = new JSONArray();
+		
+		try {
+			//根据 url 地址，得到链接后的   json 数据
+			String jsonData = URLContentUtil.getURLContent(url);
+			
+			//将 json 字符串转成JSONObject
+			JSONObject jsonObject = new JSONObject(jsonData);
+			
+			//得到 JSONArray 对象的  key 值，其中  key 的值是    partURL 去掉  “Get” 的部分
+			String jsonArrayMarker = partURL.substring(3);
+			
+			jsonArray = jsonObject.getJSONArray(jsonArrayMarker);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} 
+		return jsonArray;
+	}
 	
 	/**
 	 * 得到 URL链接中的内容

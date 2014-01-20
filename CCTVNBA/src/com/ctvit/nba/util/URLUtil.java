@@ -5,12 +5,12 @@ package com.ctvit.nba.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
-
 
 /**
  * 链接地址的部分地址获取常用类
@@ -24,8 +24,8 @@ public class URLUtil {
 	
 	/**
 	 * 得到头部链接地址
-	 * 2014-0-08
 	 * @author 高青
+	 * 2014-0-08
 	 * @param moduleName 模块名称
 	 * @return headerURL 头部链接地址
 	 */
@@ -34,7 +34,7 @@ public class URLUtil {
 		String headerURL = "";
 		try {
 			//得到配置文件中的头部链接地址
-			String settingHeaderURL = XMLUtil.getPath("headerURL");
+			String settingHeaderURL = CommonUtil.getPath("headerURL");
 			
 			//根据传递过来的模块名，拼接路径
 			String switchModuleName = moduleName.substring(0, 1).toUpperCase() + moduleName.substring(1);
@@ -59,7 +59,7 @@ public class URLUtil {
 		String middleURL = "";
 		
 		try {
-			middleURL = XMLUtil.getPath("middleURL");
+			middleURL = CommonUtil.getPath("middleURL");
 		} catch (Exception e) {
 			log.info("得到配置文件中的中部链接地址出现错误，可能是路径中地址的分割符有误！");
 			e.printStackTrace();
@@ -94,7 +94,7 @@ public class URLUtil {
 	 * 2013-12-4
 	 * @return mapObject 所有模块下的 部分链接地址 的  Map 对象
 	 */
-	public static Map<String, Map<String, String>> putPartURL(){
+	private static Map<String, Map<String, String>> putPartURL(){
 		//初始化对象
 		Map<String, Map<String, String>> mapObject = new HashMap<String, Map<String, String>>();
 		
@@ -107,10 +107,125 @@ public class URLUtil {
 		return mapObject;
 	}
 	
+	
+	
 	/**
-	 * 直播(Live)的所有部分链接地址封装
-	 * 2014-01-09
+	 * 得到更新条件的字符串集
 	 * @author 高青
+	 * 2014-1-14
+	 * @param innerUpdateModuleAConditions 内部更新模块名称和更新条件的 Map 对象
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return updateConditions 更新条件的字符串集
+	 */
+	public static <T> String getUpdateConditions(Map<String, Map<String, T>> innerUpdateModuleAConditions, String innerUpdateModule){
+		//更新条件字符串集
+		String updateConditions = "";
+		
+		if (innerUpdateModuleAConditions.size() != 0) {
+			//得到更新条件的 Map 对象
+			Map<String, T> updateConditionMap = innerUpdateModuleAConditions.get(innerUpdateModule);
+			
+			if (updateConditionMap.size() != 0) {
+				//更新条件不为空时，条件需要绑定“&”
+				updateConditions = "&";
+				
+				Set<String> conditionKeySet = updateConditionMap.keySet();
+				for (String conditionKey : conditionKeySet) {
+					//组织更新条件字符串集
+					updateConditions += conditionKey + "=" + updateConditionMap.get(conditionKey).toString() + "&";
+				}
+				//截取掉最后的一个“&”符号 
+				updateConditions = updateConditions.substring(0, updateConditions.length() - 1);
+			}
+		}
+		return updateConditions;
+	}
+	
+	/**
+	 * 得到  map 对象中 的 partURL
+	 * @author 高青
+	 * 2013-12-5
+	 * @param finalURLMap 当前链接地址和更新方式及部分链接地址的  Map 对象
+	 * @return partURL 部分链接地址
+	 */
+	public static String getPartGetURL(Map<String, Map<String, String>> finalURLMap){
+		String partGetURL = "";
+		
+		//得到内部更新模块名称
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
+		Map<String, String> map = finalURLMap.get(innerUpdateModule);
+		Set<String> keySet = map.keySet();
+		
+		for (String getURL : keySet) {
+			partGetURL = getURL;
+		}
+		return partGetURL;
+	}
+	
+	/**
+	 * 得到完整的 url 地址
+	 * @author 高青
+	 * 2013-12-13
+	 * @param finalURLMap 内部更新模块名称和get部分链接地址及最终 URL 的 Map 对象 
+	 * @return url 完整的 url 地址
+	 */
+	public static String getURL(Map<String, Map<String, String>> finalURLMap){
+		String url = "";
+		
+		//得到内部更新模块名称
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
+		//得到部分地址链接
+		String partURL = getPartGetURL(finalURLMap);
+		//得到完整的 url 地址
+		url = finalURLMap.get(innerUpdateModule).get(partURL);
+		
+		return url;
+	}
+	
+	/**
+	 * 根据模块名称和传递的参数，得到 URL 地址
+	 * @author 高青
+	 * 2014-1-14
+	 * @param <T> 泛型类型（前台的更新条件的类型不定）
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleAConditions 内部更新模块名称和更新条件的 Map 对象
+	 * @return finalURLMap 内部更新模块名称和get部分链接地址及最终 URL 的 Map 对象 
+	 */
+	public static <T> Map<String, Map<String, String>> getFinalURLMap(String moduleName,  Map<String, Map<String, T>> innerUpdateModuleAConditions){
+		//初始化对象
+		Map<String, Map<String, String>> finalURLMap = new HashMap<String, Map<String,String>>();
+		
+		//得到链接地址的头部
+		String headerURL = URLUtil.getHeaderURL(moduleName);
+		
+		//得到内部更新模块名称，并得到 部分链接地址
+		String innerUpdateModule = CommonUtil.getMapKey(innerUpdateModuleAConditions);
+		String partGetURL = URLUtil.getModulePartURL(moduleName).get(innerUpdateModule);
+		
+		//得到链接地址的中间部分
+		String middleURL = URLUtil.getMiddleURL();
+		
+		//得到更新条件字符集
+		String updateConditions = getUpdateConditions(innerUpdateModuleAConditions, innerUpdateModule);
+		
+		//得到最终的 URL 地址
+		String finalURL = headerURL + partGetURL + middleURL + updateConditions;
+		
+		//内部部分链接地址和最终 URL 的  Map 对象
+		Map<String, String> partURLAFinalURLMap = new HashMap<String, String>();
+		partURLAFinalURLMap.put(partGetURL, finalURL);
+		
+		//将对应的值，放到初始化后的 Map 对象中
+		finalURLMap.put(innerUpdateModule, partURLAFinalURLMap);
+		
+		return finalURLMap;
+	}
+	
+	/**
+	 * 直播(Live)的所有get部分链接地址封装
+	 * @author 高青
+	 * 2014-01-09
+	 * @return liveMap 封装后的直播get部分链接地址 Map 对象
 	 */
 	public static Map<String, String> liveMap(){
 		//初始化 Map 对象
@@ -153,10 +268,10 @@ public class URLUtil {
 	}
 	
 	/**
-	 * 赛程(Schedule) 所有部分链接地址封装
+	 * 赛程(Schedule) 所有get部分链接地址封装
 	 * @author 高青
 	 * 2013-12-4
-	 * @return schedulePartURLMap 赛程部分链接地址的 Map 对象
+	 * @return schedulePartURLMap 封装后的赛程get部分链接地址的 Map 对象
 	 */
 	public static Map<String, String> scheduleMap(){
 		//初始化对象

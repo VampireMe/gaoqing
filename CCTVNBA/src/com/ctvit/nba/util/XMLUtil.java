@@ -7,12 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,9 +16,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * XML操作常用类
@@ -120,7 +112,7 @@ public class XMLUtil {
 		String folder = "";
 		
 		//得到 指定的文件夹路径
-		folder = getPath(key);
+		folder = CommonUtil.getPath(key);
 		
 		return folder;
 	}
@@ -144,81 +136,22 @@ public class XMLUtil {
 	}
 	
 	/**
-	 * 从当前  map 对象中，得到更新方式
-	 * @author 高青
-	 * 2013-12-4
-	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
-	 * @return innerUpdateModule 更新方式
-	 */
-	public static String getInnerUpdateModule(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
-		//更新方式
-		String innerUpdateModule = "";
-		
-		Set<String> keySet = url_innerUpdateModule_partURL_Map.keySet();
-		
-		for (String string : keySet) {
-			innerUpdateModule = string;
-		}
-		return innerUpdateModule;
-	}
-	
-	/**
-	 * 得到  map 对象中 的 partURL
-	 * @author 高青
-	 * 2013-12-5
-	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
-	 * @return partURL 部分链接地址
-	 */
-	public static String getPartURL(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
-		String partURL = "";
-		
-		//得到更新方式
-		String innerUpdateModule = getInnerUpdateModule(url_innerUpdateModule_partURL_Map);
-		Map<String, String> map = url_innerUpdateModule_partURL_Map.get(innerUpdateModule);
-		Set<String> keySet = map.keySet();
-		
-		for (String string : keySet) {
-			partURL = string;
-		}
-		return partURL;
-	}
-	
-	/**
-	 * 得到完整的 url 地址
-	 * @author 高青
-	 * 2013-12-13
-	 * @param url_innerUpdateModule_partURL_Map 当前链接地址和更新方式及部分链接地址的  Map 对象
-	 * @return completeURL 完整的url 地址
-	 */
-	public static String getCompleteURL(Map<String, Map<String, String>> url_innerUpdateModule_partURL_Map){
-		String completeURL = "";
-		//得到更新方式
-		String innerUpdateModule = getInnerUpdateModule(url_innerUpdateModule_partURL_Map);
-		//得到部分地址链接
-		String partURL = getPartURL(url_innerUpdateModule_partURL_Map);
-		//得到完整的 url 地址
-		completeURL = url_innerUpdateModule_partURL_Map.get(innerUpdateModule).get(partURL);
-		
-		return completeURL;
-	}
-	
-	/**
 	 * 更新数据到 xml 文件中
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
-	 * @param innerUpdateModule 更新方式
+	 * @param xmlFileNameRemarker 更新方式
 	 * @param childrenElementList 子元素节点集合
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
-	public static int updateData2XML(String moduleName, String innerUpdateModule, List<Element> childrenElementList){
+	public static int updateData2XML(String moduleName, String xmlFileNameRemarker, List<Element> childrenElementList){
 		int xmlFlag = 0;
 		
 		//根元素
 		Element root = new Element("Msg");
 		root.setAttribute(moduleName + "Description", "更新数据");
 		root.setAttribute("module", moduleName);
-		root.setAttribute("innerUpdateModule", innerUpdateModule);
+		root.setAttribute("innerUpdateModule", xmlFileNameRemarker);
 		
 		
 		//生成  document 对象，并设置好  根元素
@@ -231,7 +164,7 @@ public class XMLUtil {
 		 */
 		//得到其中的链接标识，作为组织文件存储的文件夹路径
 		Pattern pattern = Pattern.compile("\\b\\w+?(?=_)"); //匹配第一个"_"前的字符
-		Matcher matcher = pattern.matcher(innerUpdateModule);
+		Matcher matcher = pattern.matcher(xmlFileNameRemarker);
 		String partURLRemarker = "";
 		while (matcher.find()) {
 			partURLRemarker = matcher.group();
@@ -239,7 +172,7 @@ public class XMLUtil {
 		matcher.reset();
 		
 		String dayFolder = XMLUtil.getFileFolder(moduleName + "_" +  partURLRemarker.toLowerCase() + "_folder");
-		String fileName = XMLUtil.getFileName("2013-2014", moduleName, innerUpdateModule);
+		String fileName = XMLUtil.getFileName("2013-2014", moduleName, xmlFileNameRemarker);
 		
 		//生成 XML 文件
 		xmlFlag = XMLUtil.generateXMLFile(document, dayFolder, fileName);
@@ -247,124 +180,6 @@ public class XMLUtil {
 		logger.info("生成XML文件成功！");
 		
 		return xmlFlag;
-	}
-	
-	/**
-	 * 根据URL地址，得到相应的  数据对象
-	 * @author 高青
-	 * 2013-11-29
-	 * @param moduleName 模块名称
-	 * @param innerUpdateModule 更新方式
-	 * @param partURL 部分链接地址
-	 * @param url 完整链接地址和
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
-	 * @return tlist 相应类型的数据对象
-	 */
-	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
-		//初始化对象
-		List<T> tlist = new ArrayList<T>();
-		
-		try {
-			//得到  jsonArray 对象
-			JSONArray tJsonArray = getJsonArray(url,partURL);
-			
-			for (int i = 0; i < tJsonArray.length(); i++) {
-				//得到一个 JSONObject 对象
-				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
-				
-				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, innerUpdateModule);
-				
-				//将当前的  Schedule 对象，放到 List<Schedule> 中
-				tlist.add(t);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return tlist;
-	}
-	
-	/**
-	 * 通过  字符串的 json 数据，得到其相应的  jsonArray 对象
-	 * @author 高青
-	 * 2013-12-2
-	 * @param url  json 字符串
-	 * @return jsonArray JSONArray对象
-	 */
-	public static JSONArray getJsonArray(String url, String partURL){
-		//初始化数据
-		JSONArray jsonArray = new JSONArray();
-		
-		try {
-			//根据 url 地址，得到链接后的   json 数据
-			String jsonData = URLContentUtil.getURLContent(url);
-			
-			//将 json 字符串转成JSONObject
-			JSONObject jsonObject = new JSONObject(jsonData);
-			
-			//得到 JSONArray 对象的  key 值，其中  key 的值是    partURL 去掉  “Get” 的部分
-			String jsonArrayMarker = partURL.substring(3);
-			
-			jsonArray = jsonObject.getJSONArray(jsonArrayMarker);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} 
-		return jsonArray;
-	}
-	
-	/**
-	 * 运用反射的机制，调用对应的方法，并返回相应的 实体类 对象
-	 * @author 高青
-	 * 2013-12-5
-	 * @param <T> 动态实体类
-	 * @param jsonObject 封装数据的JSONArray对象
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
-	 * @param moduleName 模块名称
-	 * @param innerUpdateModule 更新方式
-	 * @return T
-	 */
-	public static <T> T getEntityByJSONObject(JSONObject jsonObject, Map<String, T> tRemarkerAndParamsMap,
-										String moduleName, String innerUpdateModule) throws Exception {
-		T t = null;
-		//包的前缀名
-		String packagePrefixName = getPath("packagePrefixName");
-		
-		//将传递的 模块名称 的首字母改为大写
-		String changedModuleName = moduleName.substring(0, 1).toUpperCase() + moduleName.substring(1);
-		
-		//调用的方法名称
-		String invokeMethodName = "get" + changedModuleName;
-		
-		//最终的类的全路径
-		String changedModuleNameUtil = changedModuleName + "Util";
-		String finalClassPath = packagePrefixName + changedModuleNameUtil;
-		
-		Class<?> forNameClass = Class.forName(finalClassPath);
-		
-		//实例化对应的类
-		t = (T) forNameClass.newInstance();
-		
-		//调用特定的方法
-		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class, Map.class);		
-		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject, tRemarkerAndParamsMap);		
-				
-		return t;
-	}
-	
-	/**
-	 * 得到配置文件中的路径
-	 * @author 高青
-	 * 2013-12-5
-	 * @param key 键的值
-	 * @return path 路径地址
-	 */
-	public static String getPath(String key){
-		String path = "";
-		
-		//得到指定名称下的路径地址
-		ResourceBundle resourceBundle = ResourceBundle.getBundle("path");
-		path = resourceBundle.getString(key);
-		
-		return path;
 	}
 	
 }

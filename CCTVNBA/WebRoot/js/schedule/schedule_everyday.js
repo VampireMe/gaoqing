@@ -473,17 +473,13 @@ $(document).ready(function(){
 		//得到选中的赛程数据的 id 
 		var checkedSchedule = table.datagrid("getChecked");
 		
-		var initScheduleIDs = "",
-			subScheduleIDs = "";
+		var scheduleIDs = "";
 		
 		for ( var i = 0; i < checkedSchedule.length; i++) {
 			//得到赛程编号的字符集
-			initScheduleIDs += checkedSchedule[i].scheduleID + ",";
+			scheduleIDs += checkedSchedule[i].scheduleID + ",";
 		}
-		//将最后一个“，”截取掉
-		subScheduleIDs = initScheduleIDs.substring(0, initScheduleIDs.length - 1);
-		
-		return subScheduleIDs;
+		return scheduleIDs;
 	}
 	
 	/**
@@ -497,15 +493,75 @@ $(document).ready(function(){
 			type: 'get',
 			async: true,
 			dateType: 'json',
-			url: '',
+			url: 'basicInfo!updateScheduleBasicInfo.action',
 			data: jsonObj,
-			success: function(){
-				$.messager.alert("提示信息", "更新成功！", "info");
+			success: function(json){
+				$.messager.alert("提示信息", "更新成功！", "info", function(){
+					//显示隐藏数据
+					$("#innerContent").toggle();
+					
+					//赛程基本信息
+					if(jsonObj.innerUpdateModule === "LIVE"){
+						bindBasicInfoData(json, "Home");
+						bindBasicInfoData(json, "Visiting");
+					}
+					//双方对阵信息和换人列表
+					
+					//主队客队最近几场比赛
+				});
 			},
 			error: function(){
 				$.messager.alert("提示信息", "更新失败，请重试！", "info");
 			}
 		});
+	}
+	
+	/**
+	 * 内部基本信息模块下比赛信息的数据设置
+	 * 2014-01-16
+	 * param: callbackData 反馈回来数据
+	 * param: teamType 球队类型（主队，客队）
+	 * author: 高青
+	 */
+	function bindBasicInfoData(callbackData, teamType){
+		//将回传的数据转为 JSON 数据
+		var $callbackData = $.parseJSON(callbackData),
+			//得到当前比赛的节数信息
+		    scheduleQuarterArray = $callbackData.Quarter,
+			//得到当前比赛的基本信息
+			basicInfoArray = $callbackData.LiveInfo,
+			//得到球队的领袖者信息
+			playerLeaderArray;		
+		
+		if(teamType === "Home"){
+			playerLeaderArray = $callbackData.HomeTeamPlayerDataLeader;
+			
+			//向表格赛程基本信息下的数据项赋值
+			$("#" + teamType + "CNAlias").text(basicInfoArray[0].HomeCNAlias);
+			$("#FirstQuart"+ teamType +"Score").text(scheduleQuarterArray[0].QuartHomeScore);
+			$("#SecondQuart"+ teamType +"Score").text(scheduleQuarterArray[1].QuartHomeScore);
+			$("#ThirdQuart"+ teamType +"Score").text(scheduleQuarterArray[2].QuartHomeScore);
+			$("#FourthQuart"+ teamType +"Score").text(scheduleQuarterArray[3].QuartHomeScore);
+			$("#"+ teamType +"Score").text(basicInfoArray[0].HomeScore);
+			
+			//合并了行的数据
+			$("#StatusCNName").text(basicInfoArray[0].StatusCNName);
+			$("#MatchTypeCNName").text(basicInfoArray[0].MatchTypeCNName);
+		}else{
+			playerLeaderArray = $callbackData.VisitTeamPlayerDataLeader;
+			//向表格赛程基本信息下的数据项赋值
+			$("#" + teamType + "CNAlias").text(basicInfoArray[0].VisitingCNAlias);
+			$("#FirstQuart"+ teamType +"Score").text(scheduleQuarterArray[0].QuartVisitingScore);
+			$("#SecondQuart"+ teamType +"Score").text(scheduleQuarterArray[1].QuartVisitingScore);
+			$("#ThirdQuart"+ teamType +"Score").text(scheduleQuarterArray[2].QuartVisitingScore);
+			$("#FourthQuart"+ teamType +"Score").text(scheduleQuarterArray[3].QuartVisitingScore);
+			$("#"+ teamType +"Score").text(basicInfoArray[0].VisitingScore);
+		}
+		//球队领袖下的数据项赋值
+		$("#" + teamType + "LeaderCNAlias").text(playerLeaderArray[0].CNAlias);
+		$("#" + teamType + "Total").text(playerLeaderArray[0].Total);
+		$("#" + teamType + "Rebounds").text(playerLeaderArray[0].Rebounds);
+		$("#" + teamType + "Assists").text(playerLeaderArray[0].Assists);
 	}
 	
 	//得到 比赛基本信息 按钮对象
@@ -514,7 +570,7 @@ $(document).ready(function(){
 	//初始化 比赛信息面板
 	$("#basicInfoOuter").dialog({
 		title: '比赛信息',
-		width: 800,
+		width: 850,
 		height: 550,
 		modal: true,
 		closed: true,
@@ -527,12 +583,15 @@ $(document).ready(function(){
 			iconCls: 'icon-print',
 			handler: function(){
 				//得到选中的赛程编号字符集
-				var scheduleStr = getCheckedScheduleID();
+				var scheduleIDs = getCheckedScheduleID();
 				
 				//执行请求
-				ajaxMethod({});
+				ajaxMethod({
+					scheduleIDs: scheduleIDs,
+					moduleName: 'live',
+					innerUpdateModule: 'LIVE'
+				});
 				
-				alert(getCheckedScheduleID());
 			}
 		}, '-', {
 			text: '获得双方对阵信息和换人列表',
@@ -549,9 +608,9 @@ $(document).ready(function(){
 	
 	//绑定单击事件
 	$matchBasicInfo.bind("click", function(){
-		var checkedSchedule = table.datagrid("getChecked");
+		var checkedSchedules = table.datagrid("getChecked");
 		//判断是否选中赛程
-		if(checkedSchedule.length === 0){
+		if(checkedSchedules.length === 0){
 			$.messager.alert("提示信息", "请选择赛程！" ,"info");
 		}else{
 			$("#basicInfoOuter").dialog('open');

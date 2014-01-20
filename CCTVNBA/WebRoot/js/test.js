@@ -1,1 +1,66 @@
-var test = [{"HomeCNAlias":"魔术","HomeCNName":"奥兰多魔术","HomeLargerLogo":"Magic.png","HomeTeamScore":109,"Attendance":15415,"HomeSmallLogo":"Magic-1.png","HomeENAlias":"Orl","StatusCNName":"已完赛","VisitingTeamID":1,"MatchGTM8Time":1388358000000,"StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"Atl","TotalQuarters":4,"TimeOfGameHours":2,"MatchLocalTime":1388311240000,"TimeOfGameMinutes":11,"VisitingENName":"Hawks","StadiumCNName":"安利球馆","HomeENName":"Magic","VisitingSmallLogo":"Hawks-1.png","StadiumENName":"Amway Center","RefereeCNName":"赞 扎巴","RefereeENName":"Zach Zarba","VisitingLargerLogo":"Hawks.png","ScheduleID":1348852,"VisitingTeamScore":102,"VisitingCNAlias":"老鹰","VisitingCNName":"亚特兰大老鹰","MatchTypeCNName":"常规赛","HomeTeamID":19},{"HomeCNAlias":"骑士","HomeCNName":"克里夫兰骑士","HomeLargerLogo":"Cavaliers.png","HomeTeamScore":104,"Attendance":19384,"HomeSmallLogo":"Cavaliers-1.png","HomeENAlias":"Cle","StatusCNName":"已完赛","VisitingTeamID":9,"MatchGTM8Time":1388358000000,"StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"GS","TotalQuarters":5,"TimeOfGameHours":2,"MatchLocalTime":1388311240000,"TimeOfGameMinutes":31,"VisitingENName":"Warriors","StadiumCNName":"速贷","HomeENName":"Cavaliers","VisitingSmallLogo":"Warriors-1.png","StadiumENName":"Quicken Loans Arena","RefereeCNName":"迈克尔 史密斯","RefereeENName":"Michael Smith","VisitingLargerLogo":"Warriors.png","ScheduleID":1349442,"VisitingTeamScore":108,"VisitingCNAlias":"勇士","VisitingCNName":"金州勇士","MatchTypeCNName":"常规赛","HomeTeamID":5},{"HomeCNAlias":"雷霆","HomeCNName":"俄克拉荷马雷霆","HomeLargerLogo":"Thunder.png","HomeTeamScore":117,"Attendance":18203,"HomeSmallLogo":"sThunder.png","HomeENAlias":"OKC","StatusCNName":"已完赛","VisitingTeamID":10,"MatchGTM8Time":1388361600000,"StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"Hou","TotalQuarters":4,"TimeOfGameHours":2,"MatchLocalTime":1388311240000,"TimeOfGameMinutes":5,"VisitingENName":"Rockets","StadiumCNName":"切萨皮克能源球馆","HomeENName":"Thunder","VisitingSmallLogo":"Rockets-1.png","StadiumENName":"Chesapeake Energy Arena","RefereeCNName":"蒙蒂","RefereeENName":"Monty McCutchen","VisitingLargerLogo":"Rockets.png","ScheduleID":1349331,"VisitingTeamScore":86,"VisitingCNAlias":"火箭","VisitingCNName":"休斯敦火箭","MatchTypeCNName":"常规赛","HomeTeamID":25},{"HomeCNAlias":"马刺","HomeCNName":"圣安东尼奥马刺","HomeLargerLogo":"Spurs.png","HomeTeamScore":112,"Attendance":18581,"HomeSmallLogo":"Spurs-1.png","HomeENAlias":"SA","StatusCNName":"已完赛","VisitingTeamID":23,"MatchGTM8Time":1388361600000,"StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"Sac","TotalQuarters":4,"TimeOfGameHours":2,"MatchLocalTime":1388311240000,"TimeOfGameMinutes":9,"VisitingENName":"Kings","StadiumCNName":"AT&T中心","HomeENName":"Spurs","VisitingSmallLogo":"Kings-1.png","StadiumENName":"AT&T Center","RefereeCNName":"乔 克劳福德","RefereeENName":"Joe Crawford","VisitingLargerLogo":"Kings.png","ScheduleID":1349799,"VisitingTeamScore":104,"VisitingCNAlias":"国王","VisitingCNName":"萨克拉门托国王","MatchTypeCNName":"常规赛","HomeTeamID":24},{"HomeCNAlias":"湖人","HomeCNName":"洛杉矶湖人","HomeLargerLogo":"Lakers.png","HomeTeamScore":104,"Attendance":18997,"HomeSmallLogo":"Lakers-1.png","HomeENAlias":"LAL","StatusCNName":"已完赛","VisitingTeamID":20,"MatchGTM8Time":1388370600000,"StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"Phi","TotalQuarters":4,"TimeOfGameHours":2,"MatchLocalTime":1388313040000,"TimeOfGameMinutes":17,"VisitingENName":"76ers","StadiumCNName":"斯台普斯中心","HomeENName":"Lakers","VisitingSmallLogo":"76ers-1.png","StadiumENName":"Staples Center","RefereeCNName":"比尔 肯尼迪","RefereeENName":"Bill Kennedy","VisitingLargerLogo":"76ers.png","ScheduleID":1349139,"VisitingTeamScore":111,"VisitingCNAlias":"76人","VisitingCNName":"费城76人","MatchTypeCNName":"常规赛","HomeTeamID":13}];
+var test = {
+		"LiveInfo":
+			[
+			 {"HomeCNAlias":"掘金","HomeCNName":"丹佛掘金",
+				 "HomeLargerLogo":"Nuggets.png","VisitingScore":97,
+				 "VisitingWins":27,"HomeSmallLogo":"Nuggets-1.png",
+				 "HomeENAlias":"Den","VisitingFullTimeouts":1,"Seconds":0.0,
+				 "StatusCNName":"已完赛","VisitingTeamID":14,"MatchGTM8Time":1388455200000,
+				 "StatusENName":"Final","MatchTypeENName":"Regular Season","VisitingENAlias":"Mia",
+				 "VisitingShortTimeouts":0,"HomeLosses":18,"HomeWins":20,"VisitingLosses":11,
+				 "Quarter":4,"HomeFullTimeouts":0,"StadiumCNName":"百事中心球馆","VisitingENName":"Heat",
+				 "VisitingConferenceSeed":2,"HomeConferenceSeed":9,"HomeENName":"Nuggets","LeagueID":1,
+				 "VisitingConferenceID":1,"StadiumENName":"Pepsi Center","VisitingSmallLogo":"Heat-1.png",
+				 "HomeShortTimeouts":0,"VisitingLargerLogo":"Heat.png","ScheduleID":1348782,
+				 "HomeScore":94,"HomeConferenceID":2,"VisitingCNAlias":"热火","VisitingCNName":"迈阿密热",
+				 "MatchTypeCNName":"常规赛","Minutes":0,"HomeTeamID":7
+				 }
+			 ],
+			 
+				 "About":"当前比赛相关数据",
+				 
+				 "VisitTeamPlayerDataLeader":[{"Rebounds":6,"CNAlias":"詹姆斯","LPortrait":"LeBronJames.png",
+					 "SPortrait":"sLeBronJames.png","Number":"6","Assists":10,"CNName":"勒布朗-詹姆斯",
+					 "FirstName":"LeBron","Points":26,"LastName":"James","PlayerID":214152,"Total":42}
+				 ],
+					 
+				"Quarter":
+					[
+					 {"ScheduleID":1348782,"HomeFouls":5,"Quarter":1,"HomeScore":30,
+						 "VisitingFouls":3,"QuartVisitingScore":29,"QuartHomeScore":30,
+						 "VisitingScore":29},
+						 {"ScheduleID":1348782,"HomeFouls":3,"Quarter":2,
+							 "HomeScore":55,"VisitingFouls":3,"QuartVisitingScore":17,
+							 "QuartHomeScore":25,"VisitingScore":46},
+						{"ScheduleID":1348782,
+							"HomeFouls":9,"Quarter":3,"HomeScore":77,"VisitingFouls":3,
+							"QuartVisitingScore":26,"QuartHomeScore":22,"VisitingScore":72
+						},
+						{
+							"ScheduleID":1348782,"HomeFouls":3,"Quarter":4,"HomeScore":94,
+							"VisitingFouls":4,"QuartVisitingScore":25,"QuartHomeScore":17,
+							"VisitingScore":97
+						}
+						],
+						
+						
+						"Referee":
+							[
+							 {"RefereeCNName":"迈克 卡拉汉","IsChief":1,"RefereeID":3559,
+								 "RefereeENName":"Mike Callahan"},{"RefereeCNName":"凯恩 菲茨杰拉德",
+									 "IsChief":0,"RefereeID":531078,"RefereeENName":"Kane Fitzgerald"
+							  },
+							  {"RefereeCNName":"加里 杰林斯基","IsChief":0,"RefereeID":3624,
+								  "RefereeENName":"Gary Zielinski"}],
+							
+								  
+								  "HomeTeamPlayerDataLeader":
+									  [
+									   {"Rebounds":2,"CNAlias":"劳森","LPortrait":"TyLawson.png",
+										   "SPortrait":"sTyLawson.png","Number":"3","Assists":7,
+										   "CNName":"泰-劳森","FirstName":"Ty","Points":26,"LastName":"Lawson",
+										   "PlayerID":329672,"Total":35
+								}
+			]
+
+}

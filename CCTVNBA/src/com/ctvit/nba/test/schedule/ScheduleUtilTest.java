@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleUtil;
+import com.ctvit.nba.util.CommonUtil;
+import com.ctvit.nba.util.URLUtil;
 import com.ctvit.nba.util.XMLUtil;
 
 /**
@@ -97,10 +99,10 @@ public class ScheduleUtilTest {
 	public void testGetURLByKindsCondition() {
 		
 		//得到 innerUpdateModule_partURL_url_map 对象
-		Map<String, Map<String, String>> innerUpdateModule_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
+		Map<String, Map<String, String>> innerUpdateModule_partURL_url_map = URLUtil.getFinalURLMap("schedule",paramMap);
 		
 		//得到更新方式
-		String innerUpdateModule = XMLUtil.getInnerUpdateModule(innerUpdateModule_partURL_url_map);
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(innerUpdateModule_partURL_url_map);
 		
 		//得到部分链接地址
 		String partURL = XMLUtil.getPartURL(innerUpdateModule_partURL_url_map);

@@ -8,19 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.ctvit.nba.entity.Schedule;
+import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
+import com.ctvit.nba.service.LiveService;
 import com.ctvit.nba.service.ScheduleService;
+import com.ctvit.nba.service.impl.LiveServiceImpl;
 import com.ctvit.nba.service.impl.ScheduleServiceImpl;
-import com.ctvit.nba.util.JDBCUtil;
+import com.ctvit.nba.util.URLContentUtil;
+import com.ctvit.nba.util.URLUtil;
 
 /**
  * 赛程 Action
@@ -44,7 +44,7 @@ public class ScheduleAction extends BaseAction{
 	/**显示第几页的数据*/
 	private String pageNumber;
 	
-	/**更新方式*/
+	/**内部更新模块*/
 	private String innerUpdateModule;
 	
 	/**更新日期*/
@@ -52,12 +52,11 @@ public class ScheduleAction extends BaseAction{
 	
 	/**赛程的   Service 类*/
 	private ScheduleService scheduleService;
+	/** 直播的 Service 类 */
+	private LiveService liveService;
 	
 	/**Schedule 对象*/
 	private Schedule schedule;
-	
-	/**response 对象*/
-	private HttpServletResponse response;
 	
 	/**返回到前台的 json 数据*/
 	private String json;
@@ -74,12 +73,55 @@ public class ScheduleAction extends BaseAction{
 	/** 查询条件的 map 对象 */
 	private Map<String, String> innerConditionMap;
 	
+	/** 赛程 ID 字符串 */
+	private String scheduleIDs;
+	
 	//实例化对象的同时，初始化所需的对象
 	{
 		scheduleService = new ScheduleServiceImpl();
-		response = ServletActionContext.getResponse();
+		liveService = new LiveServiceImpl();
+		
+		//初始化内部更新模块和查询条件的 Map 对象
 		uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+		//初始化内部查询条件的 Map 对象
 		innerConditionMap = new HashMap<String, String>();
+	}
+	
+	/**
+	 * 更新该场比赛的详细信息
+	 * 2014-01-13
+	 * @author 高青
+	 */
+	public void updateScheduleBasicInfo(){
+		//更新成功标识
+		int updateScheduleBasicInfoFlag = 0;
+		if (scheduleIDs != null) {
+			
+			//将数据更新到数据库
+			
+			//拆分赛程 ID 字符串集
+			String[] scheduleIDArray = scheduleIDs.split(",");
+			for (String scheduleID : scheduleIDArray) {
+				//重置内部更新模块和查询条件的 Map 对象
+				uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+				innerConditionMap = new HashMap<String, String>();
+				
+				//将数据放到内部更新条件 map 对象中
+				innerConditionMap.put("scheduleID", scheduleID);
+				getUniqueRemarkerAndConditionMap(innerUpdateModule);
+				
+				//将数据更新到 XML 文件中
+				updateScheduleBasicInfoFlag = liveService.updateScheduleBasicInfo(moduleName, scheduleIDs, uniqueRemarkerAndConditionMap);
+			}
+			
+			//得到 url 的数据
+			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, uniqueRemarkerAndConditionMap);
+			String url = URLUtil.getURL(finalURLMap);
+			json = URLContentUtil.getURLContent(url);
+			
+			//将数据写到 jsp 中
+			writeJson2Web(json);
+		}
 	}
 	
 	/**
@@ -330,16 +372,21 @@ public class ScheduleAction extends BaseAction{
 	/** @return the uniqueRemarkerAndConditionMap */
 	@JSON(serialize=false)
 	public Map<String, Map<String, String>> getUniqueRemarkerAndConditionMap(String updateModule) {
-		//初始化对象
-		uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
-		
 		if (updateModule != null) {
 			
 			// 得到  内部 查询条件的Map 对象
 			innerConditionMap = getInnerConditionMap();
 			
-			//将当前的更新模块 和内部查询条件的 Map 对象放到当前对象中
-			uniqueRemarkerAndConditionMap.put(ScheduleEnum.getScheduleEnumByName(updateModule).toString(), innerConditionMap);
+			//赛程模块
+			if (moduleName.equals("schedule")) {
+				//将当前的更新模块 和内部查询条件的 Map 对象放到当前对象中
+				uniqueRemarkerAndConditionMap.put(ScheduleEnum.getScheduleEnumByName(updateModule).toString(), innerConditionMap);
+			
+			//直播模块
+			} else if (moduleName.equals("live")) {
+				uniqueRemarkerAndConditionMap.put(LiveEnum.getLiveEnumByName(updateModule).toString(), innerConditionMap);
+			}
+			
 		}
 		return uniqueRemarkerAndConditionMap;
 	}
@@ -352,13 +399,12 @@ public class ScheduleAction extends BaseAction{
 	/** @return the innerConditionMap */
 	@JSON(serialize=false)
 	public Map<String, String> getInnerConditionMap() {
-		//初始化对象
-		innerConditionMap = new HashMap<String, String>();
 		
 		//每日赛程
 		if (date != null) {
 			innerConditionMap.put("date", date);
 		}
+		
 		return innerConditionMap;
 	}
 
@@ -376,6 +422,16 @@ public class ScheduleAction extends BaseAction{
 	/** @param innerUpdateModule the innerUpdateModule to set */
 	public void setInnerUpdateModule(String innerUpdateModule) {
 		this.innerUpdateModule = innerUpdateModule;
+	}
+
+	/** @return the scheduleIDs */
+	public String getScheduleIDs() {
+		return scheduleIDs;
+	}
+
+	/** @param scheduleIDs the scheduleIDs to set */
+	public void setScheduleIDs(String scheduleIDs) {
+		this.scheduleIDs = scheduleIDs;
 	}
 	
 }

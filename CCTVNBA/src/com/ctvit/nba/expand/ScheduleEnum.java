@@ -48,27 +48,34 @@ public enum ScheduleEnum {
 		this.name = param;
 	}
 	
-	public static ScheduleEnum getScheduleEnumByName(String updateModule){
-		if (updateModule != null) {
-			if (updateModule.equals("DATE_SCHEDULE_LIST")) {
+	/**
+	 * 通过内部更新模块名称（链接标识符），得到当前链接的枚举值
+	 * @author 高青
+	 * 2014-1-15
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return ScheduleEnum 得到对应的枚举类型
+	 */
+	public static ScheduleEnum getScheduleEnumByName(String innerUpdateModule){
+		if (innerUpdateModule != null) {
+			if (innerUpdateModule.equals("DATE_SCHEDULE_LIST")) {
 				return ScheduleEnum.DATE_SCHEDULE_LIST;
-			} else if (updateModule.equals("ALL_SCHEDULE_LIST")) {
+			} else if (innerUpdateModule.equals("ALL_SCHEDULE_LIST")) {
 				return ScheduleEnum.ALL_SCHEDULE_LIST;
-			}else if (updateModule.equals("MONTH_SCHEDULE_LIST")) {
+			}else if (innerUpdateModule.equals("MONTH_SCHEDULE_LIST")) {
 				return ScheduleEnum.MONTH_SCHEDULE_LIST;
-			}else if (updateModule.equals("TEAM_SCHEDULE_LIST")) {
+			}else if (innerUpdateModule.equals("TEAM_SCHEDULE_LIST")) {
 				return ScheduleEnum.TEAM_SCHEDULE_LIST;
-			}else if (updateModule.equals("TODAY_LIVE")) {
+			}else if (innerUpdateModule.equals("TODAY_LIVE")) {
 				return ScheduleEnum.TODAY_LIVE;
-			}else if (updateModule.equals("SCHEDULE_DATE_LIST")) {
+			}else if (innerUpdateModule.equals("SCHEDULE_DATE_LIST")) {
 				return ScheduleEnum.SCHEDULE_DATE_LIST;
-			}else if (updateModule.equals("SCHEDULES")) {
+			}else if (innerUpdateModule.equals("SCHEDULES")) {
 				return ScheduleEnum.SCHEDULES;
-			}else if (updateModule.equals("TEAM_SCHEDULES")) {
+			}else if (innerUpdateModule.equals("TEAM_SCHEDULES")) {
 				return ScheduleEnum.TEAM_SCHEDULES;
-			}else if (updateModule.equals("INFO_BY_SCHEDULEID")) {
+			}else if (innerUpdateModule.equals("INFO_BY_SCHEDULEID")) {
 				return ScheduleEnum.INFO_BY_SCHEDULEID;
-			}else if (updateModule.equals("LAST_N_SCHEDULES")) {
+			}else if (innerUpdateModule.equals("LAST_N_SCHEDULES")) {
 				return ScheduleEnum.LAST_N_SCHEDULES;
 			}
 		}

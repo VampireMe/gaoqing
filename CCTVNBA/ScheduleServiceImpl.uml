@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="__CZ74H5UEeOVI4WHidaP5A" name="CCTVNBA">
+  <packagedElement xmi:type="uml:Package" xmi:id="__CZ74X5UEeOVI4WHidaP5A" name="com">
+    <packagedElement xmi:type="uml:Package" xmi:id="__CZ74n5UEeOVI4WHidaP5A" name="ctvit">
+      <packagedElement xmi:type="uml:Package" xmi:id="__CZ7435UEeOVI4WHidaP5A" name="nba">
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ75H5UEeOVI4WHidaP5A" name="service">
+          <packagedElement xmi:type="uml:Package" xmi:id="__CZ75X5UEeOVI4WHidaP5A" name="impl">
+            <packagedElement xmi:type="uml:Collaboration" xmi:id="__CZ75n5UEeOVI4WHidaP5A">
+              <ownedBehavior xmi:type="uml:Interaction" xmi:id="__CZ7535UEeOVI4WHidaP5A">
+                <ownedAttribute xmi:id="__CZ76H5UEeOVI4WHidaP5A" name="property" type="__CZ8335UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ76X5UEeOVI4WHidaP5A" name="property" type="__CZ9F35UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ76n5UEeOVI4WHidaP5A" name="property" type="__CZ9BX5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ7635UEeOVI4WHidaP5A" name="property" type="__CZ9B35UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ77H5UEeOVI4WHidaP5A" name="property" type="__CZ9CH5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ77X5UEeOVI4WHidaP5A" name="property" type="__CZ9In5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ77n5UEeOVI4WHidaP5A" name="property" type="__CZ9JH5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ7735UEeOVI4WHidaP5A" name="property" type="__CZ9CX5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ78H5UEeOVI4WHidaP5A" name="property" type="__CZ9DH5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ78X5UEeOVI4WHidaP5A" name="property" type="__CZ9GX5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ78n5UEeOVI4WHidaP5A" name="property" type="__CZ9L35UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ7835UEeOVI4WHidaP5A" name="property" type="__CZ9JH5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ79H5UEeOVI4WHidaP5A" name="property" type="__CZ9Cn5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ79X5UEeOVI4WHidaP5A" name="property" type="__CZ9KX5UEeOVI4WHidaP5A"/>
+                <ownedAttribute xmi:id="__CZ79n5UEeOVI4WHidaP5A" name="property" type="__CZ9K35UEeOVI4WHidaP5A"/>
+                <ownedConnector xmi:id="__CZ7935UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ7-H5UEeOVI4WHidaP5A" role="__CZ76H5UEeOVI4WHidaP5A" partWithPort="__CZ76H5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ7-X5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ7-n5UEeOVI4WHidaP5A" role="__CZ76X5UEeOVI4WHidaP5A" partWithPort="__CZ76X5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ7-35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ7_H5UEeOVI4WHidaP5A" role="__CZ76n5UEeOVI4WHidaP5A" partWithPort="__CZ76n5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ7_X5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ7_n5UEeOVI4WHidaP5A" role="__CZ7635UEeOVI4WHidaP5A" partWithPort="__CZ7635UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ7_35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8AH5UEeOVI4WHidaP5A" role="__CZ77H5UEeOVI4WHidaP5A" partWithPort="__CZ77H5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8AX5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8An5UEeOVI4WHidaP5A" role="__CZ77X5UEeOVI4WHidaP5A" partWithPort="__CZ77X5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8A35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8BH5UEeOVI4WHidaP5A" role="__CZ77n5UEeOVI4WHidaP5A" partWithPort="__CZ77n5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8BX5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8Bn5UEeOVI4WHidaP5A" role="__CZ7735UEeOVI4WHidaP5A" partWithPort="__CZ7735UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8B35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8CH5UEeOVI4WHidaP5A" role="__CZ78H5UEeOVI4WHidaP5A" partWithPort="__CZ78H5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8CX5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8Cn5UEeOVI4WHidaP5A" role="__CZ78X5UEeOVI4WHidaP5A" partWithPort="__CZ78X5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8C35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8DH5UEeOVI4WHidaP5A" role="__CZ78n5UEeOVI4WHidaP5A" partWithPort="__CZ78n5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8DX5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8Dn5UEeOVI4WHidaP5A" role="__CZ7835UEeOVI4WHidaP5A" partWithPort="__CZ7835UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8D35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8EH5UEeOVI4WHidaP5A" role="__CZ79H5UEeOVI4WHidaP5A" partWithPort="__CZ79H5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8EX5UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8En5UEeOVI4WHidaP5A" role="__CZ79X5UEeOVI4WHidaP5A" partWithPort="__CZ79X5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <ownedConnector xmi:id="__CZ8E35UEeOVI4WHidaP5A">
+                  <end xmi:id="__CZ8FH5UEeOVI4WHidaP5A" role="__CZ79n5UEeOVI4WHidaP5A" partWithPort="__CZ79n5UEeOVI4WHidaP5A"/>
+                </ownedConnector>
+                <lifeline xmi:id="__CZ8FX5UEeOVI4WHidaP5A" name="self" represents="__CZ76H5UEeOVI4WHidaP5A" coveredBy="__CZ8JH5UEeOVI4WHidaP5A __CZ8Jn5UEeOVI4WHidaP5A __CZ8KH5UEeOVI4WHidaP5A __CZ8KX5UEeOVI4WHidaP5A __CZ8Kn5UEeOVI4WHidaP5A __CZ8LX5UEeOVI4WHidaP5A __CZ8Ln5UEeOVI4WHidaP5A __CZ8MX5UEeOVI4WHidaP5A __CZ8Mn5UEeOVI4WHidaP5A __CZ8NX5UEeOVI4WHidaP5A __CZ8Nn5UEeOVI4WHidaP5A __CZ8OX5UEeOVI4WHidaP5A __CZ8On5UEeOVI4WHidaP5A __CZ8PX5UEeOVI4WHidaP5A __CZ8Pn5UEeOVI4WHidaP5A __CZ8QX5UEeOVI4WHidaP5A __CZ8Qn5UEeOVI4WHidaP5A __CZ8RX5UEeOVI4WHidaP5A __CZ8Rn5UEeOVI4WHidaP5A __CZ8Tn5UEeOVI4WHidaP5A __CZ8T35UEeOVI4WHidaP5A __CZ8SX5UEeOVI4WHidaP5A __CZ8Un5UEeOVI4WHidaP5A __CZ8U35UEeOVI4WHidaP5A __CZ8Vn5UEeOVI4WHidaP5A __CZ8V35UEeOVI4WHidaP5A __CZ8WX5UEeOVI4WHidaP5A __CZ8Wn5UEeOVI4WHidaP5A __CZ8XX5UEeOVI4WHidaP5A __CZ8Xn5UEeOVI4WHidaP5A __CZ8Zn5UEeOVI4WHidaP5A __CZ8Z35UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A __CZ8an5UEeOVI4WHidaP5A __CZ8a35UEeOVI4WHidaP5A __CZ8bn5UEeOVI4WHidaP5A __CZ8b35UEeOVI4WHidaP5A __CZ8cX5UEeOVI4WHidaP5A __CZ8cn5UEeOVI4WHidaP5A __CZ8dX5UEeOVI4WHidaP5A __CZ8dn5UEeOVI4WHidaP5A __CZ8eX5UEeOVI4WHidaP5A __CZ8en5UEeOVI4WHidaP5A __CZ8fX5UEeOVI4WHidaP5A __CZ8fn5UEeOVI4WHidaP5A __CZ8f35UEeOVI4WHidaP5A __CZ8gn5UEeOVI4WHidaP5A __CZ8g35UEeOVI4WHidaP5A __CZ8hn5UEeOVI4WHidaP5A __CZ8h35UEeOVI4WHidaP5A __CZ8in5UEeOVI4WHidaP5A __CZ8i35UEeOVI4WHidaP5A __CZ8jn5UEeOVI4WHidaP5A __CZ8j35UEeOVI4WHidaP5A __CZ8kn5UEeOVI4WHidaP5A __CZ8k35UEeOVI4WHidaP5A __CZ8lH5UEeOVI4WHidaP5A __CZ8l35UEeOVI4WHidaP5A __CZ8mH5UEeOVI4WHidaP5A __CZ8m35UEeOVI4WHidaP5A __CZ8nH5UEeOVI4WHidaP5A __CZ8n35UEeOVI4WHidaP5A __CZ8oH5UEeOVI4WHidaP5A __CZ8oX5UEeOVI4WHidaP5A __CZ8on5UEeOVI4WHidaP5A __CZ8o35UEeOVI4WHidaP5A __CZ8pH5UEeOVI4WHidaP5A __CZ8p35UEeOVI4WHidaP5A __CZ8qH5UEeOVI4WHidaP5A __CZ8qX5UEeOVI4WHidaP5A __CZ8q35UEeOVI4WHidaP5A __CZ8rH5UEeOVI4WHidaP5A __CZ8tH5UEeOVI4WHidaP5A __CZ8tX5UEeOVI4WHidaP5A __CZ8r35UEeOVI4WHidaP5A __CZ8uH5UEeOVI4WHidaP5A __CZ8uX5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8Fn5UEeOVI4WHidaP5A" name="countMap" represents="__CZ76X5UEeOVI4WHidaP5A" coveredBy="__CZ8JX5UEeOVI4WHidaP5A __CZ8Q35UEeOVI4WHidaP5A __CZ8RH5UEeOVI4WHidaP5A __CZ8X35UEeOVI4WHidaP5A __CZ8YH5UEeOVI4WHidaP5A __CZ8SX5UEeOVI4WHidaP5A __CZ8d35UEeOVI4WHidaP5A __CZ8eH5UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8F35UEeOVI4WHidaP5A" name="scheduleDao" represents="__CZ76n5UEeOVI4WHidaP5A" coveredBy="__CZ8J35UEeOVI4WHidaP5A __CZ8UH5UEeOVI4WHidaP5A __CZ8UX5UEeOVI4WHidaP5A __CZ8SX5UEeOVI4WHidaP5A __CZ8aH5UEeOVI4WHidaP5A __CZ8aX5UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A __CZ8nX5UEeOVI4WHidaP5A __CZ8nn5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8GH5UEeOVI4WHidaP5A" name="URLUtil" represents="__CZ7635UEeOVI4WHidaP5A" coveredBy="__CZ8K35UEeOVI4WHidaP5A __CZ8LH5UEeOVI4WHidaP5A __CZ8M35UEeOVI4WHidaP5A __CZ8NH5UEeOVI4WHidaP5A __CZ8gH5UEeOVI4WHidaP5A __CZ8gX5UEeOVI4WHidaP5A __CZ8iH5UEeOVI4WHidaP5A __CZ8iX5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8GX5UEeOVI4WHidaP5A" name="CommonUtil" represents="__CZ77H5UEeOVI4WHidaP5A" coveredBy="__CZ8L35UEeOVI4WHidaP5A __CZ8MH5UEeOVI4WHidaP5A __CZ8R35UEeOVI4WHidaP5A __CZ8SH5UEeOVI4WHidaP5A __CZ8hH5UEeOVI4WHidaP5A __CZ8hX5UEeOVI4WHidaP5A __CZ8lX5UEeOVI4WHidaP5A __CZ8ln5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8Gn5UEeOVI4WHidaP5A" name="finalURLMap" represents="__CZ77X5UEeOVI4WHidaP5A" coveredBy="__CZ8N35UEeOVI4WHidaP5A __CZ8OH5UEeOVI4WHidaP5A __CZ8jH5UEeOVI4WHidaP5A __CZ8jX5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8G35UEeOVI4WHidaP5A" name="" represents="__CZ77n5UEeOVI4WHidaP5A" coveredBy="__CZ8O35UEeOVI4WHidaP5A __CZ8PH5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8HH5UEeOVI4WHidaP5A" name="URLContentUtil" represents="__CZ7735UEeOVI4WHidaP5A" coveredBy="__CZ8P35UEeOVI4WHidaP5A __CZ8QH5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8HX5UEeOVI4WHidaP5A" name="ScheduleUtil" represents="__CZ78H5UEeOVI4WHidaP5A" coveredBy="__CZ8VH5UEeOVI4WHidaP5A __CZ8VX5UEeOVI4WHidaP5A __CZ8SX5UEeOVI4WHidaP5A __CZ8bH5UEeOVI4WHidaP5A __CZ8bX5UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A __CZ8pX5UEeOVI4WHidaP5A __CZ8pn5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8Hn5UEeOVI4WHidaP5A" name="innerMap" represents="__CZ78X5UEeOVI4WHidaP5A" coveredBy="__CZ8WH5UEeOVI4WHidaP5A __CZ8SX5UEeOVI4WHidaP5A __CZ8W35UEeOVI4WHidaP5A __CZ8XH5UEeOVI4WHidaP5A __CZ8cH5UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A __CZ8c35UEeOVI4WHidaP5A __CZ8dH5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8H35UEeOVI4WHidaP5A" name="log" represents="__CZ78n5UEeOVI4WHidaP5A" coveredBy="__CZ8e35UEeOVI4WHidaP5A __CZ8fH5UEeOVI4WHidaP5A __CZ8YX5UEeOVI4WHidaP5A __CZ8tn5UEeOVI4WHidaP5A __CZ8t35UEeOVI4WHidaP5A __CZ8r35UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8IH5UEeOVI4WHidaP5A" name="" represents="__CZ7835UEeOVI4WHidaP5A" coveredBy="__CZ8kH5UEeOVI4WHidaP5A __CZ8kX5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8IX5UEeOVI4WHidaP5A" name="JDBCUtil" represents="__CZ79H5UEeOVI4WHidaP5A" coveredBy="__CZ8mX5UEeOVI4WHidaP5A __CZ8mn5UEeOVI4WHidaP5A __CZ8rX5UEeOVI4WHidaP5A __CZ8rn5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8In5UEeOVI4WHidaP5A" name="schedules" represents="__CZ79X5UEeOVI4WHidaP5A" coveredBy="__CZ8qn5UEeOVI4WHidaP5A"/>
+                <lifeline xmi:id="__CZ8I35UEeOVI4WHidaP5A" name="e" represents="__CZ79n5UEeOVI4WHidaP5A" coveredBy="__CZ8un5UEeOVI4WHidaP5A __CZ8u35UEeOVI4WHidaP5A __CZ8r35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8JH5UEeOVI4WHidaP5A" name="OccuranceSpec4" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ84H5UEeOVI4WHidaP5A" message="__CZ8vH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8JX5UEeOVI4WHidaP5A" name="OccuranceSpec5" covered="__CZ8Fn5UEeOVI4WHidaP5A" event="__CZ84H5UEeOVI4WHidaP5A" message="__CZ8vH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Jn5UEeOVI4WHidaP5A" name="OccuranceSpec6" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ84X5UEeOVI4WHidaP5A" message="__CZ8vX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8J35UEeOVI4WHidaP5A" name="OccuranceSpec7" covered="__CZ8F35UEeOVI4WHidaP5A" event="__CZ84X5UEeOVI4WHidaP5A" message="__CZ8vX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8KH5UEeOVI4WHidaP5A" name="updateSchedule( )" covered="__CZ8FX5UEeOVI4WHidaP5A" start="__CZ8KX5UEeOVI4WHidaP5A" finish="__CZ8en5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8KX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ84n5UEeOVI4WHidaP5A" message="__CZ8vn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Kn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ84n5UEeOVI4WHidaP5A" message="__CZ8vn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8K35UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" event="__CZ84n5UEeOVI4WHidaP5A" message="__CZ8vn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8LH5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" start="__CZ8K35UEeOVI4WHidaP5A" finish="__CZ8K35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8LX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8435UEeOVI4WHidaP5A" message="__CZ8v35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Ln5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8435UEeOVI4WHidaP5A" message="__CZ8v35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8L35UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" event="__CZ8435UEeOVI4WHidaP5A" message="__CZ8v35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8MH5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" start="__CZ8L35UEeOVI4WHidaP5A" finish="__CZ8L35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8MX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85H5UEeOVI4WHidaP5A" message="__CZ8wH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Mn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85H5UEeOVI4WHidaP5A" message="__CZ8wH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8M35UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" event="__CZ85H5UEeOVI4WHidaP5A" message="__CZ8wH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8NH5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" start="__CZ8M35UEeOVI4WHidaP5A" finish="__CZ8M35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8NX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85X5UEeOVI4WHidaP5A" message="__CZ8wn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Nn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85X5UEeOVI4WHidaP5A" message="__CZ8wn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8N35UEeOVI4WHidaP5A" covered="__CZ8Gn5UEeOVI4WHidaP5A" event="__CZ85X5UEeOVI4WHidaP5A" message="__CZ8wn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8OH5UEeOVI4WHidaP5A" covered="__CZ8Gn5UEeOVI4WHidaP5A" start="__CZ8N35UEeOVI4WHidaP5A" finish="__CZ8N35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8OX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85n5UEeOVI4WHidaP5A" message="__CZ8wX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8On5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ85n5UEeOVI4WHidaP5A" message="__CZ8wX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8O35UEeOVI4WHidaP5A" covered="__CZ8G35UEeOVI4WHidaP5A" event="__CZ85n5UEeOVI4WHidaP5A" message="__CZ8wX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8PH5UEeOVI4WHidaP5A" covered="__CZ8G35UEeOVI4WHidaP5A" start="__CZ8O35UEeOVI4WHidaP5A" finish="__CZ8O35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8PX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8535UEeOVI4WHidaP5A" message="__CZ8w35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Pn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8535UEeOVI4WHidaP5A" message="__CZ8w35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8P35UEeOVI4WHidaP5A" covered="__CZ8HH5UEeOVI4WHidaP5A" event="__CZ8535UEeOVI4WHidaP5A" message="__CZ8w35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8QH5UEeOVI4WHidaP5A" covered="__CZ8HH5UEeOVI4WHidaP5A" start="__CZ8P35UEeOVI4WHidaP5A" finish="__CZ8P35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8QX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86H5UEeOVI4WHidaP5A" message="__CZ8xH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Qn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86H5UEeOVI4WHidaP5A" message="__CZ8xH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Q35UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" event="__CZ86H5UEeOVI4WHidaP5A" message="__CZ8xH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8RH5UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" start="__CZ8Q35UEeOVI4WHidaP5A" finish="__CZ8Q35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8RX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86X5UEeOVI4WHidaP5A" message="__CZ8xX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Rn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86X5UEeOVI4WHidaP5A" message="__CZ8xX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8R35UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" event="__CZ86X5UEeOVI4WHidaP5A" message="__CZ8xX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8SH5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" start="__CZ8R35UEeOVI4WHidaP5A" finish="__CZ8R35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:CombinedFragment" xmi:id="__CZ8SX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A __CZ8F35UEeOVI4WHidaP5A __CZ8HX5UEeOVI4WHidaP5A __CZ8Hn5UEeOVI4WHidaP5A __CZ8Fn5UEeOVI4WHidaP5A" interactionOperator="alt">
+                  <operand xmi:id="__CZ8Sn5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8S35UEeOVI4WHidaP5A" name="map == null"/>
+                  </operand>
+                  <operand xmi:id="__CZ8TH5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8TX5UEeOVI4WHidaP5A" name=""/>
+                  </operand>
+                </fragment>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Tn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86n5UEeOVI4WHidaP5A" message="__CZ8xn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8T35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ86n5UEeOVI4WHidaP5A" message="__CZ8xn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8UH5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" event="__CZ86n5UEeOVI4WHidaP5A" message="__CZ8xn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8UX5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" start="__CZ8UH5UEeOVI4WHidaP5A" finish="__CZ8UH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Un5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8635UEeOVI4WHidaP5A" message="__CZ8x35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8U35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8635UEeOVI4WHidaP5A" message="__CZ8x35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8VH5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" event="__CZ8635UEeOVI4WHidaP5A" message="__CZ8x35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8VX5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" start="__CZ8VH5UEeOVI4WHidaP5A" finish="__CZ8VH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Vn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87H5UEeOVI4WHidaP5A" message="__CZ8yH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8V35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87H5UEeOVI4WHidaP5A" message="__CZ8yH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8WH5UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" event="__CZ87H5UEeOVI4WHidaP5A" message="__CZ8yH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8WX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87X5UEeOVI4WHidaP5A" message="__CZ8yX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Wn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87X5UEeOVI4WHidaP5A" message="__CZ8yX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8W35UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" event="__CZ87X5UEeOVI4WHidaP5A" message="__CZ8yX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8XH5UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" start="__CZ8W35UEeOVI4WHidaP5A" finish="__CZ8W35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8XX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87n5UEeOVI4WHidaP5A" message="__CZ8yn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Xn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ87n5UEeOVI4WHidaP5A" message="__CZ8yn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8X35UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" event="__CZ87n5UEeOVI4WHidaP5A" message="__CZ8yn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8YH5UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" start="__CZ8X35UEeOVI4WHidaP5A" finish="__CZ8X35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:CombinedFragment" xmi:id="__CZ8YX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A __CZ8F35UEeOVI4WHidaP5A __CZ8HX5UEeOVI4WHidaP5A __CZ8Hn5UEeOVI4WHidaP5A __CZ8Fn5UEeOVI4WHidaP5A __CZ8H35UEeOVI4WHidaP5A" interactionOperator="alt">
+                  <operand xmi:id="__CZ8Yn5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8Y35UEeOVI4WHidaP5A" name="map.get(selectConditionRemarker) == null"/>
+                  </operand>
+                  <operand xmi:id="__CZ8ZH5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8ZX5UEeOVI4WHidaP5A" name=""/>
+                  </operand>
+                </fragment>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Zn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8735UEeOVI4WHidaP5A" message="__CZ8y35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8Z35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8735UEeOVI4WHidaP5A" message="__CZ8y35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8aH5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" event="__CZ8735UEeOVI4WHidaP5A" message="__CZ8y35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8aX5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" start="__CZ8aH5UEeOVI4WHidaP5A" finish="__CZ8aH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8an5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88H5UEeOVI4WHidaP5A" message="__CZ8zH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8a35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88H5UEeOVI4WHidaP5A" message="__CZ8zH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8bH5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" event="__CZ88H5UEeOVI4WHidaP5A" message="__CZ8zH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8bX5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" start="__CZ8bH5UEeOVI4WHidaP5A" finish="__CZ8bH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8bn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88X5UEeOVI4WHidaP5A" message="__CZ8zX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8b35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88X5UEeOVI4WHidaP5A" message="__CZ8zX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8cH5UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" event="__CZ88X5UEeOVI4WHidaP5A" message="__CZ8zX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8cX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88n5UEeOVI4WHidaP5A" message="__CZ8zn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8cn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ88n5UEeOVI4WHidaP5A" message="__CZ8zn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8c35UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" event="__CZ88n5UEeOVI4WHidaP5A" message="__CZ8zn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8dH5UEeOVI4WHidaP5A" covered="__CZ8Hn5UEeOVI4WHidaP5A" start="__CZ8c35UEeOVI4WHidaP5A" finish="__CZ8c35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8dX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8835UEeOVI4WHidaP5A" message="__CZ8z35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8dn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8835UEeOVI4WHidaP5A" message="__CZ8z35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8d35UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" event="__CZ8835UEeOVI4WHidaP5A" message="__CZ8z35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8eH5UEeOVI4WHidaP5A" covered="__CZ8Fn5UEeOVI4WHidaP5A" start="__CZ8d35UEeOVI4WHidaP5A" finish="__CZ8d35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8eX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89H5UEeOVI4WHidaP5A" message="__CZ80H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8en5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89H5UEeOVI4WHidaP5A" message="__CZ80H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8e35UEeOVI4WHidaP5A" covered="__CZ8H35UEeOVI4WHidaP5A" event="__CZ89H5UEeOVI4WHidaP5A" message="__CZ80H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8fH5UEeOVI4WHidaP5A" covered="__CZ8H35UEeOVI4WHidaP5A" start="__CZ8e35UEeOVI4WHidaP5A" finish="__CZ8e35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8fX5UEeOVI4WHidaP5A" name="getURLScheduleJSON( )" covered="__CZ8FX5UEeOVI4WHidaP5A" start="__CZ8fn5UEeOVI4WHidaP5A" finish="__CZ8j35UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8fn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89X5UEeOVI4WHidaP5A" message="__CZ80X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8f35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89X5UEeOVI4WHidaP5A" message="__CZ80X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8gH5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" event="__CZ89X5UEeOVI4WHidaP5A" message="__CZ80X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8gX5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" start="__CZ8gH5UEeOVI4WHidaP5A" finish="__CZ8gH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8gn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89n5UEeOVI4WHidaP5A" message="__CZ80n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8g35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ89n5UEeOVI4WHidaP5A" message="__CZ80n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8hH5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" event="__CZ89n5UEeOVI4WHidaP5A" message="__CZ80n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8hX5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" start="__CZ8hH5UEeOVI4WHidaP5A" finish="__CZ8hH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8hn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8935UEeOVI4WHidaP5A" message="__CZ8035UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8h35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8935UEeOVI4WHidaP5A" message="__CZ8035UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8iH5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" event="__CZ8935UEeOVI4WHidaP5A" message="__CZ8035UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8iX5UEeOVI4WHidaP5A" covered="__CZ8GH5UEeOVI4WHidaP5A" start="__CZ8iH5UEeOVI4WHidaP5A" finish="__CZ8iH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8in5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-H5UEeOVI4WHidaP5A" message="__CZ81X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8i35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-H5UEeOVI4WHidaP5A" message="__CZ81X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8jH5UEeOVI4WHidaP5A" covered="__CZ8Gn5UEeOVI4WHidaP5A" event="__CZ8-H5UEeOVI4WHidaP5A" message="__CZ81X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8jX5UEeOVI4WHidaP5A" covered="__CZ8Gn5UEeOVI4WHidaP5A" start="__CZ8jH5UEeOVI4WHidaP5A" finish="__CZ8jH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8jn5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-X5UEeOVI4WHidaP5A" message="__CZ81H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8j35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-X5UEeOVI4WHidaP5A" message="__CZ81H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8kH5UEeOVI4WHidaP5A" covered="__CZ8IH5UEeOVI4WHidaP5A" event="__CZ8-X5UEeOVI4WHidaP5A" message="__CZ81H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8kX5UEeOVI4WHidaP5A" covered="__CZ8IH5UEeOVI4WHidaP5A" start="__CZ8kH5UEeOVI4WHidaP5A" finish="__CZ8kH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8kn5UEeOVI4WHidaP5A" name="updateSchedule2Outer( )" covered="__CZ8FX5UEeOVI4WHidaP5A" start="__CZ8k35UEeOVI4WHidaP5A" finish="__CZ8pH5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8k35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-n5UEeOVI4WHidaP5A" message="__CZ81n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8lH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-n5UEeOVI4WHidaP5A" message="__CZ81n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8lX5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" event="__CZ8-n5UEeOVI4WHidaP5A" message="__CZ81n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8ln5UEeOVI4WHidaP5A" covered="__CZ8GX5UEeOVI4WHidaP5A" start="__CZ8lX5UEeOVI4WHidaP5A" finish="__CZ8lX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8l35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-35UEeOVI4WHidaP5A" message="__CZ8135UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8mH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8-35UEeOVI4WHidaP5A" message="__CZ8135UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8mX5UEeOVI4WHidaP5A" covered="__CZ8IX5UEeOVI4WHidaP5A" event="__CZ8-35UEeOVI4WHidaP5A" message="__CZ8135UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8mn5UEeOVI4WHidaP5A" covered="__CZ8IX5UEeOVI4WHidaP5A" start="__CZ8mX5UEeOVI4WHidaP5A" finish="__CZ8mX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8m35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_H5UEeOVI4WHidaP5A" message="__CZ82H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8nH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_H5UEeOVI4WHidaP5A" message="__CZ82H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8nX5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" event="__CZ8_H5UEeOVI4WHidaP5A" message="__CZ82H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8nn5UEeOVI4WHidaP5A" covered="__CZ8F35UEeOVI4WHidaP5A" start="__CZ8nX5UEeOVI4WHidaP5A" finish="__CZ8nX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8n35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_X5UEeOVI4WHidaP5A" message="__CZ82X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8oH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_X5UEeOVI4WHidaP5A" message="__CZ82X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8oX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_X5UEeOVI4WHidaP5A" message="__CZ82X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8on5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" start="__CZ8oX5UEeOVI4WHidaP5A" finish="__CZ8oX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8o35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_n5UEeOVI4WHidaP5A" message="__CZ82n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8pH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_n5UEeOVI4WHidaP5A" message="__CZ82n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8pX5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" event="__CZ8_n5UEeOVI4WHidaP5A" message="__CZ82n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8pn5UEeOVI4WHidaP5A" covered="__CZ8HX5UEeOVI4WHidaP5A" start="__CZ8pX5UEeOVI4WHidaP5A" finish="__CZ8pX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8p35UEeOVI4WHidaP5A" name="getSchedules( )" covered="__CZ8FX5UEeOVI4WHidaP5A" start="__CZ8qH5UEeOVI4WHidaP5A" finish="__CZ8uX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8qH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_35UEeOVI4WHidaP5A" message="__CZ8235UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8qX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ8_35UEeOVI4WHidaP5A" message="__CZ8235UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8qn5UEeOVI4WHidaP5A" covered="__CZ8In5UEeOVI4WHidaP5A" event="__CZ8_35UEeOVI4WHidaP5A" message="__CZ8235UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8q35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9AH5UEeOVI4WHidaP5A" message="__CZ83H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8rH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9AH5UEeOVI4WHidaP5A" message="__CZ83H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8rX5UEeOVI4WHidaP5A" covered="__CZ8IX5UEeOVI4WHidaP5A" event="__CZ9AH5UEeOVI4WHidaP5A" message="__CZ83H5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8rn5UEeOVI4WHidaP5A" covered="__CZ8IX5UEeOVI4WHidaP5A" start="__CZ8rX5UEeOVI4WHidaP5A" finish="__CZ8rX5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:CombinedFragment" xmi:id="__CZ8r35UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A __CZ8H35UEeOVI4WHidaP5A __CZ8I35UEeOVI4WHidaP5A" interactionOperator="alt">
+                  <operand xmi:id="__CZ8sH5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8sX5UEeOVI4WHidaP5A" name=""/>
+                  </operand>
+                  <operand xmi:id="__CZ8sn5UEeOVI4WHidaP5A">
+                    <guard xmi:id="__CZ8s35UEeOVI4WHidaP5A" name=""/>
+                  </operand>
+                </fragment>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8tH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9AX5UEeOVI4WHidaP5A" message="__CZ83X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8tX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9AX5UEeOVI4WHidaP5A" message="__CZ83X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8tn5UEeOVI4WHidaP5A" covered="__CZ8H35UEeOVI4WHidaP5A" event="__CZ9AX5UEeOVI4WHidaP5A" message="__CZ83X5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8t35UEeOVI4WHidaP5A" covered="__CZ8H35UEeOVI4WHidaP5A" start="__CZ8tn5UEeOVI4WHidaP5A" finish="__CZ8tn5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8uH5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9An5UEeOVI4WHidaP5A" message="__CZ83n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8uX5UEeOVI4WHidaP5A" covered="__CZ8FX5UEeOVI4WHidaP5A" event="__CZ9An5UEeOVI4WHidaP5A" message="__CZ83n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="__CZ8un5UEeOVI4WHidaP5A" covered="__CZ8I35UEeOVI4WHidaP5A" event="__CZ9An5UEeOVI4WHidaP5A" message="__CZ83n5UEeOVI4WHidaP5A"/>
+                <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="__CZ8u35UEeOVI4WHidaP5A" covered="__CZ8I35UEeOVI4WHidaP5A" start="__CZ8un5UEeOVI4WHidaP5A" finish="__CZ8un5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8vH5UEeOVI4WHidaP5A" name="new HashMap&lt;String,Map&lt;String,Integer>>()" messageSort="createMessage" receiveEvent="__CZ8JX5UEeOVI4WHidaP5A" sendEvent="__CZ8JH5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8vX5UEeOVI4WHidaP5A" name="new ScheduleDaoImpl()" messageSort="createMessage" receiveEvent="__CZ8J35UEeOVI4WHidaP5A" sendEvent="__CZ8Jn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8vn5UEeOVI4WHidaP5A" name="getFinalURLMap( )" receiveEvent="__CZ8K35UEeOVI4WHidaP5A" sendEvent="__CZ8KX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8v35UEeOVI4WHidaP5A" name="getInnerUpdateModule( )" receiveEvent="__CZ8L35UEeOVI4WHidaP5A" sendEvent="__CZ8LX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8wH5UEeOVI4WHidaP5A" name="getPartGetURL( )" receiveEvent="__CZ8M35UEeOVI4WHidaP5A" sendEvent="__CZ8MX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8wX5UEeOVI4WHidaP5A" name="get( )" receiveEvent="__CZ8O35UEeOVI4WHidaP5A" sendEvent="__CZ8OX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8wn5UEeOVI4WHidaP5A" name="get( )" receiveEvent="__CZ8N35UEeOVI4WHidaP5A" sendEvent="__CZ8NX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8w35UEeOVI4WHidaP5A" name="getTListByURL( )" receiveEvent="__CZ8P35UEeOVI4WHidaP5A" sendEvent="__CZ8PX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8xH5UEeOVI4WHidaP5A" name="get( )" receiveEvent="__CZ8Q35UEeOVI4WHidaP5A" sendEvent="__CZ8QX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8xX5UEeOVI4WHidaP5A" name="getConditionRemarker( )" receiveEvent="__CZ8R35UEeOVI4WHidaP5A" sendEvent="__CZ8RX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8xn5UEeOVI4WHidaP5A" name="updateSchedule2DB( )" receiveEvent="__CZ8UH5UEeOVI4WHidaP5A" sendEvent="__CZ8Tn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8x35UEeOVI4WHidaP5A" name="getChildrenElementList( )" receiveEvent="__CZ8VH5UEeOVI4WHidaP5A" sendEvent="__CZ8Un5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8yH5UEeOVI4WHidaP5A" name="new()" messageSort="createMessage" receiveEvent="__CZ8WH5UEeOVI4WHidaP5A" sendEvent="__CZ8Vn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8yX5UEeOVI4WHidaP5A" name="put( )" receiveEvent="__CZ8W35UEeOVI4WHidaP5A" sendEvent="__CZ8WX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8yn5UEeOVI4WHidaP5A" name="put( )" receiveEvent="__CZ8X35UEeOVI4WHidaP5A" sendEvent="__CZ8XX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8y35UEeOVI4WHidaP5A" name="updateSchedule2DB( )" receiveEvent="__CZ8aH5UEeOVI4WHidaP5A" sendEvent="__CZ8Zn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8zH5UEeOVI4WHidaP5A" name="getChildrenElementList( )" receiveEvent="__CZ8bH5UEeOVI4WHidaP5A" sendEvent="__CZ8an5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8zX5UEeOVI4WHidaP5A" name="new()" messageSort="createMessage" receiveEvent="__CZ8cH5UEeOVI4WHidaP5A" sendEvent="__CZ8bn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8zn5UEeOVI4WHidaP5A" name="put( )" receiveEvent="__CZ8c35UEeOVI4WHidaP5A" sendEvent="__CZ8cX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8z35UEeOVI4WHidaP5A" name="put( )" receiveEvent="__CZ8d35UEeOVI4WHidaP5A" sendEvent="__CZ8dX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ80H5UEeOVI4WHidaP5A" name="info( )" messageSort="asynchCall" receiveEvent="__CZ8e35UEeOVI4WHidaP5A" sendEvent="__CZ8eX5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ80X5UEeOVI4WHidaP5A" name="getFinalURLMap( )" receiveEvent="__CZ8gH5UEeOVI4WHidaP5A" sendEvent="__CZ8fn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ80n5UEeOVI4WHidaP5A" name="getInnerUpdateModule( )" receiveEvent="__CZ8hH5UEeOVI4WHidaP5A" sendEvent="__CZ8gn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8035UEeOVI4WHidaP5A" name="getPartGetURL( )" receiveEvent="__CZ8iH5UEeOVI4WHidaP5A" sendEvent="__CZ8hn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ81H5UEeOVI4WHidaP5A" name="get( )" receiveEvent="__CZ8kH5UEeOVI4WHidaP5A" sendEvent="__CZ8jn5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ81X5UEeOVI4WHidaP5A" name="get( )" receiveEvent="__CZ8jH5UEeOVI4WHidaP5A" sendEvent="__CZ8in5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ81n5UEeOVI4WHidaP5A" name="getMapKey( )" receiveEvent="__CZ8lX5UEeOVI4WHidaP5A" sendEvent="__CZ8k35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8135UEeOVI4WHidaP5A" name="getConnection( )" receiveEvent="__CZ8mX5UEeOVI4WHidaP5A" sendEvent="__CZ8l35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ82H5UEeOVI4WHidaP5A" name="maintainSchedule( )" receiveEvent="__CZ8nX5UEeOVI4WHidaP5A" sendEvent="__CZ8m35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ82X5UEeOVI4WHidaP5A" name="getSchedules( )" receiveEvent="__CZ8oX5UEeOVI4WHidaP5A" sendEvent="__CZ8n35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ82n5UEeOVI4WHidaP5A" name="getChildrenElementList( )" receiveEvent="__CZ8pX5UEeOVI4WHidaP5A" sendEvent="__CZ8o35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ8235UEeOVI4WHidaP5A" name="new()" messageSort="createMessage" receiveEvent="__CZ8qn5UEeOVI4WHidaP5A" sendEvent="__CZ8qH5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ83H5UEeOVI4WHidaP5A" name="getConnection( )" receiveEvent="__CZ8rX5UEeOVI4WHidaP5A" sendEvent="__CZ8q35UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ83X5UEeOVI4WHidaP5A" name="info( )" messageSort="asynchCall" receiveEvent="__CZ8tn5UEeOVI4WHidaP5A" sendEvent="__CZ8tH5UEeOVI4WHidaP5A"/>
+                <message xmi:id="__CZ83n5UEeOVI4WHidaP5A" name="printStackTrace( )" messageSort="asynchCall" receiveEvent="__CZ8un5UEeOVI4WHidaP5A" sendEvent="__CZ8uH5UEeOVI4WHidaP5A"/>
+              </ownedBehavior>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="__CZ8335UEeOVI4WHidaP5A" name="ScheduleServiceImpl"/>
+            <packagedElement xmi:type="uml:CreationEvent" xmi:id="__CZ84H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CreationEvent" xmi:id="__CZ84X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ84n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8435UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ85H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ85X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ85n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8535UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ86H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ86X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ86n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8635UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CreationEvent" xmi:id="__CZ87H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ87X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ87n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8735UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ88H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CreationEvent" xmi:id="__CZ88X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ88n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8835UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ89H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ89X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ89n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8935UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8-H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8-X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8-n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8-35UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8_H5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8_X5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ8_n5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CreationEvent" xmi:id="__CZ8_35UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ9AH5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ9AX5UEeOVI4WHidaP5A"/>
+            <packagedElement xmi:type="uml:CallEvent" xmi:id="__CZ9An5UEeOVI4WHidaP5A"/>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9A35UEeOVI4WHidaP5A" name="dao">
+          <packagedElement xmi:type="uml:Package" xmi:id="__CZ9BH5UEeOVI4WHidaP5A" name="impl">
+            <packagedElement xmi:type="uml:Class" xmi:id="__CZ9BX5UEeOVI4WHidaP5A" name="ScheduleDaoImpl"/>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Bn5UEeOVI4WHidaP5A" name="util">
+          <packagedElement xmi:type="uml:Class" xmi:id="__CZ9B35UEeOVI4WHidaP5A" name="URLUtil"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="__CZ9CH5UEeOVI4WHidaP5A" name="CommonUtil"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="__CZ9CX5UEeOVI4WHidaP5A" name="URLContentUtil"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="__CZ9Cn5UEeOVI4WHidaP5A" name="JDBCUtil"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9C35UEeOVI4WHidaP5A" name="expand">
+          <packagedElement xmi:type="uml:Class" xmi:id="__CZ9DH5UEeOVI4WHidaP5A" name="ScheduleUtil"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="__CZ9DX5UEeOVI4WHidaP5A" name="java">
+    <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Dn5UEeOVI4WHidaP5A" name="util">
+      <packagedElement xmi:type="uml:Package" xmi:id="__CZ9D35UEeOVI4WHidaP5A" name="HashMap&lt;java">
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9EH5UEeOVI4WHidaP5A" name="lang">
+          <packagedElement xmi:type="uml:Package" xmi:id="__CZ9EX5UEeOVI4WHidaP5A" name="String,java">
+            <packagedElement xmi:type="uml:Package" xmi:id="__CZ9En5UEeOVI4WHidaP5A" name="util">
+              <packagedElement xmi:type="uml:Package" xmi:id="__CZ9E35UEeOVI4WHidaP5A" name="Map&lt;java">
+                <packagedElement xmi:type="uml:Package" xmi:id="__CZ9FH5UEeOVI4WHidaP5A" name="lang">
+                  <packagedElement xmi:type="uml:Package" xmi:id="__CZ9FX5UEeOVI4WHidaP5A" name="String,java">
+                    <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Fn5UEeOVI4WHidaP5A" name="lang">
+                      <packagedElement xmi:type="uml:Class" xmi:id="__CZ9F35UEeOVI4WHidaP5A" name="Integer>>"/>
+                    </packagedElement>
+                  </packagedElement>
+                </packagedElement>
+              </packagedElement>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Package" xmi:id="__CZ9GH5UEeOVI4WHidaP5A" name="lang">
+              <packagedElement xmi:type="uml:Class" xmi:id="__CZ9GX5UEeOVI4WHidaP5A" name="Integer>"/>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Gn5UEeOVI4WHidaP5A" name="Map&lt;java">
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9G35UEeOVI4WHidaP5A" name="lang">
+          <packagedElement xmi:type="uml:Package" xmi:id="__CZ9HH5UEeOVI4WHidaP5A" name="String,java">
+            <packagedElement xmi:type="uml:Package" xmi:id="__CZ9HX5UEeOVI4WHidaP5A" name="util">
+              <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Hn5UEeOVI4WHidaP5A" name="Map&lt;java">
+                <packagedElement xmi:type="uml:Package" xmi:id="__CZ9H35UEeOVI4WHidaP5A" name="lang">
+                  <packagedElement xmi:type="uml:Package" xmi:id="__CZ9IH5UEeOVI4WHidaP5A" name="String,java">
+                    <packagedElement xmi:type="uml:Package" xmi:id="__CZ9IX5UEeOVI4WHidaP5A" name="lang">
+                      <packagedElement xmi:type="uml:Class" xmi:id="__CZ9In5UEeOVI4WHidaP5A" name="String>>"/>
+                    </packagedElement>
+                  </packagedElement>
+                </packagedElement>
+              </packagedElement>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Package" xmi:id="__CZ9I35UEeOVI4WHidaP5A" name="lang">
+              <packagedElement xmi:type="uml:Class" xmi:id="__CZ9JH5UEeOVI4WHidaP5A" name="String>"/>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="__CZ9JX5UEeOVI4WHidaP5A" name="ArrayList&lt;com">
+        <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Jn5UEeOVI4WHidaP5A" name="ctvit">
+          <packagedElement xmi:type="uml:Package" xmi:id="__CZ9J35UEeOVI4WHidaP5A" name="nba">
+            <packagedElement xmi:type="uml:Package" xmi:id="__CZ9KH5UEeOVI4WHidaP5A" name="entity">
+              <packagedElement xmi:type="uml:Class" xmi:id="__CZ9KX5UEeOVI4WHidaP5A" name="Schedule>"/>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Kn5UEeOVI4WHidaP5A" name="lang">
+      <packagedElement xmi:type="uml:Class" xmi:id="__CZ9K35UEeOVI4WHidaP5A" name="Throwable"/>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="__CZ9LH5UEeOVI4WHidaP5A" name="org">
+    <packagedElement xmi:type="uml:Package" xmi:id="__CZ9LX5UEeOVI4WHidaP5A" name="apache">
+      <packagedElement xmi:type="uml:Package" xmi:id="__CZ9Ln5UEeOVI4WHidaP5A" name="log4j">
+        <packagedElement xmi:type="uml:Class" xmi:id="__CZ9L35UEeOVI4WHidaP5A" name="Category"/>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
