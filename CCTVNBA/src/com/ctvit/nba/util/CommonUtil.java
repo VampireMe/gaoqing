@@ -72,7 +72,7 @@ public class CommonUtil {
 	 * @param key key的值
 	 * @return value 根据 key 值得到的结果值
 	 */
-	public static int getValueByKey(JSONObject jsonObject, String key){
+	public static Integer getIntegerValueByKey(JSONObject jsonObject, String key){
 		int value = 0;
 		
 		//当前  key 下的值

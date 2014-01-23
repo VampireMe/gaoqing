@@ -48,33 +48,33 @@ public class ScheduleUtil {
 		schedule.setVisitingSmallLogo(jsonObject.getString("VisitingSmallLogo"));
 		schedule.setHomeLargerLogo(jsonObject.getString("HomeLargerLogo"));
 		
-		schedule.setHomeTeamScore(CommonUtil.getValueByKey(jsonObject, "HomeTeamScore"));
+		schedule.setHomeTeamScore(CommonUtil.getIntegerValueByKey(jsonObject, "HomeTeamScore"));
 		schedule.setVisitingLargerLogo(jsonObject.getString("VisitingLargerLogo"));
 		schedule.setHomeSmallLogo(jsonObject.getString("HomeSmallLogo"));
 		
-		schedule.setScheduleID(Integer.toString(CommonUtil.getValueByKey(jsonObject, "ScheduleID")));
-		schedule.setVisitingTeamScore(CommonUtil.getValueByKey(jsonObject, "VisitingTeamScore"));
+		schedule.setScheduleID(Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "ScheduleID")));
+		schedule.setVisitingTeamScore(CommonUtil.getIntegerValueByKey(jsonObject, "VisitingTeamScore"));
 		
 		schedule.setHomeENAlias(jsonObject.getString("HomeENAlias"));
 		schedule.setStatusCNName(jsonObject.getString("StatusCNName"));
 		schedule.setStatusENName(jsonObject.getString("StatusENName"));
-		schedule.setVisitingTeamID(Integer.toString(CommonUtil.getValueByKey(jsonObject, "VisitingTeamID")));
+		schedule.setVisitingTeamID(Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "VisitingTeamID")));
 		schedule.setVisitingCNAlias(jsonObject.getString("VisitingCNAlias"));
 		schedule.setMatchLocalTime(switchDate(jsonObject.getLong("MatchLocalTime")));
 		schedule.setMatchGTM8Time(switchDate(jsonObject.getLong("MatchGTM8Time")));
-		schedule.setTotalQuarters(CommonUtil.getValueByKey(jsonObject, "TotalQuarters"));
+		schedule.setTotalQuarters(CommonUtil.getIntegerValueByKey(jsonObject, "TotalQuarters"));
 		schedule.setVisitingCNName(jsonObject.getString("VisitingCNName"));
 		schedule.setVisitingENAlias(jsonObject.getString("VisitingENAlias"));
 		schedule.setMatchTypeCNName(jsonObject.getString("MatchTypeCNName"));
 		schedule.setMatchTypeENName(jsonObject.getString("MatchTypeENName"));
-		schedule.setHomeTeamID(Integer.toString(CommonUtil.getValueByKey(jsonObject, "HomeTeamID")));
+		schedule.setHomeTeamID(Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "HomeTeamID")));
 		
 		//首先判断传递过来的 标识参数是否为空
 		if (tRemarkerAndParamsMap == null || tRemarkerAndParamsMap.size() == 0) {
 			
 		} else {
 			//得到对象标识
-			String remarkerID = Integer.toString(CommonUtil.getValueByKey(jsonObject, "ScheduleID"));
+			String remarkerID = Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "ScheduleID"));
 			//得到实体类封装的参数
 			Schedule updateSchedule  = tRemarkerAndParamsMap.get(remarkerID);
 			

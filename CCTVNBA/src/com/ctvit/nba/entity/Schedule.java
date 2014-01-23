@@ -109,6 +109,9 @@ public class Schedule {
 	/**其他*/
 	private String other;
 	
+	/** 内部更新模块 */
+	private String innerUpdateModule;
+	
 	/**附加信息 */
 	private List<ScheduleExpand> scheduleExpands;
 
@@ -573,4 +576,15 @@ public class Schedule {
 	public void setOther(String other) {
 		this.other = other;
 	}
+
+	/** @return the innerUpdateModule */
+	public String getInnerUpdateModule() {
+		return innerUpdateModule;
+	}
+
+	/** @param innerUpdateModule the innerUpdateModule to set */
+	public void setInnerUpdateModule(String innerUpdateModule) {
+		this.innerUpdateModule = innerUpdateModule;
+	}
+	
 }

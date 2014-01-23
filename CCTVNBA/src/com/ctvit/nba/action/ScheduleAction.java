@@ -16,8 +16,10 @@ import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
 import com.ctvit.nba.service.LiveService;
+import com.ctvit.nba.service.PlayerService;
 import com.ctvit.nba.service.ScheduleService;
 import com.ctvit.nba.service.impl.LiveServiceImpl;
+import com.ctvit.nba.service.impl.PlayerServiceImpl;
 import com.ctvit.nba.service.impl.ScheduleServiceImpl;
 import com.ctvit.nba.util.URLContentUtil;
 import com.ctvit.nba.util.URLUtil;
@@ -54,6 +56,8 @@ public class ScheduleAction extends BaseAction{
 	private ScheduleService scheduleService;
 	/** 直播的 Service 类 */
 	private LiveService liveService;
+	/** 球员个人信息的 Service 类 */
+	private PlayerService playerService;
 	
 	/**Schedule 对象*/
 	private Schedule schedule;
@@ -68,7 +72,7 @@ public class ScheduleAction extends BaseAction{
 	private String loadRemarker;
 	
 	/** 更新唯一标识和查询条件map对象的集合数据 */
-	private Map<String, Map<String, String>> uniqueRemarkerAndConditionMap;
+	private Map<String, Map<String, String>> innerUpdateModuleACondtions;
 	
 	/** 查询条件的 map 对象 */
 	private Map<String, String> innerConditionMap;
@@ -80,11 +84,41 @@ public class ScheduleAction extends BaseAction{
 	{
 		scheduleService = new ScheduleServiceImpl();
 		liveService = new LiveServiceImpl();
+		playerService = new PlayerServiceImpl();
 		
 		//初始化内部更新模块和查询条件的 Map 对象
-		uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+		innerUpdateModuleACondtions = new HashMap<String, Map<String,String>>();
 		//初始化内部查询条件的 Map 对象
 		innerConditionMap = new HashMap<String, String>();
+	}
+	
+	/**
+	 * 更新球员个人信息
+	 * @author 高青
+	 * 2014-1-22
+	 * @return void 空
+	 */
+	public void updatePlayerPersonalInfo(){
+		//组织内部更新模块和更新条件的 Map 对象
+		if (scheduleIDs != null && !scheduleIDs.equals("")) {
+			String[] scheduleArray = scheduleIDs.split(",");
+			
+			//更新到球员个人信息 到 XML 文件
+			for (String scheduleID : scheduleArray) {
+				innerConditionMap.put("scheduleID", scheduleID);
+				
+				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
+				
+				playerService.updatePlayerPersonal2XML(moduleName, scheduleID, innerUpdateModuleACondtions);
+			}
+			//更新到数据库中
+			playerService.updatePlayerPersonal2DB(moduleName, scheduleIDs, innerUpdateModuleACondtions);
+			
+		}
+		
+		
+		//返回更新的数据
+		
 	}
 	
 	/**
@@ -103,19 +137,19 @@ public class ScheduleAction extends BaseAction{
 			String[] scheduleIDArray = scheduleIDs.split(",");
 			for (String scheduleID : scheduleIDArray) {
 				//重置内部更新模块和查询条件的 Map 对象
-				uniqueRemarkerAndConditionMap = new HashMap<String, Map<String,String>>();
+				innerUpdateModuleACondtions = new HashMap<String, Map<String,String>>();
 				innerConditionMap = new HashMap<String, String>();
 				
 				//将数据放到内部更新条件 map 对象中
 				innerConditionMap.put("scheduleID", scheduleID);
-				getUniqueRemarkerAndConditionMap(innerUpdateModule);
+				getInnerUpdateModuleAConditions(innerUpdateModule);
 				
 				//将数据更新到 XML 文件中
-				updateScheduleBasicInfoFlag = liveService.updateScheduleBasicInfo(moduleName, scheduleIDs, uniqueRemarkerAndConditionMap);
+				updateScheduleBasicInfoFlag = liveService.updateScheduleBasicInfo(moduleName, scheduleIDs, innerUpdateModuleACondtions);
 			}
 			
 			//得到 url 的数据
-			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, uniqueRemarkerAndConditionMap);
+			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
 			String url = URLUtil.getURL(finalURLMap);
 			json = URLContentUtil.getURLContent(url);
 			
@@ -137,13 +171,13 @@ public class ScheduleAction extends BaseAction{
 		
 		//当日期不为空时
 		if (date != null && !date.equals("")) {
-			uniqueRemarkerAndConditionMap = getUniqueRemarkerAndConditionMap(innerUpdateModule);
+			innerUpdateModuleACondtions = getInnerUpdateModuleAConditions(innerUpdateModule);
 			
 			//如果是重新加载，就不执行更新操作
 			if (loadRemarker == null) {
 				//将当前日期下的赛程，初始化到数据库中
 				try {
-					scheduleService.updateSchedule(moduleName, uniqueRemarkerAndConditionMap, null);
+					scheduleService.updateSchedule(moduleName, innerUpdateModuleACondtions, null);
 				} catch (Exception e) {
 					logger.info("数据写入数据库和 xml 文件中，发生异常");
 					e.printStackTrace();
@@ -242,9 +276,9 @@ public class ScheduleAction extends BaseAction{
 		//更新到数据库、xml 文件中
 		if (innerUpdateModule != null && innerUpdateModule.length() != 0) {
 			//得到更新唯一标识和查询条件map对象的集合数据
-			uniqueRemarkerAndConditionMap = getUniqueRemarkerAndConditionMap(innerUpdateModule);
+			innerUpdateModuleACondtions = getInnerUpdateModuleAConditions(innerUpdateModule);
 			
-			updateRemarker = scheduleService.updateSchedule2Outer(moduleName, updateScheduleMap, uniqueRemarkerAndConditionMap);
+			updateRemarker = scheduleService.updateSchedule2Outer(moduleName, updateScheduleMap, innerUpdateModuleACondtions);
 		}
 		
 		if (updateRemarker == 1) {
@@ -369,9 +403,9 @@ public class ScheduleAction extends BaseAction{
 		this.loadRemarker = loadRemarker;
 	}
 
-	/** @return the uniqueRemarkerAndConditionMap */
+	/** @return the innerUpdateModuleACondtions */
 	@JSON(serialize=false)
-	public Map<String, Map<String, String>> getUniqueRemarkerAndConditionMap(String updateModule) {
+	public Map<String, Map<String, String>> getInnerUpdateModuleAConditions(String updateModule) {
 		if (updateModule != null) {
 			
 			// 得到  内部 查询条件的Map 对象
@@ -380,20 +414,20 @@ public class ScheduleAction extends BaseAction{
 			//赛程模块
 			if (moduleName.equals("schedule")) {
 				//将当前的更新模块 和内部查询条件的 Map 对象放到当前对象中
-				uniqueRemarkerAndConditionMap.put(ScheduleEnum.getScheduleEnumByName(updateModule).toString(), innerConditionMap);
+				innerUpdateModuleACondtions.put(ScheduleEnum.getScheduleEnumByName(updateModule).toString(), innerConditionMap);
 			
 			//直播模块
 			} else if (moduleName.equals("live")) {
-				uniqueRemarkerAndConditionMap.put(LiveEnum.getLiveEnumByName(updateModule).toString(), innerConditionMap);
+				innerUpdateModuleACondtions.put(LiveEnum.getLiveEnumByName(updateModule).toString(), innerConditionMap);
 			}
 			
 		}
-		return uniqueRemarkerAndConditionMap;
+		return innerUpdateModuleACondtions;
 	}
 
-	/** @param uniqueRemarkerAndConditionMap the uniqueRemarkerAndConditionMap to set */
-	public void setUniqueRemarkerAndConditionMap(Map<String, Map<String, String>> uniqueRemarkerAndConditionMap) {
-		this.uniqueRemarkerAndConditionMap = uniqueRemarkerAndConditionMap;
+	/** @param innerUpdateModuleACondtions the innerUpdateModuleACondtions to set */
+	public void setInnerUpdateAConditions(Map<String, Map<String, String>> innerUpdateModuleACondtions) {
+		this.innerUpdateModuleACondtions = innerUpdateModuleACondtions;
 	}
 
 	/** @return the innerConditionMap */

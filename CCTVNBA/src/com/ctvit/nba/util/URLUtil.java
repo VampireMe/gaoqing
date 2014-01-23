@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.ctvit.nba.expand.LiveEnum;
+import com.ctvit.nba.expand.PlayerEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
 
 /**
@@ -98,11 +99,14 @@ public class URLUtil {
 		//初始化对象
 		Map<String, Map<String, String>> mapObject = new HashMap<String, Map<String, String>>();
 		
-		//赛程 部分链接地址
+		//赛程 get部分链接地址
 		mapObject.put("schedule", scheduleMap());
 		
-		//直播 部分链接地址
+		//直播 get部分链接地址
 		mapObject.put("live", liveMap());
+		
+		//球员信息 get部分链接地址
+		mapObject.put("player", playerMap());
 		
 		return mapObject;
 	}
@@ -219,6 +223,43 @@ public class URLUtil {
 		finalURLMap.put(innerUpdateModule, partURLAFinalURLMap);
 		
 		return finalURLMap;
+	}
+	
+	public static Map<String, String> playerMap(){
+		//初始化 球员信息 的 Map 对象
+		Map<String, String> playerMap = new HashMap<String, String>();
+		
+		//获取指定球队球员列表 （链接标识：teamPlayers)
+		playerMap.put(PlayerEnum.TEAM_PLAYERS.toString(), "GetTeamPlayers");
+		
+		//查询球员的详细信息 （链接标识：playerDetail)
+		playerMap.put(PlayerEnum.PLAYER_DETAIL.toString(), "GetPlayerDetail");
+		
+		//球员TopN数据排行榜（链接标识：playerRankTopN)
+		playerMap.put(PlayerEnum.PLAYER_RANK_TOPN.toString(), "GetPlayerRankTopN");
+		
+		//球员分页数据排行榜（链接标识：playerRankPage)
+		playerMap.put(PlayerEnum.PLAYER_RANK_PAGE.toString(), "GetPlayerRankPage");
+		
+		//每日球员分类排行榜（链接标识：todayRank)
+		playerMap.put(PlayerEnum.TODAY_RANK.toString(), "GetTodayRank");
+		
+		//本场比赛球员个人数据统计（链接标识：livePlayerStat)
+		playerMap.put(PlayerEnum.LIVE_PLAYER_STAT.toString(), "GetLivePlayerStat");
+		
+		//本场最佳球员和本场之星（链接标识：bestPlayer)
+		playerMap.put(PlayerEnum.BEST_PLAYER.toString(), "GetBestPlayer");
+		
+		//本赛季球员场均统计（按位置查询、可选排序条件）（链接标识：playerStatAvg)
+		playerMap.put(PlayerEnum.PLAY_STAT_AVG.toString(), "GetPlayerStatAvg");
+		
+		//本赛季该球员场均统计（共四条记录，分别是对前7场、前15场、前30场、总场数的场均统计）（链接标识：playerAvgStat)
+		playerMap.put(PlayerEnum.PLAYER_AVG_STAT.toString(), "GetPlayerAvgStat");
+		
+		//本赛季该球员场均统计（共四条记录，分别是对前7场、前15场、前30场、总场数的场均统计）以及该球员的基本信息（链接标识：player）
+		playerMap.put(PlayerEnum.PLAYER.toString(), "GetPlayer");
+		
+		return playerMap;
 	}
 	
 	/**
