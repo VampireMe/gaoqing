@@ -28,6 +28,9 @@ public class PlayerServiceImpl implements PlayerService{
 	
 	/** 球员信息的 Dao 对象 */
 	private PlayerDao playerDao = new PlayerDaoImpl();
+	
+	/** 得到数据链接地址 */
+	private Map<String, Map<String, String>> finalURLMap = null;
 
 	@Override
 	public <T> int updatePlayerPersonal2DB(String moduleName,
@@ -57,7 +60,7 @@ public class PlayerServiceImpl implements PlayerService{
 	private <T> List<Player> getURLContent2PlayerList(String moduleName,
 			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
 		//得到数据链接地址
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
 		
 		//得到内部链接模块名称（链接的唯一标识）
 		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
@@ -86,9 +89,6 @@ public class PlayerServiceImpl implements PlayerService{
 		
 		//得到更新球员个人信息 xml 文件的子元素集合对象
 		List<Element> playerPersonalChildrenElementList = PlayerUtil.getPlayerPersonalChildrenElementList(playerPersonalList);
-		
-		//得到数据链接地址
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
 		
 		//得到更新到 xml 文件中的标识符
 		String xmlFileNameRemarker = CommonUtil.getInnerUpdateModule(finalURLMap) + "_" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);

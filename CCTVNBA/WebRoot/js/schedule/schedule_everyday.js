@@ -460,10 +460,6 @@ $(document).ready(function(){
 	}});
 	
 	/**
-	 * 比赛基本信息部分
-	 */
-	
-	/**
 	 * 单击比赛基本操作
 	 * 2014-01-08
 	 * @author: 高青
@@ -481,27 +477,28 @@ $(document).ready(function(){
 		}
 		return scheduleIDs;
 	}
+	/** ----------------------------比赛基本信息部分 start-------------------------*/
 	
 	/**
 	 * ajax 请求的方法
 	 * 2014-01-08
 	 * @author: 高青
-	 * @param jsonObj json格式的参数对象
+	 * @param jsonParamObj json格式的参数对象
 	 */
-	function ajaxMethod(jsonObj){
+	function ajaxMethod(jsonParamObj){
 		$.ajax({
 			type: 'get',
 			async: true,
 			dateType: 'json',
 			url: 'basicInfo!updateScheduleBasicInfo.action',
-			data: jsonObj,
+			data: jsonParamObj,
 			success: function(json){
 				$.messager.alert("提示信息", "更新成功！", "info", function(){
 					//显示隐藏数据
 					$("#innerContent").toggle();
 					
 					//赛程基本信息
-					if(jsonObj.innerUpdateModule === "LIVE"){
+					if(jsonParamObj.innerUpdateModule === "LIVE"){
 						bindBasicInfoData(json, "Home");
 						bindBasicInfoData(json, "Visiting");
 					}
@@ -593,13 +590,13 @@ $(document).ready(function(){
 				});
 				
 			}
-		}, '-', {
+		}, ' ', '-',' ', {
 			text: '获得双方对阵信息和换人列表',
 			iconCls: 'icon-print',
 			handler: function(){
 				
 			}
-		}, '-', {
+		}, ' ', '-',' ', {
 			text: '主队客队最近几场比赛信息',
 			iconCls: 'icon-print',
 			handler: function(){}
@@ -615,7 +612,51 @@ $(document).ready(function(){
 		}else{
 			$("#basicInfoOuter").dialog('open');
 		}
-		
+	});
+	/** ----------------------------比赛基本信息部分 end-------------------------*/
+	
+	
+	/** ----------------------------球员分析部分 start-------------------------*/
+	//球员分析部分变量
+	var $playerAnalysisOuter = $("#playerAnalysisOuter");
+	
+	//定义球员分析部分的 dialog 
+	$playerAnalysisOuter.dialog({
+		title: '球员分析',
+		width: 850,
+		height: 550,
+		modal: true,
+		closed: true,
+		minimizable: true,
+		maximizable: true,
+		closable: true,
+		resizable: true,
+		toolbar: [{
+			text: '球员个人数据',
+			iconCls: 'icon-print',
+			handler: function(){
+				
+			}
+		}, ' ', '-',' ', {
+			text: '最佳球员和本场之星',
+			iconCls: 'icon-print',
+			handler: function(){
+				
+			}
+		}]
 	});
 	
+	//单击操作，弹出一个 dialog 
+	$("#playerAnalysis").on('click', function(){
+		var checkedSchedules = table.datagrid("getChecked");
+		//判断是否选中赛程
+		if(checkedSchedules.length === 0){
+			$.messager.alert("提示信息", "请选择赛程！" ,"info");
+		}else{
+			$("#playerAnalysisOuter").dialog('open');
+		}
+	});
+	
+	
+	/** ----------------------------球员分析部分 end-------------------------*/
 });

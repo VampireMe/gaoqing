@@ -99,6 +99,8 @@ public class ScheduleAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void updatePlayerPersonalInfo(){
+		int updatePlayerPersonal2XMLFlag = 0;
+		
 		//组织内部更新模块和更新条件的 Map 对象
 		if (scheduleIDs != null && !scheduleIDs.equals("")) {
 			String[] scheduleArray = scheduleIDs.split(",");
@@ -109,16 +111,13 @@ public class ScheduleAction extends BaseAction{
 				
 				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
 				
-				playerService.updatePlayerPersonal2XML(moduleName, scheduleID, innerUpdateModuleACondtions);
+				updatePlayerPersonal2XMLFlag = playerService.updatePlayerPersonal2XML(moduleName, scheduleID, innerUpdateModuleACondtions);
 			}
 			//更新到数据库中
 			playerService.updatePlayerPersonal2DB(moduleName, scheduleIDs, innerUpdateModuleACondtions);
-			
 		}
-		
-		
 		//返回更新的数据
-		
+		writeJson2Web(updatePlayerPersonal2XMLFlag);
 	}
 	
 	/**
