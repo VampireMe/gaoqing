@@ -50,6 +50,12 @@
             </result>
         </action>
         
+        <!-- 球员分析 >> 本场比赛最佳球员信息 -->
+         <action name="bestPlayerInfo" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
         <!-- 更新赛程  End -->
         
         

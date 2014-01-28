@@ -93,6 +93,16 @@ public class ScheduleAction extends BaseAction{
 	}
 	
 	/**
+	 * 更新本场比赛的最佳球员信息
+	 * @author 高青
+	 * 2014-1-28
+	 * @return void 空
+	 */
+	public void updateBestPlayerInfo(){
+		updatePlayerPersonalInfo();
+	}
+	
+	/**
 	 * 更新球员个人信息
 	 * @author 高青
 	 * 2014-1-22

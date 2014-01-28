@@ -13,6 +13,7 @@ import org.jdom2.Element;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.ctvit.nba.entity.Schedule;
@@ -28,15 +29,14 @@ public class ScheduleUtil {
 	private static Logger log = Logger.getLogger(ScheduleUtil.class);
 	
 	/**
-	 * 将JSONObject对象数据，封装到 Schedule 对象中
+	 * 将JSONObject对象数据，封装到 Schedule 对象中的通用方法
 	 * @author 高青
 	 * 2013-12-2
 	 * @param innerUpdateModule 更新方式
 	 * @param jsonObject JSONObject对象
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return schedule 封装数据后的Schedule对象
 	 */
-	public static Schedule getSchedule(String innerUpdateModule, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
+	public static Schedule getSchedule(String innerUpdateModule, JSONObject jsonObject){
 		//初始化数据
 		Schedule schedule = new Schedule();
 		
@@ -68,6 +68,29 @@ public class ScheduleUtil {
 		schedule.setMatchTypeCNName(jsonObject.getString("MatchTypeCNName"));
 		schedule.setMatchTypeENName(jsonObject.getString("MatchTypeENName"));
 		schedule.setHomeTeamID(Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "HomeTeamID")));
+
+		schedule.setOther(innerUpdateModule);
+		//附加赛程信息
+		//schedule.setScheduleExpands(ScheduleExpands);
+		
+		return schedule;
+	}
+	
+	/**
+	 * 得到赛程实体类对象的专用方法
+	 * @author 高青
+	 * 2014-1-28
+	 * @param innerUpdateModule 更新方式
+	 * @param jsonObject JSONObject对象
+	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @return schedule 封装数据后的Schedule对象
+	 */
+	private static Schedule getSpecialSchedule(String innerUpdateModule, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap) {
+		//初始化赛程对象
+		Schedule schedule = new Schedule();
+		
+		//得到通用的赛程信息
+		schedule = getSchedule(innerUpdateModule, jsonObject);
 		
 		//首先判断传递过来的 标识参数是否为空
 		if (tRemarkerAndParamsMap == null || tRemarkerAndParamsMap.size() == 0) {
@@ -89,13 +112,46 @@ public class ScheduleUtil {
 				tRemarkerAndParamsMap.remove(remarkerID);
 			}
 		}
-		schedule.setOther(innerUpdateModule);
-		//附加赛程信息
-		//schedule.setScheduleExpands(ScheduleExpands);
-		
 		return schedule;
 	}
 	
+	/**
+	 * 得到封装到实体类的赛程集
+	 * @author 高青
+	 * 2014-1-28
+	 * @param innerUpdateModule 更新方式
+	 * @param jsonObject JSONObject对象
+	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @return scheduleList 赛程实体类集
+	 */
+	public static List<Schedule> getScheduleList(String innerUpdateModule, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
+		//初始化赛程集
+		List<Schedule> scheduleList = new ArrayList<Schedule>();
+		
+		if (jsonObject != null) {
+			JSONArray jsonArray = jsonObject.getJSONArray("Schedules");
+			
+			for (int i = 0; i < jsonArray.length(); i++) {
+				//得到其中一个赛程对象
+				JSONObject scheduleJsonObject = jsonArray.getJSONObject(i);
+				
+				//封装到赛程实体类中
+				Schedule schedule = getSpecialSchedule(innerUpdateModule, scheduleJsonObject, tRemarkerAndParamsMap);
+				
+				//将得到的 单个赛程信息添加到赛程集中
+				scheduleList.add(schedule);
+			}
+		}
+		return scheduleList;
+	}
+	
+	/**
+	 * 将长整形 Long 的数据转为 Date 类型
+	 * @author 高青
+	 * 2014-1-28
+	 * @param longDate 长整形的时间数据
+	 * @return date 转为 Date 类型的时间数据
+	 */
 	public static Date switchDate(Long longDate){
 		Date date = null;
 		
@@ -120,8 +176,6 @@ public class ScheduleUtil {
 		}
 		return date;
 	}
-	
-	
 	
 	/**
 	 * 生成 根元素的子元素集合

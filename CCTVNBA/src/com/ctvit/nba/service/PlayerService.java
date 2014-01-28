@@ -22,6 +22,17 @@ public interface PlayerService {
 	 */
 	public <T> int updatePlayerPersonal2DB(String moduleName, String scheduleID, 
 				Map<String, Map<String, T>> innerUpdateModuleACondtions );
+	
+	/**
+	 * 更新本场比赛的最佳球员信息
+	 * @author 高青
+	 * 2014-1-28
+	 * @param scheduleID 赛程的编号
+	 * @param innerUpdateModuleACondtions 内部更新模块和更新条件的 Map 对象
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 */
+	public <T> int updateBestPlayerInfo(String moduleName, String scheduleID, 
+			Map<String, Map<String, T>> innerUpdateModuleACondtions );
 
 	/**
 	 * 更新球员个人信息到 XML文件

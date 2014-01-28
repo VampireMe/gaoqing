@@ -11,9 +11,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
+import org.json.JSONObject;
 
 import com.ctvit.nba.dao.ScheduleDao;
 import com.ctvit.nba.dao.impl.ScheduleDaoImpl;
+import com.ctvit.nba.entity.Player;
 import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleUtil;
 import com.ctvit.nba.service.ScheduleService;
@@ -38,23 +40,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	/**赛程 的  Dao 类*/
 	private ScheduleDao scheduleDao = new ScheduleDaoImpl();
+	
+	/** 得到数据链接地址 */
+	private Map<String, Map<String, String>> finalURLMap = null;
 
 	@Override
 	public <T> int updateSchedule(String moduleName, Map<String, Map<String, T>> uniqueRemarkerAndConditionMap,  Map<String, Schedule> tRemarkerAndParamsMap) {
 		int flag = 0;
 		
-		//得到 访问链接地址
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, uniqueRemarkerAndConditionMap);
-		
-		//链接地址标识
-		String partURLRemarker = CommonUtil.getInnerUpdateModule(finalURLMap);
-		
 		/*
 		 * 根据提供的地址，查询赛程数据
 		 */
-		String partGetURL = URLUtil.getPartGetURL(finalURLMap);
-		String url = finalURLMap.get(partURLRemarker).get(partGetURL);
-		List<Schedule> scheduleListByURL = URLContentUtil.getTListByURL(moduleName, partURLRemarker, partGetURL, url, tRemarkerAndParamsMap);
+		List<Schedule> scheduleListByURL = getURLContent2ScheduleList(moduleName, uniqueRemarkerAndConditionMap, tRemarkerAndParamsMap);
+		
+		//链接地址标识
+		String partURLRemarker = CommonUtil.getInnerUpdateModule(finalURLMap);
 		
 		//判断当前更新方式下，是否初始化过数据
 		Map<String, Integer> map = countMap.get(partURLRemarker);
@@ -106,7 +106,41 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return flag;
 	}
 	
-	
+	/**
+	 * 得到 URL 链接地址中的内容，并封装到 Player 实体集合中
+	 * @author 高青
+	 * 2014-1-23
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块（唯一链接标识）和更新条件 Map 对象
+	 * @param updateModuleAlias 更新模块的别名
+	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
+	 * @return playerPersonalList 球员个人信息集
+	 */
+	private <T> List<Schedule> getURLContent2ScheduleList(String moduleName,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions,
+			Map<String, Schedule> tRemarkerAndParamsMap) {
+		//初始化球员信息数据集
+		List<Schedule> scheduleList = null;
+		
+		//得到数据链接地址
+		finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		
+		//得到内部链接模块名称（链接的唯一标识）
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
+		
+		//得到最终的 URL 地址
+		String url = URLUtil.getURL(finalURLMap);
+		//得到“get”部分的链接地址
+		String partURL = URLUtil.getPartGetURL(finalURLMap);
+		
+		//得到链接地址的数据集合
+		JSONObject urlJsonObject = URLContentUtil.getURLJsonObject(url);
+		
+		//得到赛程实体类集
+		scheduleList = ScheduleUtil.getScheduleList(innerUpdateModule, urlJsonObject, tRemarkerAndParamsMap);
+		
+		return scheduleList;
+	}
 
 	@Override
 	public String getURLScheduleJSON(String moduleName, Map<String, Map<String, String>> uniqueRemarkerAndConditionMap) {

@@ -58,10 +58,9 @@ public class URLContentUtil {
 	 * @param innerUpdateModule 更新方式
 	 * @param partURL 部分链接地址
 	 * @param url 完整链接地址和
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return tlist 相应类型的数据对象
 	 */
-	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url, Map<String, T> tRemarkerAndParamsMap){
+	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url){
 		//初始化对象
 		List<T> tlist = new ArrayList<T>();
 		
@@ -73,7 +72,7 @@ public class URLContentUtil {
 				//得到一个 JSONObject 对象
 				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
 				
-				T t = getEntityByJSONObject(jsonObject, tRemarkerAndParamsMap, moduleName, innerUpdateModule);
+				T t = getEntityByJSONObject(jsonObject, moduleName, innerUpdateModule);
 				
 				//将当前的  Schedule 对象，放到 List<Schedule> 中
 				tlist.add(t);
@@ -90,13 +89,11 @@ public class URLContentUtil {
 	 * 2013-12-5
 	 * @param <T> 动态实体类
 	 * @param jsonObject 封装数据的JSONArray对象
-	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @param moduleName 模块名称
 	 * @param innerUpdateModule 更新方式
 	 * @return T
 	 */
-	public static <T> T getEntityByJSONObject(JSONObject jsonObject, Map<String, T> tRemarkerAndParamsMap,
-										String moduleName, String innerUpdateModule) throws Exception {
+	public static <T> T getEntityByJSONObject(JSONObject jsonObject, String moduleName, String innerUpdateModule) throws Exception {
 		T t = null;
 		//包的前缀名
 		String packagePrefixName = CommonUtil.getPath("packagePrefixName");
@@ -117,8 +114,8 @@ public class URLContentUtil {
 		t = (T) forNameClass.newInstance();
 		
 		//调用特定的方法
-		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class, Map.class);		
-		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject, tRemarkerAndParamsMap);		
+		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class);		
+		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject);		
 				
 		return t;
 	}

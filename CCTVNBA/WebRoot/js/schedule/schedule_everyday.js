@@ -664,7 +664,15 @@ $(document).ready(function(){
 			text: '最佳球员和本场之星',
 			iconCls: 'icon-print',
 			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
 				
+				//执行请求
+				ajaxMethod('bestPlayerInfo!updateBestPlayerInfo.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'player',
+					innerUpdateModule: 'BEST_PLAYER'
+				});
 			}
 		}]
 	});

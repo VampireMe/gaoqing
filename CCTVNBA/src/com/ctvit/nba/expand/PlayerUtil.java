@@ -26,10 +26,9 @@ public class PlayerUtil {
 	 * 2014-1-21
 	 * @param innerUpdateModule 内部更新模块名称
 	 * @param playerJsonObject 球员信息的 JsonObject 对象
-	 * @param otherInfo 其他附加信息 
 	 * @return player 球员信息对象
 	 */
-	public static Player getPlayer(String innerUpdateModule, JSONObject playerJsonObject, String otherInfo){
+	public static Player getPlayer(String innerUpdateModule, JSONObject playerJsonObject){
 		//初始化球员对象 
 		Player player = new Player();
 		
@@ -73,12 +72,29 @@ public class PlayerUtil {
 			if (innerUpdateModule != null) {
 				player.setInnerUpdateModule(innerUpdateModule);
 			}
-			//其他信息
-			if (otherInfo != null) {
-				player.setOther(otherInfo);
-			}
 		}
+		return player;
+	}
+
+
+
+	/**
+	 * 得到球员个人信息的实体对象(Player)
+	 * @author 高青
+	 * 2014-1-28
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @param playerJsonObject 球员信息的 JsonObject 对象
+	 * @param otherInfo 附加信息
+	 * @return player 球员信息对象
+	 */
+	private static Player getPlayerPersonal(String innerUpdateModule, JSONObject playerJsonObject, String otherInfo) {
+		//得到公共的 Player 数据信息
+		Player player = getPlayer(innerUpdateModule, playerJsonObject);
 		
+		//其他信息
+		if (otherInfo != null) {
+			player.setOther(otherInfo);
+		}
 		return player;
 	}
 	
@@ -106,7 +122,7 @@ public class PlayerUtil {
 				JSONObject homePlayerJsonObject = homePlayerJsonArray.getJSONObject(i);
 				
 				//封装到 球员个人信息的实体类中
-				Player player = getPlayer(innerUpdateModule, homePlayerJsonObject, "home");
+				Player player = getPlayerPersonal(innerUpdateModule, homePlayerJsonObject, "home");
 				
 				//添加的集合中
 				playerPersonalList.add(player);
@@ -120,7 +136,7 @@ public class PlayerUtil {
 				JSONObject visitPlayerJsonObject = visitPlayerJsonArray.getJSONObject(i);
 				
 				//封装到 球员个人信息的实体类中
-				Player player = getPlayer(innerUpdateModule, visitPlayerJsonObject, "visit");
+				Player player = getPlayerPersonal(innerUpdateModule, visitPlayerJsonObject, "visit");
 				
 				//添加的集合中
 				playerPersonalList.add(player);
