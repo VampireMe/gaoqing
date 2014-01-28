@@ -65,7 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		String selectConditionRemarker = CommonUtil.getConditionRemarker(uniqueRemarkerAndConditionMap);
 		
 		//更新到 XML 文件的更新标识(当前的 链接地址+查询条件条件标识，形成唯一的 XML 文件)
-		String xmlUpdateRemarker = partURLRemarker + "_" + selectConditionRemarker;
+		String xmlUpdateRemarker = partURLRemarker + "-" + selectConditionRemarker;
 		if (map == null) {
 			/*
 			 * 更新到数据库

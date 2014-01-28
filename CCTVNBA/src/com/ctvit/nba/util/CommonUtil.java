@@ -17,6 +17,28 @@ import org.json.JSONObject;
 public class CommonUtil {
 	
 	/**
+	 * 处理当前项的值为 null 的情况
+	 * @author 高青
+	 * 2014-1-26
+	 * @param jsonObject JSONObject数据
+	 * @param key 得到数据的 key 标识
+	 * @return result key对应的值
+	 */
+	public static String dealWithNull(JSONObject jsonObject, String key){
+		String result = "";
+		
+		if (jsonObject != null) {
+			//判断当前值是否为空
+			if (jsonObject.isNull(key)) {
+				result = "empty";
+			}else {
+				result = jsonObject.getString(key);
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * 处理设置 Element 属性时，参数为空时产生的问题，并根据不同类型的参数，返回不同值
 	 * @author 高青
 	 * 2013-12-23
@@ -36,7 +58,7 @@ public class CommonUtil {
 		if (t instanceof String) {
 			
 			//判断当前值为空时
-			if (t.equals(null) || t.equals("") || t== null ) {
+			if (t.equals(null) || t.equals("") || t== null || t.equals("null") ) {
 				result = "empty";
 			
 			//不为空时

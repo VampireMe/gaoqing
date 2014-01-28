@@ -91,7 +91,7 @@ public class PlayerServiceImpl implements PlayerService{
 		List<Element> playerPersonalChildrenElementList = PlayerUtil.getPlayerPersonalChildrenElementList(playerPersonalList);
 		
 		//得到更新到 xml 文件中的标识符
-		String xmlFileNameRemarker = CommonUtil.getInnerUpdateModule(finalURLMap) + "_" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
+		String xmlFileNameRemarker = CommonUtil.getInnerUpdateModule(finalURLMap) + "-" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
 		
 		//更新到 xml 中
 		int updateXMLFlag = XMLUtil.updateData2XML(moduleName, xmlFileNameRemarker, playerPersonalChildrenElementList);

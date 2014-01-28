@@ -58,7 +58,7 @@ public class LiveServiceImpl implements LiveService{
 		List<Element> childrenElementList = LiveUtil.getChildrenElementList(urlJsonObject, "basicInfo");
 		
 		//得到更新到 XML 文件名表示
-		String xmlFileNameRemarker = innerUpdateModule + "_" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
+		String xmlFileNameRemarker = innerUpdateModule + "-" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
 		
 		//更新到  XML 文件中
 		int updateData2XMLFlag = XMLUtil.updateData2XML(moduleName, xmlFileNameRemarker, childrenElementList);

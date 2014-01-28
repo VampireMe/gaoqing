@@ -116,8 +116,18 @@ public class ScheduleAction extends BaseAction{
 			//更新到数据库中
 			playerService.updatePlayerPersonal2DB(moduleName, scheduleIDs, innerUpdateModuleACondtions);
 		}
+		//得到链接中的 JSON 数据
+		if (updatePlayerPersonal2XMLFlag == 1) {
+			//得到 url 的数据
+			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+			String url = URLUtil.getURL(finalURLMap);
+			json = URLContentUtil.getURLContent(url);
+		} else {
+			json = updatePlayerPersonal2XMLFlag + "";
+		}
+		
 		//返回更新的数据
-		writeJson2Web(updatePlayerPersonal2XMLFlag);
+		writeJson2Web(json);
 	}
 	
 	/**
@@ -147,10 +157,14 @@ public class ScheduleAction extends BaseAction{
 				updateScheduleBasicInfoFlag = liveService.updateScheduleBasicInfo(moduleName, scheduleIDs, innerUpdateModuleACondtions);
 			}
 			
-			//得到 url 的数据
-			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-			String url = URLUtil.getURL(finalURLMap);
-			json = URLContentUtil.getURLContent(url);
+			if (updateScheduleBasicInfoFlag == 1) {
+				//得到 url 的数据
+				Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+				String url = URLUtil.getURL(finalURLMap);
+				json = URLContentUtil.getURLContent(url);
+			} else {
+				json = updateScheduleBasicInfoFlag + "";
+			}
 			
 			//将数据写到 jsp 中
 			writeJson2Web(json);

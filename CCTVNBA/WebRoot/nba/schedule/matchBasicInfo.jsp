@@ -4,7 +4,7 @@
 	<div id="basicInfoOuter" >  
     	<div id = "innerContent" style = "display: none;">
     		<div id = "innerBasicInfo">
-			    <h2 style = "text-shadow: 2px 2px 2px #1A1A1A;color: #228B22;">赛程基本信息：</h2>  
+			    <h2 style = "text-shadow: 2px 2px 2px #6B8E23;color: #228B22;">赛程基本信息：</h2>  
 			   <table class="innerBasicInfoTable">  
 				    <thead>  
 					    <tr>  

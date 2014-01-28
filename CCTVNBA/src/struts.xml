@@ -38,9 +38,15 @@
             </result>
         </action>
         
+        <!-- 比赛信息>> 比赛基本额信息 -->
         <action name="basicInfo" class = "com.ctvit.nba.action.ScheduleAction">
             <result type = "json">
-            	<!--<param name="root">json</param>-->
+            </result>
+        </action>
+        
+        <!-- 球员分析 >> 球员个人信息 -->
+         <action name="playerPersonalInfo" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
             </result>
         </action>
         

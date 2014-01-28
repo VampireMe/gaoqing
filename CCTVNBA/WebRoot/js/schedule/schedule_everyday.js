@@ -477,41 +477,56 @@ $(document).ready(function(){
 		}
 		return scheduleIDs;
 	}
-	/** ----------------------------比赛基本信息部分 start-------------------------*/
 	
 	/**
 	 * ajax 请求的方法
 	 * 2014-01-08
 	 * @author: 高青
+	 * @param url 访问的 URL 地址
 	 * @param jsonParamObj json格式的参数对象
 	 */
-	function ajaxMethod(jsonParamObj){
+	function ajaxMethod(url, jsonParamObj){
 		$.ajax({
 			type: 'get',
 			async: true,
 			dateType: 'json',
-			url: 'basicInfo!updateScheduleBasicInfo.action',
+			url: url,
 			data: jsonParamObj,
 			success: function(json){
-				$.messager.alert("提示信息", "更新成功！", "info", function(){
-					//显示隐藏数据
-					$("#innerContent").toggle();
-					
-					//赛程基本信息
-					if(jsonParamObj.innerUpdateModule === "LIVE"){
-						bindBasicInfoData(json, "Home");
-						bindBasicInfoData(json, "Visiting");
-					}
-					//双方对阵信息和换人列表
-					
-					//主队客队最近几场比赛
-				});
+				if(json !== "0"){
+					$.messager.alert("提示信息", "更新成功！", "info", function(){
+						
+						//赛程基本信息
+						if(jsonParamObj.innerUpdateModule === "LIVE"){
+							//显示隐藏数据
+							$("#innerContent").toggle();
+							
+							bindBasicInfoData(json, "Home");
+							bindBasicInfoData(json, "Visiting");
+						}
+						//双方对阵信息和换人列表
+						
+						//主队客队最近几场比赛
+						
+						//本场比赛球员个人数据
+						if(jsonParamObj.innerUpdateModule === "LIVE_PLAYER_STAT"){
+							//显示隐藏球员个人数据模块
+							$("#playerAnalysis_playerPersonalInfoOuter").toggle();
+							
+							//后续操作
+							bindPlayerPersonalInfo(json);
+						}
+					});
+				}else{
+					$.messager.alert("提示信息", "更新失败，请重试！" ,"info");
+				}
 			},
 			error: function(){
 				$.messager.alert("提示信息", "更新失败，请重试！", "info");
 			}
 		});
 	}
+	/** ----------------------------比赛基本信息部分 start-------------------------*/
 	
 	/**
 	 * 内部基本信息模块下比赛信息的数据设置
@@ -583,7 +598,7 @@ $(document).ready(function(){
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//执行请求
-				ajaxMethod({
+				ajaxMethod('basicInfo!updateScheduleBasicInfo.action' ,{
 					scheduleIDs: scheduleIDs,
 					moduleName: 'live',
 					innerUpdateModule: 'LIVE'
@@ -627,7 +642,7 @@ $(document).ready(function(){
 		height: 550,
 		modal: true,
 		closed: true,
-		minimizable: true,
+		//minimizable: true,
 		maximizable: true,
 		closable: true,
 		resizable: true,
@@ -635,7 +650,15 @@ $(document).ready(function(){
 			text: '球员个人数据',
 			iconCls: 'icon-print',
 			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
 				
+				//执行请求
+				ajaxMethod('playerPersonalInfo!updatePlayerPersonalInfo.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'player',
+					innerUpdateModule: 'LIVE_PLAYER_STAT'
+				});
 			}
 		}, ' ', '-',' ', {
 			text: '最佳球员和本场之星',
@@ -645,6 +668,88 @@ $(document).ready(function(){
 			}
 		}]
 	});
+	
+	/**
+	 * 绑定球员的个人信息
+	 * 2014-01-27
+	 * author: 高青
+	 * param: playerPersonalInfoArray 球员个人信息的数组
+	 * param: playerPersonalInfo_tbody 要绑定到的表格中 tbody 对象
+	 * param: otherInfo 其他附加信息
+	 */
+	function appendPlayerPersonalInfo(playerPersonalInfoArray, playerPersonalInfo_tbody, otherInfo){
+		//绑定主队球员的个人显示信息
+		for(var i = 0; i < playerPersonalInfoArray.length; i++){
+			
+			//如果上场时间为0，则表示该场中，该球员为上场
+			if(playerPersonalInfoArray[i].Minutes !== 0){
+				playerPersonalInfo_tbody.
+				append('<tr>');
+				
+				if(i === 0){
+					if(otherInfo !== "" && otherInfo !== null && otherInfo === "home"){
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap">主队:</td>');
+					}else if(otherInfo !== "" && otherInfo !== null && otherInfo === "visit"){
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap">客队:</td>');
+					}
+				}else{
+					playerPersonalInfo_tbody.append('<td></td>');
+				}
+				playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].PlayerCNAlias + '</td>').
+				append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].TeamCNAlias + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].PlayerNumber + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Rebounds + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Assists + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Blocked + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Steals + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Turnovers + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].FreeThrowsAttempted + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].FreeThrows + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].PersonalFouls + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].FieldGoalsAttempted + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].FieldGoals + '</td>').
+				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Points + '</td>').
+				append('</tr>');
+			}
+		}
+	}
+	
+	/**
+	 * 绑定球员个人信息的数据
+	 * 2014-01-26
+	 * author: 高青
+	 * param: json 后台反馈的 json 格式的数据
+	 */
+	function bindPlayerPersonalInfo(json){
+		//将后台返回的数据转为 Jquery 对象
+		var $json = $.parseJSON(json);
+		
+		var livePlayerStat,
+			homePlayerPersonalInfo, 
+			$playerAnalysis_home_playerInfo,
+			visitPlayerPersonalInfo,
+			$playerAnalysis_visit_playerInfo,
+			$playerPersonalInfo_tbody;
+		
+		livePlayerStat = $json.LivePlayerStat;
+		
+		//***************************** 得到主队球员的个人信息部分 *****************************//
+		homePlayerPersonalInfo = livePlayerStat.Home;
+		
+		//得到主队球员的个人信息显示部分
+		$playerAnalysis_playerInfo = $("#playerAnalysis_playerInfo");
+		$playerPersonalInfo_tbody = $playerAnalysis_playerInfo.find(".playerPersonalInfo_table tbody");
+		
+		//绑定数据
+		appendPlayerPersonalInfo(homePlayerPersonalInfo, $playerPersonalInfo_tbody, "home");
+
+		
+		//***************************** 得到客队球员的个人信息的部分 *****************************//
+		visitPlayerPersonalInfo = livePlayerStat.Visit;
+		
+		//绑定客队球员的个人显示信息
+		appendPlayerPersonalInfo(visitPlayerPersonalInfo, $playerPersonalInfo_tbody, "visit");
+	}
 	
 	//单击操作，弹出一个 dialog 
 	$("#playerAnalysis").on('click', function(){

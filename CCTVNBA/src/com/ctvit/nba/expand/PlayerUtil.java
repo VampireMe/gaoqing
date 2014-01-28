@@ -37,7 +37,7 @@ public class PlayerUtil {
 			
 			//基本信息部分
 			player.setPlayerID(CommonUtil.getIntegerValueByKey(playerJsonObject, "PlayerID").toString());
-			player.setPlayerNumber(playerJsonObject.getString("PlayerNumber"));
+			player.setPlayerNumber(CommonUtil.resoleEmptyParam(CommonUtil.dealWithNull(playerJsonObject, "PlayerNumber")));
 			player.setTeamID(CommonUtil.getIntegerValueByKey(playerJsonObject, "TeamID").toString());
 			player.setTeamENName(playerJsonObject.getString("TeamENName"));
 			player.setTeamCNName(playerJsonObject.getString("TeamCNName"));
@@ -48,8 +48,8 @@ public class PlayerUtil {
 			player.setLastName(playerJsonObject.getString("LastName"));
 			player.setLPortrait(playerJsonObject.getString("LPortrait"));
 			player.setSPortrait(playerJsonObject.getString("SPortrait"));
-			player.setPositionID(playerJsonObject.getString("Position"));
-			player.setPositionName(playerJsonObject.getString("PositionName"));
+			player.setPositionID(CommonUtil.resoleEmptyParam(CommonUtil.dealWithNull(playerJsonObject, "Position")));
+			player.setPositionName(CommonUtil.resoleEmptyParam(CommonUtil.dealWithNull(playerJsonObject,"PositionName")));
 			
 			//球员数据部分
 			player.setRebounds(CommonUtil.getIntegerValueByKey(playerJsonObject, "Rebounds"));
