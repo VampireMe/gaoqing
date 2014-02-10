@@ -111,8 +111,6 @@ public class URLUtil {
 		return mapObject;
 	}
 	
-	
-	
 	/**
 	 * 得到更新条件的字符串集
 	 * @author 高青

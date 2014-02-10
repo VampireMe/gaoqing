@@ -99,7 +99,32 @@ public class ScheduleAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void updateBestPlayerInfo(){
-		updatePlayerPersonalInfo();
+		int updatePlayerPersonal2XMLFlag = 0;
+		
+		//组织内部更新模块和更新条件的 Map 对象
+		if (scheduleIDs != null && !scheduleIDs.equals("")) {
+			String[] scheduleArray = scheduleIDs.split(",");
+			
+			//更新到球员个人信息 到 XML 文件
+			for (String scheduleID : scheduleArray) {
+				innerConditionMap.put("scheduleID", scheduleID);
+				
+				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
+				
+				updatePlayerPersonal2XMLFlag = playerService.updateBestPlayerInfo(moduleName, scheduleID, innerUpdateModuleACondtions);
+			}
+		}
+		//得到链接中的 JSON 数据
+		if (updatePlayerPersonal2XMLFlag == 1) {
+			//得到 url 的数据
+			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+			String url = URLUtil.getURL(finalURLMap);
+			json = URLContentUtil.getURLContent(url);
+		} else {
+			json = updatePlayerPersonal2XMLFlag + "";
+		}
+		//返回更新的数据
+		writeJson2Web(json);
 	}
 	
 	/**

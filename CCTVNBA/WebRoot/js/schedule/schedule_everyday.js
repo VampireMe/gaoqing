@@ -510,11 +510,22 @@ $(document).ready(function(){
 						
 						//本场比赛球员个人数据
 						if(jsonParamObj.innerUpdateModule === "LIVE_PLAYER_STAT"){
+							$("#playerAnalysis_bestPlayerInfoOuter").hide();
 							//显示隐藏球员个人数据模块
-							$("#playerAnalysis_playerPersonalInfoOuter").toggle();
+							$("#playerAnalysis_playerPersonalInfoOuter").show();
 							
 							//后续操作
 							bindPlayerPersonalInfo(json);
+						}
+						//本场比赛最佳球员数据
+						if(jsonParamObj.innerUpdateModule === "BEST_PLAYER"){
+							$("#playerAnalysis_playerPersonalInfoOuter").hide();
+							//显示隐藏最佳球员的数据模块
+							$("#playerAnalysis_bestPlayerInfoOuter").show();
+							
+							//后续绑定显示操作
+							bindBestPlayerInfo(json);
+							json = "";
 						}
 					});
 				}else{
@@ -635,6 +646,11 @@ $(document).ready(function(){
 	//球员分析部分变量
 	var $playerAnalysisOuter = $("#playerAnalysisOuter");
 	
+	//初始状态下的球员个人信息下的 tbody 的值
+	var $init_playerPersonalInfo_tbody = $("#playerAnalysis_playerInfo .playerPersonalInfo_table tbody");
+	//初始状态下的最佳球员信息下的 tbody 的值
+	var $init_bestPlayerInfo_tbody = $("#playerAnalysis_bestPlayerInfo .playerPersonalInfo_table tbody");
+	
 	//定义球员分析部分的 dialog 
 	$playerAnalysisOuter.dialog({
 		title: '球员分析',
@@ -653,6 +669,9 @@ $(document).ready(function(){
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID();
 				
+				//重置当前 tbody 中的值
+				$("#playerAnalysis_playerInfo .playerPersonalInfo_table tbody").html($init_playerPersonalInfo_tbody);
+				
 				//执行请求
 				ajaxMethod('playerPersonalInfo!updatePlayerPersonalInfo.action' ,{
 					scheduleIDs: scheduleIDs,
@@ -666,6 +685,9 @@ $(document).ready(function(){
 			handler: function(){
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID();
+				
+				//重置当前 tbody 中的值
+				$("#playerAnalysis_bestPlayerInfo .playerPersonalInfo_table tbody").html($init_bestPlayerInfo_tbody);
 				
 				//执行请求
 				ajaxMethod('bestPlayerInfo!updateBestPlayerInfo.action' ,{
@@ -686,25 +708,38 @@ $(document).ready(function(){
 	 * param: otherInfo 其他附加信息
 	 */
 	function appendPlayerPersonalInfo(playerPersonalInfoArray, playerPersonalInfo_tbody, otherInfo){
-		//绑定主队球员的个人显示信息
+		//绑定球员的个人显示信息
 		for(var i = 0; i < playerPersonalInfoArray.length; i++){
 			
 			//如果上场时间为0，则表示该场中，该球员为上场
 			if(playerPersonalInfoArray[i].Minutes !== 0){
-				playerPersonalInfo_tbody.
-				append('<tr>');
+				playerPersonalInfo_tbody.append('<tr>');
 				
 				if(i === 0){
-					if(otherInfo !== "" && otherInfo !== null && otherInfo === "home"){
+					//本城比赛球员的个人信息--主队
+					if(otherInfo === "home"){
 						playerPersonalInfo_tbody.append('<td  nowrap="nowrap">主队:</td>');
-					}else if(otherInfo !== "" && otherInfo !== null && otherInfo === "visit"){
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].PlayerCNAlias + '</td>');
+					//本城比赛球员的个人信息--客队
+					}else if(otherInfo === "visit"){
 						playerPersonalInfo_tbody.append('<td  nowrap="nowrap">客队:</td>');
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].PlayerCNAlias + '</td>');
+					//本场比赛最佳球员信息
+					}else if(otherInfo === "bestPlayer"){
+						playerPersonalInfo_tbody.append('<td></td>');
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].CNAlias + '</td>');
 					}
 				}else{
 					playerPersonalInfo_tbody.append('<td></td>');
+					
+					//本场比赛最佳球员信息
+					if(otherInfo === "bestPlayer"){
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].CNAlias + '</td>');
+					}else{
+						playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].PlayerCNAlias + '</td>');
+					}
 				}
-				playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].PlayerCNAlias + '</td>').
-				append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].TeamCNAlias + '</td>').
+				playerPersonalInfo_tbody.append('<td  nowrap="nowrap" align="center">' + playerPersonalInfoArray[i].TeamCNAlias + '</td>').
 				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].PlayerNumber + '</td>').
 				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Rebounds + '</td>').
 				append('<td  nowrap="nowrap" align="right">' + playerPersonalInfoArray[i].Assists + '</td>').
@@ -733,18 +768,16 @@ $(document).ready(function(){
 		var $json = $.parseJSON(json);
 		
 		var livePlayerStat,
-			homePlayerPersonalInfo, 
-			$playerAnalysis_home_playerInfo,
+			homePlayerPersonalInfo,
 			visitPlayerPersonalInfo,
-			$playerAnalysis_visit_playerInfo,
-			$playerPersonalInfo_tbody;
+			$playerPersonalInfo_tbody = "";
 		
 		livePlayerStat = $json.LivePlayerStat;
 		
 		//***************************** 得到主队球员的个人信息部分 *****************************//
 		homePlayerPersonalInfo = livePlayerStat.Home;
 		
-		//得到主队球员的个人信息显示部分
+		//得到球员的个人信息显示部分
 		$playerAnalysis_playerInfo = $("#playerAnalysis_playerInfo");
 		$playerPersonalInfo_tbody = $playerAnalysis_playerInfo.find(".playerPersonalInfo_table tbody");
 		
@@ -757,6 +790,52 @@ $(document).ready(function(){
 		
 		//绑定客队球员的个人显示信息
 		appendPlayerPersonalInfo(visitPlayerPersonalInfo, $playerPersonalInfo_tbody, "visit");
+	}
+	
+	/**
+	 * 绑定本场比赛最佳球员信息的数据
+	 * 2014-02-08
+	 * author: 高青
+	 * param: json 后台反馈的 json 格式的数据
+	 */
+	function bindBestPlayerInfo(json){
+		//将后台返回的数据转为 Jquery 对象
+		var $json = $.parseJSON(json);
+		
+		//定义 table 中的 tbody 对象
+		var $bestPlayerInfo_tbody = "",
+			$playerAnalysis_bestPlayerInfo,
+			bestPlayerArray;
+		
+		//得到球员的个人信息显示部分
+		$playerAnalysis_bestPlayerInfo = $("#playerAnalysis_bestPlayerInfo");
+		$bestPlayerInfo_tbody = $playerAnalysis_bestPlayerInfo.find(".playerPersonalInfo_table tbody");
+		
+		//得到最佳球员的数组对象
+		bestPlayerArray = $json.BestPlayer;
+		
+		rejectRepeatData(bestPlayerArray);
+		
+		appendPlayerPersonalInfo(bestPlayerArray, $bestPlayerInfo_tbody, "bestPlayer");
+		
+	}
+	
+	/**
+	 * 剔除数组中的重复数据（选择比较的方法）
+	 * 2014-02-10
+	 * author: 高青
+	 */
+	function rejectRepeatData(rejectArray){
+		//外层循环，固定一个数据
+		for(var i = 0; i < rejectArray.length; i++){
+			for(var j = 0; j < rejectArray.length; j++){
+				if(i !== j){
+					if(rejectArray[i].PlayerNumber === rejectArray[j].PlayerNumber){
+						rejectArray.splice(j, 1);
+					}
+				}
+			}
+		}
 	}
 	
 	//单击操作，弹出一个 dialog 

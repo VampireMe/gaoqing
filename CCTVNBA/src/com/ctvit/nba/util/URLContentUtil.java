@@ -93,7 +93,7 @@ public class URLContentUtil {
 	 * @param innerUpdateModule 更新方式
 	 * @return T
 	 */
-	public static <T> T getEntityByJSONObject(JSONObject jsonObject, String moduleName, String innerUpdateModule) throws Exception {
+	private static <T> T getEntityByJSONObject(JSONObject jsonObject, String moduleName, String innerUpdateModule) throws Exception {
 		T t = null;
 		//包的前缀名
 		String packagePrefixName = CommonUtil.getPath("packagePrefixName");

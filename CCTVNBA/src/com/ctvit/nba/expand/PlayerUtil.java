@@ -41,8 +41,13 @@ public class PlayerUtil {
 			player.setTeamENName(playerJsonObject.getString("TeamENName"));
 			player.setTeamCNName(playerJsonObject.getString("TeamCNName"));
 			player.setTeamCNAlias(playerJsonObject.getString("TeamCNAlias"));
-			player.setPlayerCNName(playerJsonObject.getString("PlayerCNName"));
-			player.setPlayerCNAlias(playerJsonObject.getString("PlayerCNAlias"));
+			
+			//本场比赛最佳球员时，无此属性
+			if (innerUpdateModule.equals("BEST_PLAYER")) {
+			}else {
+				player.setPlayerCNName(playerJsonObject.getString("PlayerCNName"));
+				player.setPlayerCNAlias(playerJsonObject.getString("PlayerCNAlias"));
+			}
 			player.setFirstName(playerJsonObject.getString("FirstName"));
 			player.setLastName(playerJsonObject.getString("LastName"));
 			player.setLPortrait(playerJsonObject.getString("LPortrait"));
@@ -184,9 +189,9 @@ public class PlayerUtil {
 		element.setAttribute("TeamID", player.getTeamID());
 		element.setAttribute("TeamENName", player.getTeamENName());
 		element.setAttribute("TeamCNName", player.getTeamCNName());
-		element.setAttribute("TeamCNAlias", player.getTeamCNAlias());
-		element.setAttribute("PlayerCNName", player.getPlayerCNName());
-		element.setAttribute("PlayerCNAlias", player.getPlayerCNAlias());
+		element.setAttribute("TeamCNAlias", CommonUtil.resoleEmptyParam(player.getTeamCNAlias()));
+		element.setAttribute("PlayerCNName", CommonUtil.resoleEmptyParam(player.getPlayerCNName()));
+		element.setAttribute("PlayerCNAlias", CommonUtil.resoleEmptyParam(player.getPlayerCNAlias()));
 		element.setAttribute("FirstName", player.getFirstName());
 		element.setAttribute("LastName", player.getLastName());
 		element.setAttribute("LPortrait", player.getLPortrait());
