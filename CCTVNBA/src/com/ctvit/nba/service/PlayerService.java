@@ -48,4 +48,6 @@ public interface PlayerService {
 	public <T> int updatePlayerPersonal2XML(String moduleName, String scheduleID,
 			Map<String, Map<String, T>> innerUpdateModuleACondtions);
 
+
+
 }

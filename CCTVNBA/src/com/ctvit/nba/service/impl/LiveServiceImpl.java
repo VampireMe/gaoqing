@@ -3,20 +3,13 @@
  */
 package com.ctvit.nba.service.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jdom2.Element;
-import org.json.JSONObject;
 
 import com.ctvit.nba.dao.LiveDao;
 import com.ctvit.nba.dao.impl.LiveDaoImpl;
-import com.ctvit.nba.expand.LiveUtil;
 import com.ctvit.nba.service.LiveService;
-import com.ctvit.nba.util.CommonUtil;
-import com.ctvit.nba.util.URLContentUtil;
-import com.ctvit.nba.util.URLUtil;
 import com.ctvit.nba.util.XMLUtil;
 
 /**
@@ -36,34 +29,62 @@ public class LiveServiceImpl implements LiveService{
 	public <T> int updateScheduleBasicInfo(String moduleName,String scheduleIDs, 
 			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
 		
-		//得到内部更新模块及部分链接地址和最终 URL 对象
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-		
-		//得到内部更新模块
-		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
-		//得到 URL 地址及getURL
-		String url = URLUtil.getURL(finalURLMap);
-		String partGetUR = URLUtil.getPartGetURL(finalURLMap);
-		
-		//根据 URL 得到其内容并封装到 List 对象中
-		JSONObject urlJsonObject = URLContentUtil.getURLJsonObject(url);
-		
-		//将选中的赛程更新到数据库中
-		int daoUpdateFlag = liveDao.updateScheduleBasicInfo(innerUpdateModule, scheduleIDs);
-		
-		/*
-		 * 将选中的赛程更新到外部的 XML 文件中
-		 */
-		//组织数据并生成子元素对象集合
-		List<Element> childrenElementList = LiveUtil.getChildrenElementList(urlJsonObject, "basicInfo");
-		
-		//得到更新到 XML 文件名表示
-		String xmlFileNameRemarker = innerUpdateModule + "-" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
-		
 		//更新到  XML 文件中
-		int updateData2XMLFlag = XMLUtil.updateData2XML(moduleName, xmlFileNameRemarker, childrenElementList);
-		
+		int updateData2XMLFlag = XMLUtil.encapsulationGenerateXML(moduleName, 
+								innerUpdateModuleACondtions, "LiveUtil", 
+								"getChildrenElementList", "basicInfo");
 		return updateData2XMLFlag;
 	}
+
+	@Override
+	public <T> int updatePlayerDataStatistics(String moduleName, String scheduleID,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
+		//更新球员数据分析成功标识符
+		int updatePlayerDataStatisticsFlag = 0;
+		
+		updatePlayerDataStatisticsFlag = XMLUtil.encapsulationGenerateXML(moduleName, 
+										innerUpdateModuleACondtions, "com.ctvit.nba.expand.LiveUtil", 
+										"getChildrenElementList", "livePlayerStats");
+		/*
+		 * 更新到数据库中
+		 */
+		
+		return updatePlayerDataStatisticsFlag;
+	}
+
+	@Override
+	public <T> int updateCorelativeData(String moduleName, String scheduleID,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
+		//更新比赛相关数据成功的标识
+		int updateCorelativeDataFlag = 0;
+		
+		updateCorelativeDataFlag = XMLUtil.encapsulationGenerateXML(moduleName, 
+									innerUpdateModuleACondtions, "com.ctvit.nba.expand.LiveUtil", 
+									"getChildrenElementList", "liveData");
+		/*
+		 * 更新到数据库中
+		 */
+		
+		return updateCorelativeDataFlag;
+	}
+
+	@Override
+	public <T> int updateTeamGatherData(String moduleName, String scheduleID,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
+		//初始化更新比赛球队汇总数据的成功标识
+		int updateTeamGatherDataFlag = 0;
+		
+		//执行封装方法的更新操作
+		updateTeamGatherDataFlag = XMLUtil.encapsulationGenerateXML(moduleName, innerUpdateModuleACondtions, 
+				"com.ctvit.nba.expand.LiveUtil", 
+				"getChildrenElementList", "liveTeamStat");
+		/*
+		 * 保存到数据库中
+		 */
+		
+		return updateTeamGatherDataFlag;
+	}
+
+
 
 }

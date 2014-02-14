@@ -17,6 +17,47 @@ import org.json.JSONObject;
 public class CommonUtil {
 	
 	/**
+	 * 根据 KEY 的值，得到 JSONObject 中的值，并将其转为 String 类型
+	 * @author 高青
+	 * 2014-2-11
+	 * @param jsonObject JSONObject数据
+	 * @param key 得到数据的 key 标识
+	 * @param dataType 数据类型
+	 * @return result 得到的 String 值
+	 */
+	public static String getStringValueByKey(JSONObject jsonObject, String key, String dataType){
+		//返回的值
+		String value = "";
+		
+		//判断 JSONObject 对象是否为空
+		if (jsonObject != null) {
+			//判断当前 key 对应的值是否为 null
+			if (jsonObject.isNull(key)) {
+				value = "empty";
+			}else {
+				
+				//默认情况下，是 int 类型
+				if (dataType == null) {
+					value = Integer.toString(jsonObject.getInt(key));
+					
+				//类型是 int 时：
+				} else if (dataType.equals("int")) {
+					value = Integer.toString(jsonObject.getInt(key));
+					
+				//类型是 double 时：
+				}else if (dataType.equals("double")) {
+					value = Double.toString(jsonObject.getDouble(key));
+					
+				//类型是 String 时：
+				}else if (dataType.equals("String")) {
+					value = jsonObject.getString(key);
+				}
+			}
+		}
+		return value;
+	}
+	
+	/**
 	 * 处理当前项的值为 null 的情况
 	 * @author 高青
 	 * 2014-1-26
@@ -58,7 +99,7 @@ public class CommonUtil {
 		if (t instanceof String) {
 			
 			//判断当前值为空时
-			if (t.equals(null) || t.equals("") || t== null || t.equals("null") ) {
+			if (t.equals("") || t== null) {
 				result = "empty";
 			
 			//不为空时

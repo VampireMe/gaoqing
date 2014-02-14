@@ -281,10 +281,272 @@
     -webkit-border-radius: 0 0 6px 0;  
     border-radius: 0 0 6px 0;  
     } 
-    
 	/**###################本场比赛球员信息模块 end ##########################*/
 	
 /********************************** 球员分析模块 end **********************************/
+
+
+/********************************** 数据分析模块 start **********************************/
+
+	/**-------------------- 比赛球员的数据统计 start --------------------*/
+		/**比赛球员的数据统计的外层 div 样式*/
+		#dataStatistics_playerData_outer{
+			display: none;
+		}
+		
+	    .playerData_table {  
+	    *border-collapse: collapse; /* IE7 and lower */  
+	    border-spacing: 0;  
+	    width: 100%;  
+	    
+	    border: solid #ccc 1px;  
+	    -moz-border-radius: 6px;  
+	    -webkit-border-radius: 6px;  
+	    border-radius: 6px;  
+	    -webkit-box-shadow: 1px 2px 2px #888888;  
+	    -moz-box-shadow: 1px 2px 2px #888888;  
+	    box-shadow: 1px 2px 2px #888888;  
+	    }  
+	      
+	    .playerData_table tr:hover {  
+	    background: #fbf8e9;  
+	    -o-transition: all 0.1s ease-in-out;  
+	    -webkit-transition: all 0.1s ease-in-out;  
+	    -moz-transition: all 0.1s ease-in-out;  
+	    -ms-transition: all 0.1s ease-in-out;  
+	    transition: all 0.1s ease-in-out;  
+	    }  
+	      
+	    .playerData_table td, .playerData_table th {  
+	    border-left: 1px solid #ccc;  
+	    border-top: 1px solid #ccc;  
+	    padding: 6px;  
+	    }  
+	      
+	    .playerData_table th {  
+	    background-color: #dce9f9;  
+	    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+	    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+	    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+	    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    border-top: none;  
+	    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+	    }  
+	      
+	    .playerData_table td:first-child, .playerData_table th:first-child {  
+	    border-left: none;  
+	    }  
+	      
+	    .playerData_table th:first-child {  
+	    -moz-border-radius: 6px 0 0 0;  
+	    -webkit-border-radius: 6px 0 0 0;  
+	    border-radius: 6px 0 0 0;  
+	    }  
+	      
+	    .playerData_table th:last-child {  
+	    -moz-border-radius: 0 6px 0 0;  
+	    -webkit-border-radius: 0 6px 0 0;  
+	    border-radius: 0 6px 0 0;  
+	    }  
+	      
+	    .playerData_table th:only-child{  
+	    -moz-border-radius: 6px 6px 0 0;  
+	    -webkit-border-radius: 6px 6px 0 0;  
+	    border-radius: 6px 6px 0 0;  
+	    }  
+	      
+	    .playerData_table tr:last-child td:first-child {  
+	    -moz-border-radius: 0 0 0 6px;  
+	    -webkit-border-radius: 0 0 0 6px;  
+	    border-radius: 0 0 0 6px;  
+	    }  
+	      
+	    .playerData_table tr:last-child td:last-child {  
+	    -moz-border-radius: 0 0 6px 0;  
+	    -webkit-border-radius: 0 0 6px 0;  
+	    border-radius: 0 0 6px 0;  
+	    } 
+	/**-------------------- 比赛球员的数据统计 end --------------------*/
+	
+	
+	/**-------------------- 比赛相关的数据统计 start --------------------*/
+	/**外层 div 的样式*/
+	#dataStatistics_corelativeData_outer{
+		display: none;
+	}
+	
+	 .corelativeData_table {  
+    *border-collapse: collapse; /* IE7 and lower */  
+    border-spacing: 0;  
+    width: 100%;  
+    
+    border: solid #ccc 1px;  
+    -moz-border-radius: 6px;  
+    -webkit-border-radius: 6px;  
+    border-radius: 6px;  
+    -webkit-box-shadow: 1px 2px 2px #888888;  
+    -moz-box-shadow: 1px 2px 2px #888888;  
+    box-shadow: 1px 2px 2px #888888;  
+    }  
+      
+    .corelativeData_table tr:hover {  
+    background: #fbf8e9;  
+    -o-transition: all 0.1s ease-in-out;  
+    -webkit-transition: all 0.1s ease-in-out;  
+    -moz-transition: all 0.1s ease-in-out;  
+    -ms-transition: all 0.1s ease-in-out;  
+    transition: all 0.1s ease-in-out;  
+    }  
+      
+    .corelativeData_table td, .corelativeData_table th {  
+    border-left: 1px solid #ccc;  
+    border-top: 1px solid #ccc;  
+    padding: 6px;  
+    }  
+      
+    .corelativeData_table th {  
+    background-color: #dce9f9;  
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    border-top: none;  
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+    }  
+      
+    .corelativeData_table td:first-child, .corelativeData_table th:first-child {  
+    border-left: none;  
+    }  
+      
+    .corelativeData_table th:first-child {  
+    -moz-border-radius: 6px 0 0 0;  
+    -webkit-border-radius: 6px 0 0 0;  
+    border-radius: 6px 0 0 0;  
+    }  
+      
+    .corelativeData_table th:last-child {  
+    -moz-border-radius: 0 6px 0 0;  
+    -webkit-border-radius: 0 6px 0 0;  
+    border-radius: 0 6px 0 0;  
+    }  
+      
+    .corelativeData_table th:only-child{  
+    -moz-border-radius: 6px 6px 0 0;  
+    -webkit-border-radius: 6px 6px 0 0;  
+    border-radius: 6px 6px 0 0;  
+    }  
+      
+    .corelativeData_table tr:last-child td:first-child {  
+    -moz-border-radius: 0 0 0 6px;  
+    -webkit-border-radius: 0 0 0 6px;  
+    border-radius: 0 0 0 6px;  
+    }  
+      
+    .corelativeData_table tr:last-child td:last-child {  
+    -moz-border-radius: 0 0 6px 0;  
+    -webkit-border-radius: 0 0 6px 0;  
+    border-radius: 0 0 6px 0;  
+    } 
+	/**-------------------- 比赛相关的数据统计 end --------------------*/
+	
+	
+	/**-------------------- 比赛球队汇总数据 start --------------------*/
+	/** 外层 div 样式 */
+	#dataStatistics_teamGatherData_outer{
+		display: none;
+	}
+	
+	.teamGatherData_table {  
+    *border-collapse: collapse; /* IE7 and lower */  
+    border-spacing: 0;  
+    width: 100%;  
+    
+    border: solid #ccc 1px;  
+    -moz-border-radius: 6px;  
+    -webkit-border-radius: 6px;  
+    border-radius: 6px;  
+    -webkit-box-shadow: 1px 2px 2px #888888;  
+    -moz-box-shadow: 1px 2px 2px #888888;  
+    box-shadow: 1px 2px 2px #888888;  
+    }  
+      
+    .teamGatherData_table tr:hover {  
+    background: #fbf8e9;  
+    -o-transition: all 0.1s ease-in-out;  
+    -webkit-transition: all 0.1s ease-in-out;  
+    -moz-transition: all 0.1s ease-in-out;  
+    -ms-transition: all 0.1s ease-in-out;  
+    transition: all 0.1s ease-in-out;  
+    }  
+      
+    .teamGatherData_table td, .teamGatherData_table th {  
+    border-left: 1px solid #ccc;  
+    border-top: 1px solid #ccc;  
+    padding: 6px;  
+    }  
+      
+    .teamGatherData_table th {  
+    background-color: #dce9f9;  
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    border-top: none;  
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+    }  
+      
+    .teamGatherData_table td:first-child, .teamGatherData_table th:first-child {  
+    border-left: none;  
+    }  
+      
+    .teamGatherData_table th:first-child {  
+    -moz-border-radius: 6px 0 0 0;  
+    -webkit-border-radius: 6px 0 0 0;  
+    border-radius: 6px 0 0 0;  
+    }  
+      
+    .teamGatherData_table th:last-child {  
+    -moz-border-radius: 0 6px 0 0;  
+    -webkit-border-radius: 0 6px 0 0;  
+    border-radius: 0 6px 0 0;  
+    }  
+      
+    .teamGatherData_table th:only-child{  
+    -moz-border-radius: 6px 6px 0 0;  
+    -webkit-border-radius: 6px 6px 0 0;  
+    border-radius: 6px 6px 0 0;  
+    }  
+      
+    .teamGatherData_table tr:last-child td:first-child {  
+    -moz-border-radius: 0 0 0 6px;  
+    -webkit-border-radius: 0 0 0 6px;  
+    border-radius: 0 0 0 6px;  
+    }  
+      
+    .teamGatherData_table tr:last-child td:last-child {  
+    -moz-border-radius: 0 0 6px 0;  
+    -webkit-border-radius: 0 0 6px 0;  
+    border-radius: 0 0 6px 0;  
+    } 
+	/**-------------------- 比赛球队汇总数据 end --------------------*/
+	
+/********************************** 数据分析模块 end **********************************/
+
 
 
 

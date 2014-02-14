@@ -56,6 +56,23 @@
             </result>
         </action>
         
+        <!-- 数据统计 >> 球员的数据统计 -->
+         <action name="playerDataStatistics" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
+        <!-- 数据统计 >> 比赛相关数据 -->
+         <action name="corelativeData" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        <!-- 数据统计 >> 比赛球队汇总数据 -->
+         <action name="teamGatherData" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
         <!-- 更新赛程  End -->
         
         

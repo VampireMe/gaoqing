@@ -4,6 +4,8 @@
 package com.ctvit.nba.action;
 
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,13 +95,17 @@ public class ScheduleAction extends BaseAction{
 	}
 	
 	/**
-	 * 更新本场比赛的最佳球员信息
+	 * 通用更新方法
 	 * @author 高青
-	 * 2014-1-28
-	 * @return void 空
+	 * 2014-2-13
+	 * @param T 泛型类型
+	 * @param t 调用方法的实例类
+	 * @param methodName 方法名称
+	 * @return int commonUpdateFlag 通用成功标识
 	 */
-	public void updateBestPlayerInfo(){
-		int updatePlayerPersonal2XMLFlag = 0;
+	private <T> int commonUpdateMethod(T t, String methodName) {
+		//初始化通用成功标识：
+		int commonUpdateFlag = 0;
 		
 		//组织内部更新模块和更新条件的 Map 对象
 		if (scheduleIDs != null && !scheduleIDs.equals("")) {
@@ -111,20 +117,117 @@ public class ScheduleAction extends BaseAction{
 				
 				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
 				
-				updatePlayerPersonal2XMLFlag = playerService.updateBestPlayerInfo(moduleName, scheduleID, innerUpdateModuleACondtions);
+				//得到指定类中的更新方法
+				Method sepcifyMethod = null;
+				try {
+					sepcifyMethod = t.getClass().getMethod(methodName, String.class, String.class, Map.class);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				}
+				
+				//执行指定的更新方法
+				try {
+					commonUpdateFlag = (Integer) sepcifyMethod.invoke(t, moduleName, scheduleID, innerUpdateModuleACondtions);
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		return commonUpdateFlag;
+	}
+	
+	/**
+	 * 统一将 json 写到前台的方法
+	 * @author 高青
+	 * 2014-2-10
+	 * @param update2XMLFlag 更新到 xml 文件成功标识
+	 * @return void 空
+	 */
+	private void unifyWriteJson2Web(int update2XMLFlag) {
 		//得到链接中的 JSON 数据
-		if (updatePlayerPersonal2XMLFlag == 1) {
+		if (update2XMLFlag == 1) {
 			//得到 url 的数据
 			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
 			String url = URLUtil.getURL(finalURLMap);
 			json = URLContentUtil.getURLContent(url);
 		} else {
-			json = updatePlayerPersonal2XMLFlag + "";
+			json = update2XMLFlag + "";
 		}
 		//返回更新的数据
 		writeJson2Web(json);
+	}
+	
+	/**
+	 * 更新球队汇总数据
+	 * @author 高青
+	 * 2014-2-13
+	 * @return void 空
+	 */
+	public void updateTeamGatherData(){
+		//比赛球队汇总数据更新到 xml 成功标识
+		int teamGatherData2XMLFlag = 0;
+		
+		//执行更新操作
+		teamGatherData2XMLFlag = commonUpdateMethod(liveService, "updateTeamGatherData");
+		
+		writeJson2Web(teamGatherData2XMLFlag);
+	}
+	
+	/**
+	 * 更新数据统计下的比赛相关数据的信息
+	 * @author 高青
+	 * 2014-2-11
+	 * @return void 空
+	 */
+	public void updateCorelativeData(){
+		//比赛相关数据更新到 xml 成功标识
+		int updateCorelativeData2XMLFlag = 0;
+		
+		//执行更新操作
+		updateCorelativeData2XMLFlag = commonUpdateMethod(liveService, "updateCorelativeData");
+		 
+		//将 url 的数据以 json 字符串的形式，写出到前台
+		unifyWriteJson2Web(updateCorelativeData2XMLFlag);
+	}
+	
+	/**
+	 * 更新比赛球员的数据统计
+	 * @author 高青
+	 * 2014-2-10
+	 * @return void 空
+	 */
+	public void updatePlayerDataStatistics(){
+		//球员数据统计更新到 xml 成功标识
+		int updatePlayerDataStatistics2XMLFlag = 0;
+		
+		//执行更新操作
+		updatePlayerDataStatistics2XMLFlag = commonUpdateMethod(liveService, "updatePlayerDataStatistics");
+		
+		//将 url 的数据以 json 字符串的形式，写出到前台
+		unifyWriteJson2Web(updatePlayerDataStatistics2XMLFlag);
+	}
+	
+	/**
+	 * 更新本场比赛的最佳球员信息
+	 * @author 高青
+	 * 2014-1-28
+	 * @return void 空
+	 */
+	public void updateBestPlayerInfo(){
+		//球员个人数据更新到  xml 文件，成功标识
+		int updatePlayerPersonal2XMLFlag = 0;
+		
+		//执行球员个人数据
+		updatePlayerPersonal2XMLFlag = commonUpdateMethod(playerService, "updateBestPlayerInfo");
+		
+		//将 url 的数据以 json 字符串的形式，写出到前台
+		unifyWriteJson2Web(updatePlayerPersonal2XMLFlag);
 	}
 	
 	/**
@@ -134,35 +237,17 @@ public class ScheduleAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void updatePlayerPersonalInfo(){
+		//更新球员个人信息到 xml 成功标识
 		int updatePlayerPersonal2XMLFlag = 0;
 		
-		//组织内部更新模块和更新条件的 Map 对象
-		if (scheduleIDs != null && !scheduleIDs.equals("")) {
-			String[] scheduleArray = scheduleIDs.split(",");
-			
-			//更新到球员个人信息 到 XML 文件
-			for (String scheduleID : scheduleArray) {
-				innerConditionMap.put("scheduleID", scheduleID);
-				
-				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
-				
-				updatePlayerPersonal2XMLFlag = playerService.updatePlayerPersonal2XML(moduleName, scheduleID, innerUpdateModuleACondtions);
-			}
-			//更新到数据库中
-			playerService.updatePlayerPersonal2DB(moduleName, scheduleIDs, innerUpdateModuleACondtions);
-		}
-		//得到链接中的 JSON 数据
-		if (updatePlayerPersonal2XMLFlag == 1) {
-			//得到 url 的数据
-			Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-			String url = URLUtil.getURL(finalURLMap);
-			json = URLContentUtil.getURLContent(url);
-		} else {
-			json = updatePlayerPersonal2XMLFlag + "";
-		}
+		//执行更新球员个人信息到 xml 操作
+		updatePlayerPersonal2XMLFlag = commonUpdateMethod(playerService, "updatePlayerPersonal2XML");
 		
-		//返回更新的数据
-		writeJson2Web(json);
+		//更新到数据库中
+		playerService.updatePlayerPersonal2DB(moduleName, scheduleIDs, innerUpdateModuleACondtions);
+		
+		//将 url 的数据以 json 字符串的形式，写出到前台
+		unifyWriteJson2Web(updatePlayerPersonal2XMLFlag);
 	}
 	
 	/**
@@ -173,37 +258,12 @@ public class ScheduleAction extends BaseAction{
 	public void updateScheduleBasicInfo(){
 		//更新成功标识
 		int updateScheduleBasicInfoFlag = 0;
-		if (scheduleIDs != null) {
 			
-			//将数据更新到数据库
-			
-			//拆分赛程 ID 字符串集
-			String[] scheduleIDArray = scheduleIDs.split(",");
-			for (String scheduleID : scheduleIDArray) {
-				//重置内部更新模块和查询条件的 Map 对象
-				innerUpdateModuleACondtions = new HashMap<String, Map<String,String>>();
-				innerConditionMap = new HashMap<String, String>();
-				
-				//将数据放到内部更新条件 map 对象中
-				innerConditionMap.put("scheduleID", scheduleID);
-				getInnerUpdateModuleAConditions(innerUpdateModule);
-				
-				//将数据更新到 XML 文件中
-				updateScheduleBasicInfoFlag = liveService.updateScheduleBasicInfo(moduleName, scheduleIDs, innerUpdateModuleACondtions);
-			}
-			
-			if (updateScheduleBasicInfoFlag == 1) {
-				//得到 url 的数据
-				Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-				String url = URLUtil.getURL(finalURLMap);
-				json = URLContentUtil.getURLContent(url);
-			} else {
-				json = updateScheduleBasicInfoFlag + "";
-			}
-			
-			//将数据写到 jsp 中
-			writeJson2Web(json);
-		}
+		//执行更新该场比赛的详细到 xml 操作
+		updateScheduleBasicInfoFlag = commonUpdateMethod(liveService, "updateScheduleBasicInfo");
+		
+		//将 url 的数据以 json 字符串的形式，写出到前台
+		unifyWriteJson2Web(updateScheduleBasicInfoFlag);
 	}
 	
 	/**

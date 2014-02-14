@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a class = "easyui-linkbutton" id = "playerAnalysis"
 									data-options = "iconCls:'icon-search' "
 								   >球&nbsp;员&nbsp;分&nbsp;析</a>
-				<a class = "easyui-linkbutton" 
+				<a class = "easyui-linkbutton" id = "dataStatistics"
 									data-options = "iconCls:'icon-save' "
 								   >数&nbsp;据&nbsp;统&nbsp;计</a>
 				<a class = "easyui-linkbutton" 
@@ -70,6 +70,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 球员分析模块 start -->
 	<%@ include file = "playerAnalysis.jsp" %>
 	<!-- 球员分析模块 end -->
+	
+	<!-- 数据分析模块 start -->
+	<%@ include file = "dataStatistics.jsp" %>
+	<!-- 数据分析模块 end -->
 	
 </div>
 

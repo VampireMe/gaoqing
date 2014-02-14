@@ -7,7 +7,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +20,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.json.JSONObject;
 
 /**
  * XML操作常用类
@@ -26,6 +31,111 @@ public class XMLUtil {
 	
 	/**日志对象*/
 	private static Logger logger = Logger.getLogger(XMLUtil.class);
+	
+	/**
+	 * 封装后的，生成 xml 的方法
+	 * @author 高青
+	 * 2014-2-12
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块和更新条件的 Map 对象
+	 * @param className 调用方法的类的全称（包括包名）
+	 * @param methodName 调用的方法名
+	 * @param otherInfo 调用方法的其他附加信息
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws SecurityException 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 */
+	public static <T> int encapsulationGenerateXML(String moduleName,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions,
+			String className, String methodName, String otherInfo) {
+		int updateFlag = 0;
+		//得到内部更新模块及部分链接地址和最终 URL 对象
+		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		
+		//得到内部更新模块
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
+		//得到 URL 地址及getURL
+		String url = URLUtil.getURL(finalURLMap);
+		
+		//根据 URL 得到其内容并封装到 List 对象中
+		JSONObject urlJsonObject = URLContentUtil.getURLJsonObject(url);
+		
+		//得到子元素集
+		List<Element> childrenElementList = new ArrayList<Element>();
+		try {
+			childrenElementList = getChildrenElementListByClassName(
+					className, methodName, otherInfo, urlJsonObject);
+		} catch (ClassNotFoundException e) {
+			System.out.println("指定类名下的类，没找到异常");
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			System.out.println("实例化当前类异常");
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			System.out.println("不合法的调用方法异常");
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			System.out.println("调用的方法不存在异常");
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			System.out.println("调用方法异常");
+			e.printStackTrace();
+		}
+		
+		//得到 xml 文件名称标识
+		String xmlFileNameRemarker = innerUpdateModule + "-" + CommonUtil.getConditionRemarker(innerUpdateModuleACondtions);
+		
+		//更新到 xml 文件中
+		updateFlag = XMLUtil.updateData2XML(moduleName, xmlFileNameRemarker, childrenElementList);
+		
+		return updateFlag;
+	}
+
+	/**
+	 * 通过指定的类名和方法名，调用方法并得到子元素集
+	 * @author 高青
+	 * 2014-2-12
+	 * @param className 调用方法的类名
+	 * @param methodName 模块名称
+	 * @param otherInfo 其他附加信息
+	 * @param urlJsonObject url路径的 JSONObject 对象数据 
+	 * @throws ClassNotFoundException 指定类名下的类，没找到异常
+	 * @throws InstantiationException 实例化当前类异常
+	 * @throws IllegalAccessException 不合法的调用方法异常
+	 * @throws NoSuchMethodException 调用的方法不存在异常
+	 * @throws InvocationTargetException 调用方法异常
+	 * @return childrenElementList 子元素的集合
+	 */
+	public static List<Element> getChildrenElementListByClassName(String className,
+			String methodName, String otherInfo, JSONObject urlJsonObject)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NoSuchMethodException,
+			InvocationTargetException {
+		//初始化子元素集合
+		List<Element> childrenElementList = new ArrayList<Element>();
+		
+		/*
+		 * 根据传递的类名及方法名，
+		 * 用反射的方式执行相关方法
+		 */
+		//1、通过类名，得到相应的类
+		Class<?> specifyClass = Class.forName(className);
+		//实例化指定类
+		Object instancedClass = specifyClass.newInstance();
+		
+		//得到指定的方法
+		Method specifyMethod = specifyClass.getMethod(methodName, JSONObject.class, String.class);
+		
+		//调用该方法
+		childrenElementList = (List<Element>) specifyMethod.invoke(instancedClass, urlJsonObject, otherInfo);
+		
+		return childrenElementList;
+	}
 	
 	/**
 	 * 生成  XML 文件

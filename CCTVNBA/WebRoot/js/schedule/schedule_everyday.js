@@ -508,6 +508,7 @@ $(document).ready(function(){
 						
 						//主队客队最近几场比赛
 						
+						//****************** 球员分析 start *******************//
 						//本场比赛球员个人数据
 						if(jsonParamObj.innerUpdateModule === "LIVE_PLAYER_STAT"){
 							$("#playerAnalysis_bestPlayerInfoOuter").hide();
@@ -525,8 +526,41 @@ $(document).ready(function(){
 							
 							//后续绑定显示操作
 							bindBestPlayerInfo(json);
-							json = "";
 						}
+						//****************** 球员分析 end *******************//
+						
+						//********** 数据统计模块 start************//
+						//（1）球员数据分析部分：
+						if(jsonParamObj.innerUpdateModule === "LIVE_PLAY_STATS"){
+							$("#dataStatistics_corelativeData_outer").hide();
+							$("#dataStatistics_teamGatherData_outer").hide();
+							//1、显示隐藏的球员数据分析部分
+							$("#dataStatistics_playerData_outer").show();
+							
+							//2、绑定球员数据分析的信息
+							bindPlayerDataStats(json);
+						}
+						//（2）比赛相关数据部分：
+						if(jsonParamObj.innerUpdateModule === "LIVE_DATA"){
+							$("#dataStatistics_playerData_outer").hide();
+							$("#dataStatistics_teamGatherData_outer").hide();
+							//1、显示隐藏的比赛相关数据部分：
+							$("#dataStatistics_corelativeData_outer").show();
+							
+							//2、绑定比赛相关数据部分信息：
+							bindCorelativeData(json);
+						}
+						//（3）本场比赛球队汇总数据部分：
+						if(jsonParamObj.innerUpdateModule === "LIVE_TEAM_STAT"){
+							$("#dataStatistics_playerData_outer").hide();
+							//1、显示隐藏的比赛球队汇总数据部分：
+							$("#dataStatistics_corelativeData_outer").hide();
+							$("#dataStatistics_teamGatherData_outer").show();
+							
+							//2、绑定比赛球队汇总数据部分信息：
+							bindTeamGatherData(json);
+						}
+						//********** 数据统计模块 end************//
 					});
 				}else{
 					$.messager.alert("提示信息", "更新失败，请重试！" ,"info");
@@ -848,7 +882,294 @@ $(document).ready(function(){
 			$("#playerAnalysisOuter").dialog('open');
 		}
 	});
-	
-	
 	/** ----------------------------球员分析部分 end-------------------------*/
+	
+	/** ----------------------------数据统计部分 start -------------------------*/
+	//申明数据统计的外层对象
+	var dataStatistics = $("#dataStatisticsOuter");
+	
+		//初始状态下的 球员数据统计下的 table 中 tbody 
+	var $init_playerDataStats_tbody = $("#dataStatistics_playerData_outer .playerData_table tbody"),
+		//初始状态下的 比赛相关信息的 table 中 tbody 
+		$init_corelativeData_tbody = $("#dataStatistics_corelativeData_outer .corelativeData_table tbody"),
+		//初始状态下的球队汇总数据的 table 中的 tbody 
+		$init_teamGatherData_tbody = $("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody");
+	
+	//定义 dialog 对象
+	dataStatistics.dialog({
+		title: '数据统计',
+		width: 850,
+		height: 550,
+		modal: true,
+		closed: true,
+		maximizable: true,
+		closable: true,
+		resizable: true,
+		toolbar: [{
+			text: '比赛球员的数据统计',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+				
+				//重置球员数据统计下的 table 中的 tbody 的值
+				$("#dataStatistics_playerData .playerData_table tbody").html($init_playerDataStats_tbody);
+				
+				//执行请求
+				ajaxMethod('playerDataStatistics!updatePlayerDataStatistics.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'live',
+					innerUpdateModule: 'LIVE_PLAY_STATS'
+				});
+			}
+		}, ' ', '-',' ', {
+			text: '该场比赛的相关数据',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+				
+				//重置当前 tbody 中的值
+				$("#dataStatistics_corelativeData_outer .corelativeData_table tbody").html($init_corelativeData_tbody);
+				
+				//执行请求
+				ajaxMethod('corelativeData!updateCorelativeData.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'live',
+					innerUpdateModule: 'LIVE_DATA'
+				});
+			}
+		}, ' ', '-',' ', {
+			text: '本场比赛球队汇总数据',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+				
+				//重置当前 tbody 中的值
+				$("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody").html($init_teamGatherData_tbody);
+				
+				//执行请求
+				ajaxMethod('teamGatherData!updateTeamGatherData.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'live',
+					innerUpdateModule: 'LIVE_TEAM_STAT'
+				});
+			}
+		}]
+	});
+	
+	//单击操作，弹出一个 dialog 
+	$("#dataStatistics").on('click', function(){
+		var checkedSchedules = table.datagrid("getChecked");
+		//判断是否选中赛程
+		if(checkedSchedules.length === 0){
+			$.messager.alert("提示信息", "请选择赛程！" ,"info");
+		}else{
+			$("#dataStatisticsOuter").dialog('open');
+		}
+	});
+	
+	/**
+	 * 显示数据统计的信息
+	 * 2014-02-11
+	 * author: 高青
+	 * param: dataStatsArray 数据分析的数组对象
+	 * param: dataStats_tbody 数据分析的 table 下的 tbody 对象
+	 * param: otherInfo 其他附加信息
+	 */
+	function appendDataStats(dataStatsArray, dataStats_tbody, otherInfo){
+		
+		//循环遍历数组中的统计数据
+		for ( var i = 0; i < dataStatsArray.length; i++) {
+			//如果上场时间为0，则隐藏该球员的信息
+			if(dataStatsArray[i].Minutes !== 0){
+				
+				dataStats_tbody.append('<tr>');
+				
+				//第一行显示出主队或者客队：
+				if(i === 0){
+					//主队
+					if(otherInfo === "home"){
+						dataStats_tbody.append('<td  nowrap="nowrap" align="center">主队：</td>');
+					}
+					if(otherInfo === "visit"){
+						dataStats_tbody.append('<td  nowrap="nowrap" align="center">客队：</td>');
+					}
+				}else{
+					dataStats_tbody.append('<td  nowrap="nowrap" align="right"></td>');
+				}
+				//比赛相关数据中，没有该项数据
+				if(dataStatsArray[i].CNAlias !== undefined){
+					dataStats_tbody.append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].CNAlias +'</td>');
+				}else{
+					dataStats_tbody.append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].PlayerCNAlias +'</td>');
+				}
+				dataStats_tbody.append('<td  nowrap="nowrap" align="center">'+ dataStatsArray[i].TeamCNAlias +'</td>').
+				append('<td  nowrap="nowrap" align="center">'+ dataStatsArray[i].PositionDescription +'</td>').
+				append('<td  nowrap="nowrap" align="center">'+ dataStatsArray[i].Minutes +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Rebounds +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Assists +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Blocked +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Steals +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Turnovers +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].FreeThrowsAttempted +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].FreeThrows +'</td>');
+				
+				//比赛相关数据中，没有该项数据
+				if(dataStatsArray[i].CNAlias === undefined){
+					dataStats_tbody.append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].PersonalFouls +'</td>');
+				}
+				dataStats_tbody.append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].FieldGoalsAttempted +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].FieldGoals +'</td>').
+				append('<td  nowrap="nowrap" align="right">'+ dataStatsArray[i].Points +'</td>');
+				dataStats_tbody.append('</tr>');
+			}
+		}
+	}
+	
+	/**
+	 * 绑定球员数据分析 的信息
+	 * 2014-02-11
+	 * author: 高青
+	 * param: json 从后台返回的 json 数据值
+	 */
+	function bindPlayerDataStats(json){
+			//首先将返回的 json 值转为 JQuery 下的 JSON 对象
+		var callbackJSON = $.parseJSON(json),
+			//数据统计集合数据对象
+			playerDataStatsObj,
+			//主队球员数据统计对象
+			homePlayerDataStatsArray,
+			//客队球员数据统计对象
+			visitPlayerDataStatsArray,
+			//球员数据统计的 tbody 对象
+			playerDataStats_tbody;
+		
+		//得到数据统计的集合数据
+		playerDataStatsObj = callbackJSON.LiveStats;
+		
+		//得到球员数据统计的 tbody 对象
+		playerDataStats_tbody = $("#dataStatistics_playerData_outer .playerData_table tbody");
+		
+		//(1)得到主队球员数据统计信息
+		homePlayerDataStatsArray = playerDataStatsObj.Home;
+		//显示主队球员数据统计的信息
+		appendDataStats(homePlayerDataStatsArray, playerDataStats_tbody, "home");
+		
+		//(2)得到客队球员数据统计信息
+		visitPlayerDataStatsArray = playerDataStatsObj.Visit;
+		
+		//显示客队球员数据统计的信息
+		appendDataStats(visitPlayerDataStatsArray, playerDataStats_tbody, "visit");
+	}
+	
+	/**
+	 * 绑定比赛相关数据的信息
+	 * 2014-02-12
+	 * author: 高青
+	 * param: json 从后台返回的 json 数据值
+	 */
+	function bindCorelativeData(json){
+		/*
+		 * 变量的定义
+		 */
+			//首先将 json 数据转为 JQuery 的 json 对象
+		var  $corelativeData = $.parseJSON(json),
+			//table 下的 tbody 对象
+			$corelativeData_tbody,
+			//客队球员的数据
+			corelativeData_visitingPlayerStatsArray,
+			//主队球员的数据
+			corelativeData_homePlayerStatsArray;
+		
+		//得到 tbody 对象
+		$corelativeData_tbody = $("#dataStatistics_corelativeData_outer .corelativeData_table tbody");
+		
+		//得到主队球员信息
+		corelativeData_homePlayerStatsArray = $corelativeData.HomePlayerStats;
+		appendDataStats(corelativeData_homePlayerStatsArray, $corelativeData_tbody, "home");
+		
+		//得到客队球员信息
+		corelativeData_visitingPlayerStatsArray = $corelativeData.VisitingPlayerStats;
+		appendDataStats(corelativeData_visitingPlayerStatsArray, $corelativeData_tbody, "visit");
+	}
+	
+	/**
+	 * 绑定比赛球队汇总信息
+	 * 2014-02-13
+	 * author： 高青
+	 * param: teamGatherData_statArray 球队汇总的 JSON 数据
+	 * param: teamGatherData_tbody 球队汇总 table 下的 tbody 对象
+	 * param: otherInfo 其他附加信息
+	 */
+	function appendTeamGatherData(teamGatherData_statArray, teamGatherData_tbody, otherInfo){
+		//判断传递过来的 JSON 数据是否为空
+		if(teamGatherData_statArray !== null && teamGatherData_statArray !== undefined){
+			for(var i = 0; i < teamGatherData_statArray.length; i++){
+				//绑定最外层的 tr 
+				teamGatherData_tbody.append("<tr>");
+				
+				if(i === 0){
+					if(otherInfo === "home"){
+						teamGatherData_tbody.append('<td>主队：</td>');
+					}else if(otherInfo === "visit"){
+						teamGatherData_tbody.append('<td>客队：</td>');
+					}
+				}else{
+					teamGatherData_tbody.append('<td></td>');
+				}
+				teamGatherData_tbody.append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].TeamCNAlias+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].MatchPlayed+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Wins+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Losses+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].HomeWins+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].HomeLosses+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].AwayWins+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].AwayLosses+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Points+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].FieldGoalsAttempted+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].FieldGoals+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].FreeThrowsAttempted+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].FreeThrows+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Rebounds+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Assists+ '</td>').
+				append('<td align = "center" nowrap = "nowrap">' + teamGatherData_statArray[i].Steals+ '</td>');
+				
+				//绑定最外层的 tr 结束标签
+				teamGatherData_tbody.append("</tr>");
+			}
+		}
+	}
+	
+	/**
+	 * 绑定球队汇总数据
+	 * 2014-02-13
+	 * author: 高青
+	 * parma: json 后台返回的 字符串 类型的 json 值
+	 */
+	function bindTeamGatherData(json){
+		/*
+		 * 定义变量
+		 */
+			//1、将后台返回的 json 字符串转为 JSON 对象
+		var $teamGatherDataJSON = $.parseJSON(json),
+			//2、table 下的 tbody 对象
+			$teamGatherData_tbody,
+			//3、主队的球队汇总数据
+			teamGatherData_homeStatArray,
+			//4、客队的球队汇总数据
+			teamGatherData_visitStatArray;
+		
+		//得到 tbody 对象
+		$teamGatherData_tbody = $("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody");
+		//得到主队的球队汇总数据数组
+		teamGatherData_homeStatArray = $teamGatherDataJSON.HomeStat;
+		appendTeamGatherData(teamGatherData_homeStatArray, $teamGatherData_tbody, "home");
+		
+		//得到客队的球队汇总数据数组
+		teamGatherData_visitStatArray = $teamGatherDataJSON.VisitStat;
+		appendTeamGatherData(teamGatherData_visitStatArray, $teamGatherData_tbody, "visit");
+	}
+	/** ----------------------------数据统计部分 end -------------------------*/
 });
