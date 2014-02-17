@@ -499,7 +499,7 @@ $(document).ready(function(){
 						//赛程基本信息
 						if(jsonParamObj.innerUpdateModule === "LIVE"){
 							//显示隐藏数据
-							$("#innerContent").toggle();
+							$("#innerContent").show();
 							
 							bindBasicInfoData(json, "Home");
 							bindBasicInfoData(json, "Visiting");

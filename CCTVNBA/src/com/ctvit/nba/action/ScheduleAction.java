@@ -176,7 +176,7 @@ public class ScheduleAction extends BaseAction{
 		//执行更新操作
 		teamGatherData2XMLFlag = commonUpdateMethod(liveService, "updateTeamGatherData");
 		
-		writeJson2Web(teamGatherData2XMLFlag);
+		unifyWriteJson2Web(teamGatherData2XMLFlag);
 	}
 	
 	/**

@@ -17,7 +17,9 @@ import org.json.JSONObject;
 public class CommonUtil {
 	
 	/**
-	 * 根据 KEY 的值，得到 JSONObject 中的值，并将其转为 String 类型
+	 * 根据 KEY 的值，得到 JSONObject 中的值，
+	 * <p>并将其转为 String 类型</p>
+	 * 默认情况（null）下，是 int 类型
 	 * @author 高青
 	 * 2014-2-11
 	 * @param jsonObject JSONObject数据

@@ -376,7 +376,7 @@ public class LiveUtil {
 		corelativeDataElement.setAttribute("LastName", corelativeDataJSONObject.getString("LastName"));
 		corelativeDataElement.setAttribute("LPortrait", corelativeDataJSONObject.getString("LPortrait"));
 		corelativeDataElement.setAttribute("SPortrait", corelativeDataJSONObject.getString("SPortrait"));
-		corelativeDataElement.setAttribute("Minutes", corelativeDataJSONObject.getString("Minutes"));
+		corelativeDataElement.setAttribute("Minutes", CommonUtil.getStringValueByKey(corelativeDataJSONObject, "Minutes", "int"));
 	}
 	
 	/**
@@ -455,15 +455,15 @@ public class LiveUtil {
 		
 		//球员相关数据时：
 		if (otherInfo != null && "liveData".equals(otherInfo)) {
-			playerElement.setAttribute("PlayerCNName", CommonUtil.getStringValueByKey(playerJSONObject, "CNName", null));
-			playerElement.setAttribute("PlayerCNAlias", CommonUtil.getStringValueByKey(playerJSONObject, "CNAlias", null));
+			playerElement.setAttribute("PlayerCNName", CommonUtil.getStringValueByKey(playerJSONObject, "CNName", "String"));
+			playerElement.setAttribute("PlayerCNAlias", CommonUtil.getStringValueByKey(playerJSONObject, "CNAlias", "String"));
 		} else {
-			playerElement.setAttribute("PlayerCNName", CommonUtil.getStringValueByKey(playerJSONObject, "PlayerCNName", null));
-			playerElement.setAttribute("PlayerCNAlias", CommonUtil.getStringValueByKey(playerJSONObject, "PlayerCNAlias", null));
+			playerElement.setAttribute("PlayerCNName", CommonUtil.getStringValueByKey(playerJSONObject, "PlayerCNName", "String"));
+			playerElement.setAttribute("PlayerCNAlias", CommonUtil.getStringValueByKey(playerJSONObject, "PlayerCNAlias", "String"));
 		}
 		
-		playerElement.setAttribute("FirstName", CommonUtil.getStringValueByKey(playerJSONObject, "FirstName", null));
-		playerElement.setAttribute("LastName", CommonUtil.getStringValueByKey(playerJSONObject, "LastName", null));
+		playerElement.setAttribute("FirstName", CommonUtil.getStringValueByKey(playerJSONObject, "FirstName", "String"));
+		playerElement.setAttribute("LastName", CommonUtil.getStringValueByKey(playerJSONObject, "LastName", "String"));
 	}
 	
 	/**
@@ -566,7 +566,7 @@ public class LiveUtil {
 		playerDataStatsElement.setAttribute("PositionDescription", playerDataStatsJSONObject.getString("PositionDescription"));
 		playerDataStatsElement.setAttribute("GameStart", CommonUtil.getStringValueByKey(playerDataStatsJSONObject, "GameStart", null));
 		playerDataStatsElement.setAttribute("PlayerCNAlias", playerDataStatsJSONObject.getString("PlayerCNAlias"));
-		playerDataStatsElement.setAttribute("Minutes", playerDataStatsJSONObject.getString("Minutes"));
+		playerDataStatsElement.setAttribute("Minutes", CommonUtil.getStringValueByKey(playerDataStatsJSONObject, "Minutes", "int"));
 	}
 
 	/**

@@ -31,7 +31,7 @@ public class LiveServiceImpl implements LiveService{
 		
 		//更新到  XML 文件中
 		int updateData2XMLFlag = XMLUtil.encapsulationGenerateXML(moduleName, 
-								innerUpdateModuleACondtions, "LiveUtil", 
+								innerUpdateModuleACondtions, "com.ctvit.nba.expand.LiveUtil", 
 								"getChildrenElementList", "basicInfo");
 		return updateData2XMLFlag;
 	}

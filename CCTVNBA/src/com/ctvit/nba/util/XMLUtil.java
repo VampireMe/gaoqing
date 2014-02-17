@@ -273,7 +273,7 @@ public class XMLUtil {
 		 * 得到 按天更新赛程的文件夹路径及文件名
 		 */
 		//得到其中的链接标识，作为组织文件存储的文件夹路径
-		Pattern pattern = Pattern.compile("\\b\\w+?(?=-)"); //匹配第一个"_"前的字符
+		Pattern pattern = Pattern.compile("^\\w+?(?=-)"); //匹配第一个"_"前的字符
 		Matcher matcher = pattern.matcher(xmlFileNameRemarker);
 		String partURLRemarker = "";
 		while (matcher.find()) {

@@ -183,7 +183,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		List<Element> childrenElementList = ScheduleUtil.getChildrenElementList(schedules);
 		
 		//得到更新到 xml 文件的标识变量
-		String xmlFolderRemarker = uniqueMoeduleRemarker + "_" + CommonUtil.getConditionRemarker(uniqueRemarkerAndConditionMap);
+		String xmlFolderRemarker = uniqueMoeduleRemarker + "-" + CommonUtil.getConditionRemarker(uniqueRemarkerAndConditionMap);
 		flag = XMLUtil.updateData2XML(moduleName, xmlFolderRemarker, childrenElementList);
 		
 		return flag;
