@@ -50,10 +50,172 @@ public class LiveUtil {
 			if (updateModuleAlias.equals("liveTeamStat")) {
 				childrenElements = getTeamGatherDataChildrenElementList(urlJsonObject, updateModuleAlias);
 			}
+			//比赛的相关事件
+			if (updateModuleAlias.equals("eventsBySchedule")) {
+				childrenElements = getMatchCorelativeChildrenElementList(urlJsonObject, updateModuleAlias);
+			}
 		}
 		return childrenElements;
 	}
 	
+	/**
+	 * 得到比赛的相关事件子元素集
+	 * @author 高青
+	 * 2014-2-18
+	 * @param urlJsonObject
+	 * @param updateModuleAlias
+	 * @return List<Element>
+	 */
+	private static List<Element> getMatchCorelativeChildrenElementList(
+			JSONObject urlJsonObject, String updateModuleAlias) {
+		//初始化比赛相关事件的子元素集
+		List<Element> matchCorelativeEventChildElementList = new ArrayList<Element>();
+		
+		if (urlJsonObject != null && urlJsonObject.length() != 0) {
+			//得到比赛事件的 JSONArray 对象
+			JSONArray eventsJSONArray = urlJsonObject.getJSONArray("Events");
+			bindMatchCorelativeEventEleList(matchCorelativeEventChildElementList, eventsJSONArray, updateModuleAlias);
+			
+			//得到比赛事件中的 赛程信息的 JSONArray 对象
+			JSONArray scheduleJSONArray = urlJsonObject.getJSONArray("Schedule");
+			bindMatchEventScheduleEleList(matchCorelativeEventChildElementList, scheduleJSONArray, updateModuleAlias);
+			
+			//得到比赛节数的 JSONArray 信息
+			JSONArray quarterJSONArray = urlJsonObject.getJSONArray("Quarter");
+			commonQuarterAttr(matchCorelativeEventChildElementList, quarterJSONArray, updateModuleAlias);
+		}
+		return matchCorelativeEventChildElementList;
+	}
+
+	/**
+	 * 绑定比赛相关事件的赛程信息
+	 * @author 高青
+	 * 2014-2-18
+	 * @param matchEventChildElementList 比赛事件的子元素集
+	 * @param matchEventScheduleJSONArray 比赛事件的赛程信息的 JSONArray 对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空，执行绑定比赛相关事件的赛程信息的操作
+	 */
+	private static void bindMatchEventScheduleEleList(
+			List<Element> matchEventChildElementList,
+			JSONArray matchEventScheduleJSONArray, String otherInfo) {
+		if (matchEventScheduleJSONArray != null && matchEventScheduleJSONArray.length() != 0) {
+			for (int i = 0; i < matchEventScheduleJSONArray.length(); i++) {
+				//得到当前循环的 JSONObejct 对象
+				JSONObject jsonObject = matchEventScheduleJSONArray.getJSONObject(i);
+				
+				//初始化比赛事件的子元素对象
+				Element element = new Element("schedule");
+				//设置属性
+				appendScheduleOfMatchEvent(element, jsonObject, otherInfo);
+				
+				//添加到子元素集中
+				matchEventChildElementList.add(element);
+			}
+		}
+	}
+
+	/**
+	 * 绑定比赛事件中的赛程信息到子元素中
+	 * @author 高青
+	 * 2014-2-18
+	 * @param matchEventElement 比赛事件的子元素
+	 * @param matchEventJSONObject 比赛事件的 JSONObject 对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空，执行绑定比赛事件中的赛程信息到子元素操作
+	 */
+	private static void appendScheduleOfMatchEvent(Element matchEventElement,
+			JSONObject matchEventJSONObject, String otherInfo) {
+		
+		//设置属性
+		matchEventElement.setAttribute("ScheduleID", CommonUtil.getStringValueByKey(matchEventJSONObject, "ScheduleID", "int"));
+		matchEventElement.setAttribute("MatchTypeCNName", CommonUtil.getStringValueByKey(matchEventJSONObject, "MatchTypeCNName", "String"));
+		matchEventElement.setAttribute("MatchGTM8Time", Long.toString(matchEventJSONObject.getLong("MatchGTM8Time")));
+		matchEventElement.setAttribute("HomeTeamID", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeTeamID", "int"));
+		matchEventElement.setAttribute("HomeENName", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeENName", "String"));
+		matchEventElement.setAttribute("HomeCNName", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeCNName", "String"));
+		matchEventElement.setAttribute("HomeCNAlias", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeCNAlias", "String"));
+		matchEventElement.setAttribute("VisitingTeamID", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingTeamID", "int"));
+		matchEventElement.setAttribute("VisitingENName", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingENName", "String"));
+		matchEventElement.setAttribute("VisitingENAlias", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingENAlias", "String"));
+		matchEventElement.setAttribute("VisitingCNName", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingCNName", "String"));
+		matchEventElement.setAttribute("VisitingCNAlias", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingCNAlias", "String"));
+		matchEventElement.setAttribute("StatusCNName", CommonUtil.getStringValueByKey(matchEventJSONObject, "StatusCNName", "String"));
+		matchEventElement.setAttribute("HomeScore", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeScore", "int"));
+		matchEventElement.setAttribute("VisitingScore", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitingScore", "int"));
+		matchEventElement.setAttribute("Quarter", CommonUtil.getStringValueByKey(matchEventJSONObject, "Quarter", "int"));
+	}
+
+	/**
+	 * 绑定比赛相关事件的子元素集
+	 * @author 高青
+	 * 2014-2-18
+	 * @param matchCorelativeEventChildElementList 比赛相关事件的子元素集
+	 * @param eventsJSONArray 事件的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空，执行绑定比赛相关事件的子元素集操作
+	 */
+	private static void bindMatchCorelativeEventEleList(
+			List<Element> matchCorelativeEventChildElementList,
+			JSONArray eventsJSONArray, String otherInfo) {
+		if (eventsJSONArray != null && eventsJSONArray.length() != 0) {
+			for (int i = 0; i < eventsJSONArray.length(); i++) {
+				//得到当前循环下的 JSONObject 对象
+				JSONObject eventJSONObject = eventsJSONArray.getJSONObject(i);
+				
+				//初始化子元素对象
+				Element element = new Element("event");
+				
+				//绑定数据
+				appendMatchCorelativeEventElement(element, eventJSONObject, otherInfo);
+				
+				//添加到子元素集中
+				matchCorelativeEventChildElementList.add(element);
+			}
+		}
+	}
+
+	/**
+	 * 绑定比赛相关事件的子元素属性
+	 * @author 高青
+	 * 2014-2-18
+	 * @param matchCorelativeEventElement 比赛相关事件的子元素对象
+	 * @param matchEventJSONObject 比赛相关事件的 JSONObject 对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空，执行绑定比赛相关事件的子元素属性操作
+	 */
+	private static void appendMatchCorelativeEventElement(Element matchCorelativeEventElement,
+			JSONObject matchEventJSONObject, String otherInfo) {
+		
+		//设置属性
+		matchCorelativeEventElement.setAttribute("QuarterNum", CommonUtil.getStringValueByKey(matchEventJSONObject, "QuarterNum", "int"));
+		matchCorelativeEventElement.setAttribute("SequenceNum", CommonUtil.getStringValueByKey(matchEventJSONObject, "SequenceNum", "double"));
+		matchCorelativeEventElement.setAttribute("TeamID1", CommonUtil.getStringValueByKey(matchEventJSONObject, "TeamID1", "int"));
+		matchCorelativeEventElement.setAttribute("TeamENName1", CommonUtil.getStringValueByKey(matchEventJSONObject, "TeamENName1", "String"));
+		matchCorelativeEventElement.setAttribute("TeamENAlias1", CommonUtil.getStringValueByKey(matchEventJSONObject, "TeamENAlias1", "String"));
+		matchCorelativeEventElement.setAttribute("TeamCNName1", CommonUtil.getStringValueByKey(matchEventJSONObject, "TeamCNName1", "String"));
+		matchCorelativeEventElement.setAttribute("TeamCNAlias1", CommonUtil.getStringValueByKey(matchEventJSONObject, "TeamCNAlias1", "String"));
+		matchCorelativeEventElement.setAttribute("PlayerID1", CommonUtil.getStringValueByKey(matchEventJSONObject, "PlayerID1", "int"));
+		matchCorelativeEventElement.setAttribute("FirstName1", CommonUtil.getStringValueByKey(matchEventJSONObject, "FirstName1", "String"));
+		matchCorelativeEventElement.setAttribute("LastName1", CommonUtil.getStringValueByKey(matchEventJSONObject, "LastName1", "String"));
+		matchCorelativeEventElement.setAttribute("PlayerCNName1", CommonUtil.getStringValueByKey(matchEventJSONObject, "PlayerCNName1", "String"));
+		matchCorelativeEventElement.setAttribute("PlayerCNAlias1", CommonUtil.getStringValueByKey(matchEventJSONObject, "PlayerCNAlias1", "String"));
+		matchCorelativeEventElement.setAttribute("EventTypeID", CommonUtil.getStringValueByKey(matchEventJSONObject, "EventTypeID", "int"));
+		matchCorelativeEventElement.setAttribute("Minutes", CommonUtil.getStringValueByKey(matchEventJSONObject, "Minutes", "double"));
+		matchCorelativeEventElement.setAttribute("Seconds", CommonUtil.getStringValueByKey(matchEventJSONObject, "Seconds", "double"));
+		matchCorelativeEventElement.setAttribute("HomeScore", CommonUtil.getStringValueByKey(matchEventJSONObject, "HomeScore", "int"));
+		matchCorelativeEventElement.setAttribute("VisitorScore", CommonUtil.getStringValueByKey(matchEventJSONObject, "VisitorScore", "int"));
+		matchCorelativeEventElement.setAttribute("ShotCoordX", CommonUtil.getStringValueByKey(matchEventJSONObject, "ShotCoordX", "double"));
+		matchCorelativeEventElement.setAttribute("ShotCoordY", CommonUtil.getStringValueByKey(matchEventJSONObject, "ShotCoordY", "double"));
+		matchCorelativeEventElement.setAttribute("ScheduleID", CommonUtil.getStringValueByKey(matchEventJSONObject, "ScheduleID", "int"));
+		matchCorelativeEventElement.setAttribute("TextualFormat", CommonUtil.getStringValueByKey(matchEventJSONObject, "TextualFormat", "String"));
+		matchCorelativeEventElement.setAttribute("TextualDescription", CommonUtil.getStringValueByKey(matchEventJSONObject, "TextualDescription", "String"));
+		matchCorelativeEventElement.setAttribute("Distance",CommonUtil.getStringValueByKey(matchEventJSONObject, "Distance", "int"));
+		matchCorelativeEventElement.setAttribute("PlayerScore", CommonUtil.getStringValueByKey(matchEventJSONObject, "PlayerScore", "int"));
+		matchCorelativeEventElement.setAttribute("PlayerFouls", CommonUtil.getStringValueByKey(matchEventJSONObject, "PlayerFouls", "int"));
+		matchCorelativeEventElement.setAttribute("PointsType", CommonUtil.getStringValueByKey(matchEventJSONObject, "PointsType", "int"));
+	}
+
 	/**
 	 * 得到比赛球队汇总数据的子元素集
 	 * @author 高青
@@ -533,7 +695,11 @@ public class LiveUtil {
 			if (otherInfo != null && "liveTeamStat".equals(otherInfo)) {
 				quarterElement.setAttribute("HomeQuarterScore", Integer.toString(quarterJsonObject.getInt("HomeQuarterScore")));
 				quarterElement.setAttribute("VisitingQuarterScore", Integer.toString(quarterJsonObject.getInt("VisitingQuarterScore")));
-			}else {
+			}else if(otherInfo != null && "eventsBySchedule".equals(otherInfo)){
+				quarterElement.setAttribute("ScheduleID", CommonUtil.getStringValueByKey(quarterJsonObject, "ScheduleID", "int"));
+				quarterElement.setAttribute("TotalHomeScore", CommonUtil.getStringValueByKey(quarterJsonObject, "TotalHomeScore", "int"));
+				quarterElement.setAttribute("TotalVisitingScore", CommonUtil.getStringValueByKey(quarterJsonObject, "TotalVisitingScore", "int"));
+			}else{
 				quarterElement.setAttribute("QuartHomeScore", Integer.toString(quarterJsonObject.getInt("QuartHomeScore")));
 				quarterElement.setAttribute("QuartVisitingScore", Integer.toString(quarterJsonObject.getInt("QuartVisitingScore")));
 			}

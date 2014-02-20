@@ -43,16 +43,21 @@ public class CommonUtil {
 					value = Integer.toString(jsonObject.getInt(key));
 					
 				//类型是 int 时：
-				} else if (dataType.equals("int")) {
-					value = Integer.toString(jsonObject.getInt(key));
+				} else{
+					//取得数据类型的第一个字母
+					String firstWordOfDataType = dataType.trim().substring(0, 1);	
 					
-				//类型是 double 时：
-				}else if (dataType.equals("double")) {
-					value = Double.toString(jsonObject.getDouble(key));
-					
-				//类型是 String 时：
-				}else if (dataType.equals("String")) {
-					value = jsonObject.getString(key);
+					if (firstWordOfDataType.equals("i") || firstWordOfDataType.equals("I")) {
+						value = Integer.toString(jsonObject.getInt(key));
+						
+					//类型是 double 时：
+					}else if (firstWordOfDataType.equals("d") || firstWordOfDataType.equals("D")) {
+						value = Double.toString(jsonObject.getDouble(key));
+						
+					//类型是 String 时：
+					}else if (firstWordOfDataType.equals("s") || firstWordOfDataType.equals("S")) {
+						value = jsonObject.getString(key);
+					}
 				}
 			}
 		}
@@ -222,10 +227,10 @@ public class CommonUtil {
 			for (String condition : conditionKeySet) {
 				//得到 查询条件的值
 				T t = conditionMap.get(condition);
-				conditionRemarker += t.toString() + "_";
+				conditionRemarker += t.toString() + "-";
 			}
 		}
-		//取消最后一个“_”
+		//取消最后一个“-”
 		conditionRemarker = conditionRemarker.substring(0, conditionRemarker.length() - 1);
 		
 		return conditionRemarker;

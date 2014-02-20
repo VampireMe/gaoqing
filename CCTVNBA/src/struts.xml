@@ -67,8 +67,26 @@
             <result type = "json">
             </result>
         </action>
+        
         <!-- 数据统计 >> 比赛球队汇总数据 -->
          <action name="teamGatherData" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
+        <!-- 比赛事件 >> 比赛相关事件 -->
+         <action name="matchCorelativeEvent" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
+        <!-- 比赛事件 >> 根据比赛节数，获取比赛相关事件 -->
+         <action name="matchEventByQuarter" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        <!-- 比赛事件 >> 根据比赛球队，获取比赛相关事件 -->
+         <action name="matchEventByTeam" class = "com.ctvit.nba.action.ScheduleAction">
             <result type = "json">
             </result>
         </action>

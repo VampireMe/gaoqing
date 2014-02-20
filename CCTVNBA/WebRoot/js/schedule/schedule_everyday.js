@@ -561,6 +561,42 @@ $(document).ready(function(){
 							bindTeamGatherData(json);
 						}
 						//********** 数据统计模块 end************//
+						
+						//********** 比赛事件模块 start************//
+							//1、比赛的相关事件：
+						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_SCHEDULE"){
+							$("#matchEventByTeamData").hide();
+							$("#matchCorelativeEventByQuarterData").hide();
+							
+							//显示比赛的相关事件部分
+							$("#matchCorelativeEvent").show();
+							
+							//绑定比赛的相关事件数据
+							bindMatchCorelativeEvent(json);
+						}
+						//2、根据比赛节数，获取的比赛事件部分：
+						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_QUARTER"){
+							//显示数据部分
+							$("#matchCorelativeEvent").hide();
+							$("#matchEventByTeamData").hide();
+							
+							$("#matchCorelativeEventByQuarterData").show();
+							
+							//绑定比赛的相关事件数据
+							bindMatchEventByQuarter(json);
+						}
+						//3、根据比赛球队，获取的比赛事件部分
+						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_TEAM"){
+							//显示数据部分
+							$("#matchCorelativeEventByQuarterData").hide();
+							$("#matchCorelativeEvent").hide();
+							
+							$("#matchEventByTeamData").show();
+							
+							//绑定比赛的相关事件数据
+							bindMatchEventByTeam(json);
+						}
+						//********** 比赛事件模块 end************//
 					});
 				}else{
 					$.messager.alert("提示信息", "更新失败，请重试！" ,"info");
@@ -663,16 +699,8 @@ $(document).ready(function(){
 		}]
 	});
 	
-	//绑定单击事件
-	$matchBasicInfo.bind("click", function(){
-		var checkedSchedules = table.datagrid("getChecked");
-		//判断是否选中赛程
-		if(checkedSchedules.length === 0){
-			$.messager.alert("提示信息", "请选择赛程！" ,"info");
-		}else{
-			$("#basicInfoOuter").dialog('open');
-		}
-	});
+	//打开 dialog 窗口
+	openDialog("matchBasicInfo", "basicInfoOuter");
 	/** ----------------------------比赛基本信息部分 end-------------------------*/
 	
 	
@@ -873,15 +901,7 @@ $(document).ready(function(){
 	}
 	
 	//单击操作，弹出一个 dialog 
-	$("#playerAnalysis").on('click', function(){
-		var checkedSchedules = table.datagrid("getChecked");
-		//判断是否选中赛程
-		if(checkedSchedules.length === 0){
-			$.messager.alert("提示信息", "请选择赛程！" ,"info");
-		}else{
-			$("#playerAnalysisOuter").dialog('open');
-		}
-	});
+	openDialog("playerAnalysis", "playerAnalysisOuter");
 	/** ----------------------------球员分析部分 end-------------------------*/
 	
 	/** ----------------------------数据统计部分 start -------------------------*/
@@ -959,16 +979,29 @@ $(document).ready(function(){
 		}]
 	});
 	
-	//单击操作，弹出一个 dialog 
-	$("#dataStatistics").on('click', function(){
-		var checkedSchedules = table.datagrid("getChecked");
-		//判断是否选中赛程
-		if(checkedSchedules.length === 0){
-			$.messager.alert("提示信息", "请选择赛程！" ,"info");
-		}else{
-			$("#dataStatisticsOuter").dialog('open');
-		}
-	});
+	/**
+	 * 打开 Dialog 面板
+	 * 2014-02-17
+	 * author: 高青
+	 * param: moduleID 模板的 id 
+	 * param：moduleDetailDivID 模块的具体的 div id 
+	 */
+	function openDialog (moduleID, moduleDetailDivID){
+		//单击操作，弹出一个 dialog 
+		$("#" + moduleID).on('click', function(){
+			var checkedSchedules = table.datagrid("getChecked");
+			//判断是否选中赛程
+			if(checkedSchedules.length === 0){
+				$.messager.alert("提示信息", "请选择赛程！" ,"info");
+			}else{
+				$("#" + moduleDetailDivID).dialog('open');
+			}
+		});
+	}
+	
+	//打开数据统计的 dialog 
+	openDialog("dataStatistics", "dataStatisticsOuter");
+
 	
 	/**
 	 * 显示数据统计的信息
@@ -1172,4 +1205,307 @@ $(document).ready(function(){
 		appendTeamGatherData(teamGatherData_visitStatArray, $teamGatherData_tbody, "visit");
 	}
 	/** ----------------------------数据统计部分 end -------------------------*/
+	
+	
+	/** ----------------------------比赛事件部分 start -------------------------*/
+	//初始化 table 下的 tbody 部分对象
+	var $init_matchCorelativeEvent_tbody = $("#matchCorelativeEvent .matchCorelativeEventTable tbody"),
+		//根据比赛节数下的比赛事件的 table 下的 tbody 数据部分
+		$init_matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody"),
+		//根据比赛球队下的比赛事件的 table 下的 tbody 数据部分
+		$init_matchEventByTeam_tbody = $("#matchEventByTeamData .matchEventByTeamTable tbody");
+	
+	//得到比赛事件对象
+	var $matchEvent = $("#matchEventOuter");
+	
+	//将该对象设为 Dialog 对象
+	$matchEvent.dialog({
+		title: '比赛事件',
+		width: 950,
+		height: 550,
+		modal: true,
+		closed: true,
+		maximizable: true,
+		closable: true,
+		resizable: true,
+		toolbar: [{
+			text: '比赛的相关事件',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+				
+				//重置球员数据统计下的 table 中的 tbody 的值
+				$("#matchCorelativeEvent .matchCorelativeEventTable tbody").html($init_matchCorelativeEvent_tbody);
+				
+				//执行请求
+				ajaxMethod('matchCorelativeEvent!updateMatchCorelativeEvent.action' ,{
+					scheduleIDs: scheduleIDs,
+					moduleName: 'live',
+					innerUpdateModule: 'EVENTS_BY_SCHEDULE'
+				});
+			}
+		}, ' ', '-',' ', {
+			text: '根据比赛和节数，获取比赛的相关事件',
+			iconCls: 'icon-print',
+			handler: function(){
+				//显示该部分信息并隐藏其他部分
+				$("#matchCorelativeEventByQuarter").show();
+				
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+
+				updateMatchEvent("matchEventByQuarterLinkButton", 
+						"matchEventByQuarter!updateMatchEventByQuarter.action", 
+						scheduleIDs, null, "eventsByQuarter");
+				
+			}
+		}, ' ', '-',' ', {
+			text: '根据比赛和球队，获取比赛的相关事件',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID(),
+				//得到选中的赛程对象
+				checkedSchedule = table.datagrid("getChecked");
+				
+				$("#matchEventByTeam").show();
+				
+				updateMatchEvent("matchEventByTeamLinkButton", 
+						"matchEventByTeam!updateMatchEventByTeam.action", 
+						scheduleIDs, checkedSchedule, "eventsByTeam");
+				
+			}
+		}, ' ', '-',' ', {
+			text: '更多比赛的相关事件',
+			iconCls: 'icon-print',
+			handler: function(){
+				//得到选中的赛程编号字符集
+				var scheduleIDs = getCheckedScheduleID();
+				
+			}
+		}]		
+	});
+	
+	//打开 Dialog 窗口
+	openDialog("matchEvent", "matchEventOuter");
+	
+	/**
+	 * 具体绑定比赛事件的方法
+	 * 2014-02-18
+	 * author: 高青
+	 * param: matchCorelativeEventArray 比赛相关事件的数据数组
+	 * param: matchCorelativeEvent_tbody 比赛相关事件的 tbody 对象
+	 * param: otherInfo 其他附加信息
+	 */
+	function appendMatchCorelativeEvent(matchCorelativeEventArray, matchCorelativeEvent_tbody, otherInfo){
+		if(matchCorelativeEventArray.length !== 0){
+			for(var i = 0; i < matchCorelativeEventArray.length; i++){
+				//首先追加 tr 部分
+				matchCorelativeEvent_tbody.append("<tr>");
+				
+				matchCorelativeEvent_tbody.append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].TeamCNAlias1  +'</td>');
+				if(matchCorelativeEventArray[i].PlayerCNAlias1 === null){
+					matchCorelativeEvent_tbody.append('<td nowrap = "nowrap" align = "center">无</td>');
+				}else{
+					matchCorelativeEvent_tbody.append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].PlayerCNAlias1 +'</td>');
+				}
+				
+				matchCorelativeEvent_tbody.append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].HomeScore +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].VisitorScore +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].TextualFormat +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].Minutes + ":" 
+						+ matchCorelativeEventArray[i].Seconds +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].Distance +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].PlayerScore +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].PlayerFouls +'</td>').
+				append('<td nowrap = "nowrap" align = "center">'+ matchCorelativeEventArray[i].PointsType +'</td>');
+				
+				matchCorelativeEvent_tbody.append("</tr>");
+			}
+		}else{
+			$.messager.alert("提示信息", "没有数据！", "info");
+		}
+	}
+	
+	/**
+	 * 绑定比赛的相关事件的数据
+	 * 2014-02-18
+	 * author: 高青
+	 * param: json 后台返回的 字符串 类型的 json 值
+	 */
+	function bindMatchCorelativeEvent(json){
+		//定义所需的变量
+			//1、将 json 字符串转为 JQuery 对象
+		var $matchCorelativeEvent = $.parseJSON(json),
+			//2、event 数组对象
+			matchCorelativeEventArray,
+			//3、比赛的相关事件 中 table 下的 tbody 对象
+			matchCorelativeEvent_tbody;
+		
+		matchCorelativeEventArray = $matchCorelativeEvent.Events;
+		matchCorelativeEvent_tbody = $("#matchCorelativeEvent .matchCorelativeEventTable tbody");
+		
+		//绑定比赛事件数据
+		appendMatchCorelativeEvent(matchCorelativeEventArray, matchCorelativeEvent_tbody, "eventsBySchedule");
+	}
+	
+	/**
+	 * 根据比赛节数，绑定比赛的事件的数据
+	 * 2014-02-19
+	 * author: 高青
+	 * param: json 后台返回的 字符串 类型的 json 值
+	 */
+	function bindMatchEventByQuarter(json){
+		//定义所需的变量
+		//1、将 json 字符串转为 JQuery 对象
+		var $matchEventByQuarter = $.parseJSON(json),
+		//2、event 数组对象
+		matchEventByQuarterArray,
+		//3、比赛的相关事件 中 table 下的 tbody 对象
+		matchEventByQuarter_tbody;
+		
+		matchEventByQuarterArray = $matchEventByQuarter.Events;
+		matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody");
+		
+		//绑定比赛事件数据
+		appendMatchCorelativeEvent(matchEventByQuarterArray, matchEventByQuarter_tbody, "eventsByQuarter");
+	}
+	
+	/**
+	 * 根据比赛球队，绑定比赛的事件的数据
+	 * 2014-02-19
+	 * author: 高青
+	 * param: json 后台返回的 字符串 类型的 json 值
+	 */	
+	function bindMatchEventByTeam(json){
+		//定义所需的变量
+		//1、将 json 字符串转为 JQuery 对象
+		var $matchEventByTeam = $.parseJSON(json),
+		//2、event 数组对象
+		matchEventByTeamArray,
+		//3、比赛的相关事件 中 table 下的 tbody 对象
+		matchEventByTeam_tbody;
+		
+		matchEventByTeamArray = $matchEventByTeam.Events;
+		matchEventByTeam_tbody = $("#matchEventByTeamData .matchEventByTeamTable tbody");
+		
+		//绑定比赛事件数据
+		appendMatchCorelativeEvent(matchEventByTeamArray, matchEventByTeam_tbody, "eventsByTeam");
+	}
+	
+	/**
+	 * 更新比赛的事件
+	 * 2014-02-18
+	 * author: 高青
+	 * param: aID <a> 标签的 id 
+	 * param: updateURL 更新的链接地址
+	 * parma: scheduleIDs 选中的赛程 id
+	 * param: selectedObj 选中的对象
+	 * param: otherInfo 其他附加信息
+	 */
+	function updateMatchEvent(aID, updateURL, scheduleIDs, selectedObj, otherInfo){
+				//更新的参数
+			var updateJSONParamObj;
+			
+			//根据比赛和比赛节数，获取比赛事件
+			if(otherInfo === "eventsByQuarter"){
+				$("#quarter").combobox({
+					//将选中的
+					onSelect: function(valueObj){
+						$("#quarter").val(valueObj.value);
+						quarter = $("#quarter").val();
+					}
+				});
+			}
+		
+		//根据比赛和比赛球队，获取比赛事件
+		 if(otherInfo === "eventsByTeam"){
+			$("#teamQuarter").combobox({
+				//将选中的
+				onSelect: function(valueObj){
+					$("#teamQuarter").val(valueObj.value);
+				}
+			});
+			
+			 var selectedObjJSON = "";
+			if(selectedObj !== null){
+				selectedObjJSON = [{
+					               		'TeamID': "",
+					               		'TeamCNAlias': "请选择比赛球队"				                   		
+									},{
+				                   		'TeamID': selectedObj[0].homeTeamID,
+				                   		'TeamCNAlias': selectedObj[0].homeCNAlias
+				                   	},{
+				                   		'TeamID': selectedObj[0].visitingTeamID,
+				                   		'TeamCNAlias': selectedObj[0].visitingCNAlias
+				                   	}];
+			}
+			console.info(selectedObjJSON);
+		    //球队下拉框列表
+		    $('#teamID').combobox({  
+		    	data: selectedObjJSON,  
+			    valueField:'TeamID',  
+			    textField:'TeamCNAlias',
+				onSelect: function(valueObj){
+					//得到球队id
+					$("#teamID").val(valueObj.value);
+				}
+			});  
+		}
+		
+		//得到当前的按钮并绑定单击事件
+		$("#" + aID).on("click", function(){
+			
+			//根据比赛的节数，获得比赛的事件
+			if(otherInfo === "eventsByQuarter"){
+				//重置球员数据统计下的 table 中的 tbody 的值
+				$("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody").html($init_matchEventByQuarter_tbody);		
+								
+				updateJSONParamObj = {
+					scheduleIDs: scheduleIDs,
+					Quarter: $("#quarter").val(),
+					moduleName: 'live',
+					innerUpdateModule: 'EVENTS_BY_QUARTER'
+				};
+				ajaxMethod(updateURL, updateJSONParamObj);
+			}
+			
+			//根据比赛的球队，获得比赛的事件
+			if(otherInfo === "eventsByTeam"){
+				
+				var teamID = $("input[name=teamID]").val();
+				
+				updateJSONParamObj = {
+						scheduleIDs: scheduleIDs,
+						Quarter: $("#teamQuarter").val(),
+						teamID: teamID,
+						moduleName: 'live',
+						innerUpdateModule: 'EVENTS_BY_TEAM'
+				};
+				//如果比赛节数不存在，则查询全部的事件
+				if($("#teamQuarter").val() === "" || $("#teamQuarter").val() === null || $("#teamQuarter").val() === undefined){
+					updateJSONParamObj = {
+							scheduleIDs: scheduleIDs,
+							teamID: teamID,
+							moduleName: 'live',
+							innerUpdateModule: 'EVENTS_BY_TEAM'
+					};
+				}
+				if(teamID === null || teamID  === undefined || teamID === ""){
+					$.messager.alert("提示信息", "请选择更新球队", "info");
+				}else{
+					//重置球员数据统计下的 table 中的 tbody 的值
+					$("#matchEventByTeamData .matchEventByTeamTable tbody").html($init_matchEventByTeam_tbody);		
+
+					ajaxMethod(updateURL, updateJSONParamObj);
+				}
+			}
+		});
+	}
+	
+	//根据比赛的节数，更新比赛的事件
+	//updateMatchEvent("matchEventByQuarterLinkButton", "matchEventByQuarter!updateMatchEventByQuarter.action",  "eventsByQuarter");
+	
+	/** ----------------------------比赛事件部分 end -------------------------*/
 });

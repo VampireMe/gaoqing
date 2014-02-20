@@ -85,6 +85,20 @@ public class LiveServiceImpl implements LiveService{
 		return updateTeamGatherDataFlag;
 	}
 
+	@Override
+	public <T> int updateMatchCorelativeEvent(String moduleName,
+			String scheduleID,
+			Map<String, Map<String, T>> innerUpdateModuleACondtions) {
+		//更新比赛相关事件
+		int updateMatchCorelativeEventFlag = 0;
+		
+		updateMatchCorelativeEventFlag = XMLUtil.encapsulationGenerateXML(moduleName, innerUpdateModuleACondtions, 
+				"com.ctvit.nba.expand.LiveUtil", 
+				"getChildrenElementList", "eventsBySchedule");
+		
+		return updateMatchCorelativeEventFlag;
+	}
+
 
 
 }

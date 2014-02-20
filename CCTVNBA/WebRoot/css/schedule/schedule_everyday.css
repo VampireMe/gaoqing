@@ -548,5 +548,301 @@
 /********************************** 数据分析模块 end **********************************/
 
 
+/********************************** 比赛事件模块 start **********************************/
+
+	/**-------------------- 比赛的相关事件 start --------------------*/
+	/** 最外层的 div 样式 */
+	#matchCorelativeEventByQuarter{
+		display: none;
+	}
+	
+	/** 外部 div 样式 */
+	#matchCorelativeEvent{
+		display: none;
+	}
+	
+	/** 表格样式 */
+	.matchCorelativeEventByQuarterTable {  
+    *border-collapse: collapse; /* IE7 and lower */  
+    border-spacing: 0;  
+    width: 100%;  
+    
+    border: solid #ccc 1px;  
+    -moz-border-radius: 6px;  
+    -webkit-border-radius: 6px;  
+    border-radius: 6px;  
+    -webkit-box-shadow: 1px 2px 2px #888888;  
+    -moz-box-shadow: 1px 2px 2px #888888;  
+    box-shadow: 1px 2px 2px #888888;  
+    }  
+      
+    .matchCorelativeEventByQuarterTable tr:hover {  
+    background: #fbf8e9;  
+    -o-transition: all 0.1s ease-in-out;  
+    -webkit-transition: all 0.1s ease-in-out;  
+    -moz-transition: all 0.1s ease-in-out;  
+    -ms-transition: all 0.1s ease-in-out;  
+    transition: all 0.1s ease-in-out;  
+    }  
+      
+    .matchCorelativeEventByQuarterTable td, .matchCorelativeEventByQuarterTable th {  
+    border-left: 1px solid #ccc;  
+    border-top: 1px solid #ccc;  
+    padding: 6px;  
+    }  
+      
+    .matchCorelativeEventByQuarterTable th {  
+    background-color: #dce9f9;  
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    border-top: none;  
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+    }  
+      
+    .matchCorelativeEventByQuarterTable td:first-child, .matchCorelativeEventByQuarterTable th:first-child {  
+    border-left: none;  
+    }  
+      
+    .matchCorelativeEventByQuarterTable th:first-child {  
+    -moz-border-radius: 6px 0 0 0;  
+    -webkit-border-radius: 6px 0 0 0;  
+    border-radius: 6px 0 0 0;  
+    }  
+      
+    .matchCorelativeEventByQuarterTable th:last-child {  
+    -moz-border-radius: 0 6px 0 0;  
+    -webkit-border-radius: 0 6px 0 0;  
+    border-radius: 0 6px 0 0;  
+    }  
+      
+    .matchCorelativeEventTable th:only-child{  
+    -moz-border-radius: 6px 6px 0 0;  
+    -webkit-border-radius: 6px 6px 0 0;  
+    border-radius: 6px 6px 0 0;  
+    }  
+      
+    .matchCorelativeEventTable tr:last-child td:first-child {  
+    -moz-border-radius: 0 0 0 6px;  
+    -webkit-border-radius: 0 0 0 6px;  
+    border-radius: 0 0 0 6px;  
+    }  
+      
+    .matchCorelativeEventTable tr:last-child td:last-child {  
+    -moz-border-radius: 0 0 6px 0;  
+    -webkit-border-radius: 0 0 6px 0;  
+    border-radius: 0 0 6px 0;  
+    } 	
+	/**-------------------- 比赛的相关事件 end --------------------*/
+	
+	
+	/**-------------------- 根据比赛的节数，获取相关事件 start --------------------*/
+		/**** 条件样式区域 start ****/
+		#matchCorelativeEventByQuarterCond{
+			width: 95%;
+			height: 30px;
+			margin: 10px 20px;
+		}
+		/**** 条件样式区域 end ****/
+		
+		/****数据显示样式区域 start ****/
+		/** 外层 div 样式 */
+		#matchCorelativeEventByQuarterData{
+			width: 95%;
+			margin: 1px 20px;
+			display: none;
+		}
+		.matchCorelativeEventByQuarterTable {  
+	    *border-collapse: collapse; /* IE7 and lower */  
+	    border-spacing: 0;  
+	    width: 100%;  
+	    
+	    border: solid #ccc 1px;  
+	    -moz-border-radius: 6px;  
+	    -webkit-border-radius: 6px;  
+	    border-radius: 6px;  
+	    -webkit-box-shadow: 1px 2px 2px #888888;  
+	    -moz-box-shadow: 1px 2px 2px #888888;  
+	    box-shadow: 1px 2px 2px #888888;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable tr:hover {  
+	    background: #fbf8e9;  
+	    -o-transition: all 0.1s ease-in-out;  
+	    -webkit-transition: all 0.1s ease-in-out;  
+	    -moz-transition: all 0.1s ease-in-out;  
+	    -ms-transition: all 0.1s ease-in-out;  
+	    transition: all 0.1s ease-in-out;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable td, .matchCorelativeEventByQuarterTable th {  
+	    border-left: 1px solid #ccc;  
+	    border-top: 1px solid #ccc;  
+	    padding: 6px;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable th {  
+	    background-color: #dce9f9;  
+	    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+	    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+	    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+	    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    border-top: none;  
+	    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable td:first-child, .matchCorelativeEventByQuarterTable th:first-child {  
+	    border-left: none;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable th:first-child {  
+	    -moz-border-radius: 6px 0 0 0;  
+	    -webkit-border-radius: 6px 0 0 0;  
+	    border-radius: 6px 0 0 0;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable th:last-child {  
+	    -moz-border-radius: 0 6px 0 0;  
+	    -webkit-border-radius: 0 6px 0 0;  
+	    border-radius: 0 6px 0 0;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable th:only-child{  
+	    -moz-border-radius: 6px 6px 0 0;  
+	    -webkit-border-radius: 6px 6px 0 0;  
+	    border-radius: 6px 6px 0 0;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable tr:last-child td:first-child {  
+	    -moz-border-radius: 0 0 0 6px;  
+	    -webkit-border-radius: 0 0 0 6px;  
+	    border-radius: 0 0 0 6px;  
+	    }  
+	      
+	    .matchCorelativeEventByQuarterTable tr:last-child td:last-child {  
+	    -moz-border-radius: 0 0 6px 0;  
+	    -webkit-border-radius: 0 0 6px 0;  
+	    border-radius: 0 0 6px 0;  
+	    } 			
+		/****数据显示样式区域 end ****/
+	/**-------------------- 根据比赛的节数，获取相关事件 end --------------------*/
+	
+	/**-------------------- 根据比赛的球队，获取相关事件 start --------------------*/
+		/** 最外层的 div 样式 */
+		#matchEventByTeam{
+			display: none;
+		}
+		
+		/**----- 条件区域 样式 start ----- */
+		#matchEventByTeamCon{
+			width: 95%;
+			height: 30px;
+			margin: 10px 20px;
+		}
+		/**----- 条件区域 样式 end ----- */
+		
+		/**----- 数据区域 样式 start ----- */
+		#matchEventByTeamData{
+			width: 95%;
+			margin: 1px 20px;
+			display: none;
+		}
+		
+		.matchEventByTeamTable {  
+	    *border-collapse: collapse; /* IE7 and lower */  
+	    border-spacing: 0;  
+	    width: 100%;  
+	    
+	    border: solid #ccc 1px;  
+	    -moz-border-radius: 6px;  
+	    -webkit-border-radius: 6px;  
+	    border-radius: 6px;  
+	    -webkit-box-shadow: 1px 2px 2px #888888;  
+	    -moz-box-shadow: 1px 2px 2px #888888;  
+	    box-shadow: 1px 2px 2px #888888;  
+	    }  
+	      
+	    .matchEventByTeamTable tr:hover {  
+	    background: #fbf8e9;  
+	    -o-transition: all 0.1s ease-in-out;  
+	    -webkit-transition: all 0.1s ease-in-out;  
+	    -moz-transition: all 0.1s ease-in-out;  
+	    -ms-transition: all 0.1s ease-in-out;  
+	    transition: all 0.1s ease-in-out;  
+	    }  
+	      
+	    .matchEventByTeamTable td, .matchEventByTeamTable th {  
+	    border-left: 1px solid #ccc;  
+	    border-top: 1px solid #ccc;  
+	    padding: 6px;  
+	    }  
+	      
+	    .matchEventByTeamTable th {  
+	    background-color: #dce9f9;  
+	    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+	    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+	    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+	    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+	    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+	    border-top: none;  
+	    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+	    }  
+	      
+	    .matchEventByTeamTable td:first-child, .matchEventByTeamTable th:first-child {  
+	    border-left: none;  
+	    }  
+	      
+	    .matchEventByTeamTable th:first-child {  
+	    -moz-border-radius: 6px 0 0 0;  
+	    -webkit-border-radius: 6px 0 0 0;  
+	    border-radius: 6px 0 0 0;  
+	    }  
+	      
+	    .matchEventByTeamTable th:last-child {  
+	    -moz-border-radius: 0 6px 0 0;  
+	    -webkit-border-radius: 0 6px 0 0;  
+	    border-radius: 0 6px 0 0;  
+	    }  
+	      
+	    .matchEventByTeamTable th:only-child{  
+	    -moz-border-radius: 6px 6px 0 0;  
+	    -webkit-border-radius: 6px 6px 0 0;  
+	    border-radius: 6px 6px 0 0;  
+	    }  
+	      
+	    .matchEventByTeamTable tr:last-child td:first-child {  
+	    -moz-border-radius: 0 0 0 6px;  
+	    -webkit-border-radius: 0 0 0 6px;  
+	    border-radius: 0 0 0 6px;  
+	    }  
+	      
+	    .matchEventByTeamTable tr:last-child td:last-child {  
+	    -moz-border-radius: 0 0 6px 0;  
+	    -webkit-border-radius: 0 0 6px 0;  
+	    border-radius: 0 0 6px 0;  
+	    } 	
+		/**----- 数据区域 样式 end ----- */
+		
+		
+	/**-------------------- 根据比赛的球队，获取相关事件 end --------------------*/
+	
+/********************************** 比赛事件模块 end **********************************/
+
+
 
 

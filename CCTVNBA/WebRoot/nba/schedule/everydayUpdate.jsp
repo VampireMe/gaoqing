@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a class = "easyui-linkbutton" id = "dataStatistics"
 									data-options = "iconCls:'icon-save' "
 								   >数&nbsp;据&nbsp;统&nbsp;计</a>
-				<a class = "easyui-linkbutton" 
+				<a class = "easyui-linkbutton" id = "matchEvent"
 									data-options = "iconCls:'icon-tip' "
 								   >比&nbsp;赛&nbsp;事&nbsp;件</a>
 			</div>
@@ -74,6 +74,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 数据分析模块 start -->
 	<%@ include file = "dataStatistics.jsp" %>
 	<!-- 数据分析模块 end -->
+	
+	<!-- 比赛事件 start -->
+	<%@ include file = "matchEvent.jsp" %>
+	<!-- 比赛事件 end -->
 	
 </div>
 

@@ -82,6 +82,12 @@ public class ScheduleAction extends BaseAction{
 	/** 赛程 ID 字符串 */
 	private String scheduleIDs;
 	
+	/** 比赛节数 */
+	private String Quarter;
+	
+	/** 比赛球队 */
+	private String teamID;
+	
 	//实例化对象的同时，初始化所需的对象
 	{
 		scheduleService = new ScheduleServiceImpl();
@@ -114,6 +120,16 @@ public class ScheduleAction extends BaseAction{
 			//更新到球员个人信息 到 XML 文件
 			for (String scheduleID : scheduleArray) {
 				innerConditionMap.put("scheduleID", scheduleID);
+				
+				//设置比赛节数
+				if (Quarter != null && Quarter != "") {
+					innerConditionMap.put("Quarter", Quarter);
+				}
+				
+				//设置比赛球队
+				if (teamID != null && teamID != "") {
+					innerConditionMap.put("teamID", teamID);
+				}
 				
 				innerUpdateModuleACondtions.put(innerUpdateModule, innerConditionMap);
 				
@@ -161,6 +177,43 @@ public class ScheduleAction extends BaseAction{
 		}
 		//返回更新的数据
 		writeJson2Web(json);
+	}
+	
+	/**
+	 * 根据比赛球队，更新比赛的事件
+	 * @author 高青
+	 * 2014-2-19
+	 * @return void 空
+	 */	
+	public void updateMatchEventByTeam(){
+		updateMatchCorelativeEvent();
+	}
+	
+	/**
+	 * 根据比赛节数，更新比赛的事件
+	 * @author 高青
+	 * 2014-2-19
+	 * @return void 空
+	 */
+	public void updateMatchEventByQuarter(){
+		updateMatchCorelativeEvent();
+	}
+	
+	/**
+	 * 更新比赛相关事件
+	 * @author 高青
+	 * 2014-2-18
+	 * @return void 空
+	 */
+	public void updateMatchCorelativeEvent(){
+		//比赛相关事件更新标识
+		int matchCorelativeEventFlag = 0;
+		
+		//执行更新操作
+		matchCorelativeEventFlag = commonUpdateMethod(liveService, "updateMatchCorelativeEvent");
+		
+		//将数据写到前台
+		unifyWriteJson2Web(matchCorelativeEventFlag);
 	}
 	
 	/**
@@ -574,6 +627,26 @@ public class ScheduleAction extends BaseAction{
 	/** @param scheduleIDs the scheduleIDs to set */
 	public void setScheduleIDs(String scheduleIDs) {
 		this.scheduleIDs = scheduleIDs;
+	}
+
+	/** @return the quarter */
+	public String getQuarter() {
+		return Quarter;
+	}
+
+	/** @param quarter the quarter to set */
+	public void setQuarter(String quarter) {
+		Quarter = quarter;
+	}
+
+	/** @return the teamID */
+	public String getTeamID() {
+		return teamID;
+	}
+
+	/** @param teamID the teamID to set */
+	public void setTeamID(String teamID) {
+		this.teamID = teamID;
 	}
 	
 }
