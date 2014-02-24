@@ -51,9 +51,9 @@ public interface ScheduleService {
 	 * @author 高青
 	 * 2014-1-6
 	 * @param innerUpdateModule 更新方式
-	 * @param date 更新的日期
+	 * @param updateName 更新模块名称
 	 * @return List<Schedule>  Sschedule 数据集合
 	 */
-	public List<Schedule> getSchedules(String innerUpdateModule, String date);
+	public List<Schedule> getSchedules(String innerUpdateModule, String updateName);
 	
 }

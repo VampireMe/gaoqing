@@ -32,11 +32,11 @@ public class ScheduleUtil {
 	 * 将JSONObject对象数据，封装到 Schedule 对象中的通用方法
 	 * @author 高青
 	 * 2013-12-2
-	 * @param innerUpdateModule 更新方式
+	 * @param innerUpdateModule_otherInfo 更新方式和其他信息
 	 * @param jsonObject JSONObject对象
 	 * @return schedule 封装数据后的Schedule对象
 	 */
-	public static Schedule getSchedule(String innerUpdateModule, JSONObject jsonObject){
+	public static Schedule getSchedule(String innerUpdateModule_otherInfo, JSONObject jsonObject){
 		//初始化数据
 		Schedule schedule = new Schedule();
 		
@@ -69,9 +69,11 @@ public class ScheduleUtil {
 		schedule.setMatchTypeENName(jsonObject.getString("MatchTypeENName"));
 		schedule.setHomeTeamID(Integer.toString(CommonUtil.getIntegerValueByKey(jsonObject, "HomeTeamID")));
 
-		schedule.setOther(innerUpdateModule);
-		//附加赛程信息
-		//schedule.setScheduleExpands(ScheduleExpands);
+		//拆分内部更新名称和其他附加信息
+		String[] updateModuleAOtherArray = innerUpdateModule_otherInfo.split(",");
+		
+		schedule.setOther(updateModuleAOtherArray[1]);
+		schedule.setInnerUpdateModule(updateModuleAOtherArray[0]);
 		
 		return schedule;
 	}
@@ -119,24 +121,31 @@ public class ScheduleUtil {
 	 * 得到封装到实体类的赛程集
 	 * @author 高青
 	 * 2014-1-28
-	 * @param innerUpdateModule 更新方式
+	 * @param innerUpdateModule_otherInfo 更新方式
 	 * @param jsonObject JSONObject对象
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return scheduleList 赛程实体类集
 	 */
-	public static List<Schedule> getScheduleList(String innerUpdateModule, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
+	public static List<Schedule> getScheduleList(String innerUpdateModule_otherInfo, JSONObject jsonObject, Map<String, Schedule> tRemarkerAndParamsMap){
 		//初始化赛程集
 		List<Schedule> scheduleList = new ArrayList<Schedule>();
+		JSONArray jsonArray = new JSONArray();
+		
+		//得到内部更新模块名称
+		String innerUpdateModule = CommonUtil.getInnerUpdateModuleName(innerUpdateModule_otherInfo);
 		
 		if (jsonObject != null) {
-			JSONArray jsonArray = jsonObject.getJSONArray("Schedules");
-			
+			if(!innerUpdateModule.isEmpty() && "SCHEDULES".equals(innerUpdateModule)){
+				jsonArray = jsonObject.getJSONArray("Schedules");
+			}else if (!innerUpdateModule.isEmpty() && "MONTH_SCHEDULE_LIST".equals(innerUpdateModule)) {
+				jsonArray = jsonObject.getJSONArray("MonthScheduleList");
+			}
 			for (int i = 0; i < jsonArray.length(); i++) {
 				//得到其中一个赛程对象
 				JSONObject scheduleJsonObject = jsonArray.getJSONObject(i);
 				
 				//封装到赛程实体类中
-				Schedule schedule = getSpecialSchedule(innerUpdateModule, scheduleJsonObject, tRemarkerAndParamsMap);
+				Schedule schedule = getSpecialSchedule(innerUpdateModule_otherInfo, scheduleJsonObject, tRemarkerAndParamsMap);
 				
 				//将得到的 单个赛程信息添加到赛程集中
 				scheduleList.add(schedule);

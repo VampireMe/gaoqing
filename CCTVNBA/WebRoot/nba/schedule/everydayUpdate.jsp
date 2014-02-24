@@ -22,6 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type = "text" id = "dateID" value = "请选择日期" 
 						       style = "height: 26px;" />
 					</td>
+					
 					<td align="right">
 						<a  id = "updateScheduleAID"
 							class = "easyui-linkbutton" 

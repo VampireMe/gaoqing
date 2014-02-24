@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import com.ctvit.nba.dao.ScheduleDao;
 import com.ctvit.nba.dao.impl.ScheduleDaoImpl;
-import com.ctvit.nba.entity.Player;
 import com.ctvit.nba.entity.Schedule;
 import com.ctvit.nba.expand.ScheduleUtil;
 import com.ctvit.nba.service.ScheduleService;
@@ -125,6 +124,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		//得到数据链接地址
 		finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
 		
+		//得到更新条件
+		String keyConditions = CommonUtil.getKeyConditions(innerUpdateModuleACondtions);
+		
 		//得到内部链接模块名称（链接的唯一标识）
 		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
 		
@@ -136,8 +138,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		//得到链接地址的数据集合
 		JSONObject urlJsonObject = URLContentUtil.getURLJsonObject(url);
 		
+		String innerUpdateModule_otherInfo = innerUpdateModule + "," + keyConditions;
+		
 		//得到赛程实体类集
-		scheduleList = ScheduleUtil.getScheduleList(innerUpdateModule, urlJsonObject, tRemarkerAndParamsMap);
+		scheduleList = ScheduleUtil.getScheduleList(innerUpdateModule_otherInfo, urlJsonObject, tRemarkerAndParamsMap);
 		
 		return scheduleList;
 	}
@@ -166,7 +170,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 		String uniqueMoeduleRemarker = CommonUtil.getMapKey(uniqueRemarkerAndConditionMap);
 		
 		//得到更新条件date
-		String date = (String) uniqueRemarkerAndConditionMap.get(uniqueMoeduleRemarker).get("date");
+		String updateName = "";
+		
+		//每日更新赛程
+		if(uniqueMoeduleRemarker != null && "SCHEDULES".equals(uniqueMoeduleRemarker)){
+			updateName = (String) uniqueRemarkerAndConditionMap.get(uniqueMoeduleRemarker).get("date");
+			
+		//每月更新赛程
+		}else if (uniqueMoeduleRemarker != null && "MONTH_SCHEDULE_LIST".equals(uniqueMoeduleRemarker)) {
+			updateName = (String) uniqueRemarkerAndConditionMap.get(uniqueMoeduleRemarker).get("month");
+		}
 		
 		//建立数据库连接
 		Connection connection = JDBCUtil.getConnection();
@@ -175,7 +188,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		int maintainFlag = scheduleDao.maintainSchedule(connection, tRemarkerAndParamsMap);
 		
 		//得到 Schedule 集合对象
-		List<Schedule> schedules = getSchedules(uniqueMoeduleRemarker, date);
+		List<Schedule> schedules = getSchedules(uniqueMoeduleRemarker, updateName);
 		
 		/*
 		 * 将得到更改后的 Schedule集合对象更新到 xml 文件中
@@ -190,7 +203,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 	
 	@Override
-	public List<Schedule> getSchedules(String innerUpdateModule, String date) {
+	public List<Schedule> getSchedules(String innerUpdateModule, String updateName) {
 		//得到数据库更新后的数据对象集合
 		List<Schedule> schedules = new ArrayList<Schedule>();
 		
@@ -198,9 +211,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Connection connection = JDBCUtil.getConnection();
 		
 		try {
-			schedules = scheduleDao.getScheduleById(connection, innerUpdateModule, date);
+			schedules = scheduleDao.getScheduleById(connection, innerUpdateModule, updateName);
 		} catch (Exception e) {
-			log.info("查询类别为：" + innerUpdateModule + "的，标识为：" + date + "的数据出现异常！");
+			log.info("查询类别为：" + innerUpdateModule + "的，标识为：" + updateName + "的数据出现异常！");
 			e.printStackTrace();
 		}
 		return schedules;

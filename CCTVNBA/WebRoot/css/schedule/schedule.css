@@ -27,14 +27,14 @@
 #schedule_monthUpdateID{
 	width: 780px;
 	height: 550px;
-	background-color: #EDF9F0;
+	background-color: #E0FFFF;
 }
 
 /*更多更新赛程 div 样式*/
 #schedule_moreUpdateID{
 	width: 780px;
 	height: 550px;
-	background-color: #EDF9F0;
+	background-color: #E0FFFF;
 }
 
 /*每日更新模块下的 条件区域 div 样式*/

@@ -17,6 +17,26 @@ import org.json.JSONObject;
 public class CommonUtil {
 	
 	/**
+	 * 得到内部更新模块的名称
+	 * @author 高青
+	 * 2014-2-24
+	 * @param innerUpdateModule_otherInfo 内部更新模块和其他信息字符串 
+	 * @return innerUpdateModule 内部更新模块的名称
+	 */
+	public static String getInnerUpdateModuleName(String innerUpdateModule_otherInfo){
+		//内部更新模块的名称
+		String innerUpdateModule = "";
+		
+		if (innerUpdateModule_otherInfo != null && !innerUpdateModule_otherInfo.isEmpty()) {
+			String[] array = innerUpdateModule_otherInfo.split(",");
+			
+			//数组中的第一个就是内部更新模块
+			innerUpdateModule = array[0];
+		}
+		return innerUpdateModule;
+	}
+	
+	/**
 	 * 根据 KEY 的值，得到 JSONObject 中的值，
 	 * <p>并将其转为 String 类型</p>
 	 * 默认情况（null）下，是 int 类型
@@ -200,7 +220,7 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * 得到 Map 对象中的更新条件的字符串集
+	 * 得到 Map 对象中的更新条件值的字符串集
 	 * @author 高青
 	 * 2014-1-14
 	 * @param <T> 泛型类型
@@ -234,6 +254,40 @@ public class CommonUtil {
 		conditionRemarker = conditionRemarker.substring(0, conditionRemarker.length() - 1);
 		
 		return conditionRemarker;
+	}
+	/**
+	 * 得到 Map 对象中的更新条件的字符串集
+	 * @author 高青
+	 * 2014-2-24
+	 * @param <T> 泛型类型
+	 * @param uniqueRemarkerAndConditionMap 内部更新模块名称和查询条件map对象的集合数据
+	 * @return conditionRemarker 更新条件的字符串集
+	 */
+	public static <T> String getKeyConditions(Map<String, Map<String, T>> uniqueRemarkerAndConditionMap){
+		//查询条件标识 
+		String keyConditions = "";
+		
+		//得到更新模块标识
+		String updateModuleName = getMapKey(uniqueRemarkerAndConditionMap);
+		
+		//得到查询条的  Map 对象
+		Map<String, T> conditionMap = uniqueRemarkerAndConditionMap.get(updateModuleName);
+		//判断 查询条件的  Map 对象是否为空
+		if (conditionMap.size() == 0) {
+			//当前查询条件为空的时候，说明当前访问链接中，就不存在查询条件，则查询条件标识就是当前的 链接标识（）
+			
+			
+			//查询条件的  Map 对象不为空时：
+		} else {
+			Set<String> conditionKeySet = conditionMap.keySet();
+			for (String condition : conditionKeySet) {
+				keyConditions += condition + "-";
+			}
+		}
+		//取消最后一个“-”
+		keyConditions = keyConditions.substring(0, keyConditions.length() - 1);
+		
+		return keyConditions;
 	}
 	
 	/**

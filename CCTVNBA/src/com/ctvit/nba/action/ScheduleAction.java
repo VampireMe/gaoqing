@@ -3,7 +3,6 @@
  */
 package com.ctvit.nba.action;
 
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -87,6 +86,9 @@ public class ScheduleAction extends BaseAction{
 	
 	/** 比赛球队 */
 	private String teamID;
+	
+	/** 查询条件： 月份 */
+	private String month;
 	
 	//实例化对象的同时，初始化所需的对象
 	{
@@ -186,7 +188,14 @@ public class ScheduleAction extends BaseAction{
 	 * @return void 空
 	 */	
 	public void updateMatchEventByTeam(){
-		updateMatchCorelativeEvent();
+		//根据比赛的节数，更新比赛的事件成功标识
+		int matchEventByTeamFlag = 0;
+		
+		//执行更新操作
+		matchEventByTeamFlag = commonUpdateMethod(liveService, "updateMatchCorelativeEvent");
+		
+		//将数据写到前台
+		unifyWriteJson2Web(matchEventByTeamFlag);	
 	}
 	
 	/**
@@ -196,7 +205,14 @@ public class ScheduleAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void updateMatchEventByQuarter(){
-		updateMatchCorelativeEvent();
+		//根据比赛的节数，更新比赛的事件成功标识
+		int matchEventByQuarterFlag = 0;
+		
+		//执行更新操作
+		matchEventByQuarterFlag = commonUpdateMethod(liveService, "updateMatchCorelativeEvent");
+		
+		//将数据写到前台
+		unifyWriteJson2Web(matchEventByQuarterFlag);		
 	}
 	
 	/**
@@ -320,18 +336,14 @@ public class ScheduleAction extends BaseAction{
 	}
 	
 	/**
-	 * 根据日期，获取当前日期下的赛程Json数据
-	 * 2013-12-12
+	 * 根据月份，获取当前月下的赛程Json数据
+	 * 2013-02-24
 	 * @author 高青
-	 * @param null
 	 * @return everydayScheduleJson struts页面返回标识
 	 */
-	public void getEverydayScheduleJson(){
-		//输出对象
-		PrintWriter writer = null;
-		
+	public void getMonthScheduleJson(){
 		//当日期不为空时
-		if (date != null && !date.equals("")) {
+		if (month != null && !month.equals("")) {
 			innerUpdateModuleACondtions = getInnerUpdateModuleAConditions(innerUpdateModule);
 			
 			//如果是重新加载，就不执行更新操作
@@ -344,7 +356,41 @@ public class ScheduleAction extends BaseAction{
 					e.printStackTrace();
 				}
 			}
+			//得到相应的 json 数据
+			List<Schedule> schedules = scheduleService.getSchedules(innerUpdateModule, month);
 			
+			JSONArray jsonArray = new JSONArray(schedules);
+			json = jsonArray.toString();
+			
+			//将数据写到前台
+			this.writeJson2Web(json);
+		}else {
+			json = null;
+			this.writeJson2Web(json);
+		}
+	}
+	
+	/**
+	 * 根据日期，获取当前日期下的赛程Json数据
+	 * 2013-12-12
+	 * @author 高青
+	 * @return everydayScheduleJson struts页面返回标识
+	 */
+	public void getEverydayScheduleJson(){
+		//当日期不为空时
+		if ((date != null && !date.equals(""))) {
+			innerUpdateModuleACondtions = getInnerUpdateModuleAConditions(innerUpdateModule);
+			
+			//如果是重新加载，就不执行更新操作
+			if (loadRemarker == null) {
+				//将当前日期下的赛程，初始化到数据库中
+				try {
+					scheduleService.updateSchedule(moduleName, innerUpdateModuleACondtions, null);
+				} catch (Exception e) {
+					logger.info("数据写入数据库和 xml 文件中，发生异常");
+					e.printStackTrace();
+				}
+			}
 			//得到相应的 json 数据
 			List<Schedule> schedules = scheduleService.getSchedules(innerUpdateModule, date);
 			
@@ -599,7 +645,10 @@ public class ScheduleAction extends BaseAction{
 		if (date != null) {
 			innerConditionMap.put("date", date);
 		}
-		
+		//按月查询
+		if(month != null){
+			innerConditionMap.put("month", month);
+		}
 		return innerConditionMap;
 	}
 
@@ -620,6 +669,7 @@ public class ScheduleAction extends BaseAction{
 	}
 
 	/** @return the scheduleIDs */
+	@JSON(serialize=false)
 	public String getScheduleIDs() {
 		return scheduleIDs;
 	}
@@ -630,6 +680,7 @@ public class ScheduleAction extends BaseAction{
 	}
 
 	/** @return the quarter */
+	@JSON(serialize=false)
 	public String getQuarter() {
 		return Quarter;
 	}
@@ -640,6 +691,7 @@ public class ScheduleAction extends BaseAction{
 	}
 
 	/** @return the teamID */
+	@JSON(serialize=false)
 	public String getTeamID() {
 		return teamID;
 	}
@@ -647,6 +699,17 @@ public class ScheduleAction extends BaseAction{
 	/** @param teamID the teamID to set */
 	public void setTeamID(String teamID) {
 		this.teamID = teamID;
+	}
+
+	/** @return the month */
+	@JSON(serialize=false)
+	public String getMonth() {
+		return month;
+	}
+
+	/** @param month the month to set */
+	public void setMonth(String month) {
+		this.month = month;
 	}
 	
 }

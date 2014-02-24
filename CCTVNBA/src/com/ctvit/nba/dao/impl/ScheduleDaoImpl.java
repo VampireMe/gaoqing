@@ -223,7 +223,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			+ "HomeScore = "+switchNullSituation(schedule.getHomeScore())+", " 
 			+ "VisitingScore = "+switchNullSituation(schedule.getVisitingScore())+", "
 			+ "Quarter = "+switchNullSituation(schedule.getQuarter())+", " 
-			+ "Other = '"+schedule.getOther()+"' where SCHEDULEID='"+schedule.getScheduleID()+"' "
+			+ "Other = '"+schedule.getOther()+"', INNERUPDATEMODULE = '"+schedule.getInnerUpdateModule()
+			+"' where SCHEDULEID='"+schedule.getScheduleID()+"' "
 			;
 			
 		//插入
@@ -237,7 +238,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 					"TotalQuarters, VisitingCNName, VisitingENAlias, " +
 					"MatchTypeCNName, MatchTypeENName, HomeTeamID, " +
 					"BroadcastName, BestVedio, BestImage, Remarker, HomeScore, " +
-					"VisitingScore, Quarter, Other ) values(" + "'"
+					"VisitingScore, Quarter, Other,  INNERUPDATEMODULE) values(" + "'"
 					+schedule.getHomeCNAlias()+"', '"
 					+schedule.getVisitingENName()+"', '"
 					+schedule.getHomeENName()+"', '"
@@ -269,7 +270,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 					+switchNullSituation(schedule.getHomeScore())+", "
 					+switchNullSituation(schedule.getVisitingScore())+", "
 					+switchNullSituation(schedule.getQuarter())+", '"
-					+schedule.getOther()+"') ";
+					+schedule.getOther()+"', '"+schedule.getInnerUpdateModule()+"') ";
 		}
 		return sql;
 	}
@@ -333,12 +334,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	}
 	
 	@Override
-	public List<Schedule> getScheduleById(Connection connection, String innerUpdateModule, String date) {
+	public List<Schedule> getScheduleById(Connection connection, String innerUpdateModule, String updateName) {
 		//Schedule 集合对象
 		List<Schedule> schedules = new ArrayList<Schedule>();
 		
 		//判断参数是否为空
-		if (date != null) {
+		if (updateName != null) {
 			
 			//数据操作对象
 			PreparedStatement preparedStatement = null;
@@ -347,11 +348,18 @@ public class ScheduleDaoImpl implements ScheduleDao {
 			//查询制定 id 下的赛程数据
 			try {
 				//sql 语句
-				String sql = "select * from TAB_NBA_SCHEDULE Where Other = ? and MATCHGTM8TIME = to_date(?, 'yyyy-MM-dd') ";
+				String sql = "";
+				//每日更新模块
+				if(innerUpdateModule != null && "SCHEDULES".equals(innerUpdateModule)){
+					sql = "select * from TAB_NBA_SCHEDULE Where MATCHGTM8TIME = to_date(?, 'yyyy-MM-dd') ";
+					
+				//按月更新模块
+				}else if (innerUpdateModule != null && "MONTH_SCHEDULE_LIST".equals(innerUpdateModule)) {
+					sql = "select * from TAB_NBA_SCHEDULE Where substr(to_char(MATCHGTM8TIME,'yyyy-MM-dd'),6,2) = ? ";
+				}
 				preparedStatement = JDBCUtil.getPreparedStatement(connection, sql);
 				//绑定参数
-				preparedStatement.setString(1, innerUpdateModule);
-				preparedStatement.setString(2, date);
+				preparedStatement.setString(1, updateName);
 				
 				querySet = preparedStatement.executeQuery();
 				

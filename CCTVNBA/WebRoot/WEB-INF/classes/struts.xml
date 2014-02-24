@@ -38,6 +38,12 @@
             </result>
         </action>
         
+        <!-- 月份赛程更新 -->
+        <action name="monthSchedule" class = "com.ctvit.nba.action.ScheduleAction">
+            <result type = "json">
+            </result>
+        </action>
+        
         <!-- 比赛信息>> 比赛基本额信息 -->
         <action name="basicInfo" class = "com.ctvit.nba.action.ScheduleAction">
             <result type = "json">
@@ -85,6 +91,7 @@
             <result type = "json">
             </result>
         </action>
+        
         <!-- 比赛事件 >> 根据比赛球队，获取比赛相关事件 -->
          <action name="matchEventByTeam" class = "com.ctvit.nba.action.ScheduleAction">
             <result type = "json">

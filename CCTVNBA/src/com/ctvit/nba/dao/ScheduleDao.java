@@ -41,11 +41,11 @@ public interface ScheduleDao {
 	 * 2014-1-2
 	 * @param connection 数据库连接对象
 	 * @param innerUpdateModule 更新方式
-	 * @param date 当前更新日期
+	 * @param updateName 当前更新名称
 	 * @return schedules 赛程对象数据集
 	 */
 	public List<Schedule> getScheduleById(Connection connection, String innerUpdateModule,
-			String date);
+			String updateName);
 	
 	
 }

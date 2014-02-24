@@ -125,7 +125,7 @@ public class ScheduleUtilTest {
 		Map<String, Map<String, String>> innerUpdateModule_partURL_url_map = scheduleUtil.getURLByKindsCondition("schedule",paramMap);
 		
 		//得到更新方式
-		String innerUpdateModule = XMLUtil.getInnerUpdateModule(innerUpdateModule_partURL_url_map);
+		String innerUpdateModule = XMLUtil.getInnerUpdateModuleName(innerUpdateModule_partURL_url_map);
 		
 		//得到部分链接地址
 		String partURL = XMLUtil.getPartURL(innerUpdateModule_partURL_url_map);
@@ -147,7 +147,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.ctvit.nba.util.ScheduleUtil#getSchedule(org.json.JSONObject, java.lang.String)}.
+	 * Test method for {@link com.ctvit.nba.util.ScheduleUtil#getSchedule(org.json.JSONObject, java.lang.String, String)}.
 	 */
 	@Test
 	public void testGetScheduleByJSONObject() {

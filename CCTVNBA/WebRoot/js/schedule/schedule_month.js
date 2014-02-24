@@ -12,34 +12,57 @@ $(document).ready(function(){
 	 */
 	
 	/**格式化日期*/
-	$.fn.datebox.defaults.formatter = function(date){
-		var y = date.getFullYear();
-		var m = date.getMonth()+1;
-		var d = date.getDate();
-		return y+'-'+m+'-'+d;
+	$.fn.datebox.defaults.formatter = function(month){
+		var y = month.getFullYear();
+		var m = month.getMonth()+1;
+		//var d = month.getDate();
+		return y+'-'+m;
 	};
 	
-	//日期控件的属性
-	var $date = $("#dateID");
-	$date.datebox({
+	//月份控件的属性
+	var $monthOfYear = $("#monthOfYear");
+	$monthOfYear.combobox({
 		required: true,
-		currentText:"今天",
-		closeText:"关闭",
-		editable: false,
+		data: [
+				{year: 2010, text: 2010},
+				{year: 2011, text: 2011},
+				{year: 2012, text: 2012},
+				{year: 2013, text: 2013},
+				{year: 2014, text: 2014},
+				{year: 2015, text: 2015},
+				{year: 2016, text: 2016},
+				{year: 2017, text: 2017},
+				{year: 2018, text: 2018},
+				{year: 2019, text: 2019},
+				{year: 2020, text: 2020}
+			  ],
+		valueField:'year',  
+		textField:'text', 
 		
 		//选择完日期后，讲该日期赋到该输入框中
-		onSelect: function(date){
-			$date.val(date);
+		onSelect: function(monthOfYear){
+			$monthOfYear.val(monthOfYear);
 		}
 	});
-	
 	//月份控件的属性
 	var $month = $("#monthID");
-	$month.datebox({
+	$month.combobox({
 		required: true,
-		currentText:"今天",
-		closeText:"关闭",
-		editable: false,
+		data:[
+				{"month": 1, "text": 1},
+				{"month": 2, "text": 2},
+				{"month": 3, "text": 3},
+				{"month": 4, "text": 4},
+				{"month": 5, "text": 5},
+				{"month": 6, "text": 6},
+				{"month": 7, "text": 8},
+				{"month": 9, "text": 9},
+				{"month": 10, "text": 10},
+				{"month": 11, "text": 11},
+				{"month": 12, "text": 12}
+			  ], 
+	    valueField:'month',
+	    textField:'text', 
 		
 		//选择完日期后，讲该日期赋到该输入框中
 		onSelect: function(month){
@@ -88,8 +111,8 @@ $(document).ready(function(){
 	/*
 	 * 更新赛程操作 
 	 */
-	var $updateScheduleA = $("#updateScheduleAID");
-	$updateScheduleA.linkbutton({
+	var $updateScheduleAMonth = $("#updateScheduleAIDMonth");
+	$updateScheduleAMonth.linkbutton({
 		iconCls: "icon-reload"
 	});
 	
@@ -126,22 +149,22 @@ $(document).ready(function(){
 	 * date: 2013-12-17
 	 */
 	//得到 表格对象
-	var table = $("#dataTableID");
+	var tableMonth = $("#dataTableIDMonth");
 	function tableMethod(){
-		table.datagrid({
+		tableMonth.datagrid({
 			loadMsg: '数据加载中......',
 			striped: true, //条纹所有行
 			method: "post",
 			fitColumns: false,//自适应列的宽度
 			
 			//远程访问地址
-			url: 'everydaySchedule!getEverydayScheduleJson.action',
+			url: 'monthSchedule!getMonthScheduleJson.action',
 			
 			//参数
 			queryParams:{
 				moduleName: 'schedule',
-				date: getSpecifiedFormmaterDate($date.val()),
-				innerUpdateModule: 'SCHEDULES'
+				month:$("input[name='monthID']").val(),
+				innerUpdateModule: 'MONTH_SCHEDULE_LIST'
 			},
 			//固定列定义
 			frozenColumns: [[
@@ -275,11 +298,9 @@ $(document).ready(function(){
 	}
 	
 	//绑定  更新赛程  单击事件
-	$updateScheduleA.on("click",function(){
+	$updateScheduleAMonth.on("click",function(){
 		//判断是否选择了日期
-		if($date.val() === "请选择日期" || $date.val() === ""){
-			$.messager.alert("提示信息","请选择更新的日期！", "info");
-		}else if($month.val() === "请选择月份" || $month.val() === ""){
+		if($month.val() === "请选择月份" || $month.val() === ""){
 			$.messager.alert("提示信息","请选择更新的月份！", "info");
 		}else{
 			//加载表格及其数据
@@ -295,7 +316,7 @@ $(document).ready(function(){
 	function maintain(){
 		
 		//得到选中的表格对象
-		var tableCheckedObject = table.datagrid('getChecked');
+		var tableCheckedObject = tableMonth.datagrid('getChecked');
 		
 		//如果没有选中数据
 		if(tableCheckedObject.length === 0){
@@ -304,13 +325,13 @@ $(document).ready(function(){
 			//得到当前行的 序列号值
 			for(var i = 0; i < tableCheckedObject.length; i++ ){
 				//得到当前选中的行的索引值
-				var index = table.datagrid("getRowIndex", tableCheckedObject[i] );
+				var index = tableMonth.datagrid("getRowIndex", tableCheckedObject[i] );
 				
 				//保持选中该行
-				table.datagrid("checkRow", index);
+				tableMonth.datagrid("checkRow", index);
 				
 				//开始当前行的编辑状态
-				table.datagrid("beginEdit", index);
+				tableMonth.datagrid("beginEdit", index);
 				
 				//得到隐藏的列
 				var currentObj = $("td[field = 'hiddenColumn']")[index];
@@ -327,7 +348,7 @@ $(document).ready(function(){
 	 */
 	function cancelMaintain(){
 		//得到选中的表格对象
-		var tableCheckedObject = table.datagrid('getChecked');
+		var tableCheckedObject = tableMonth.datagrid('getChecked');
 		
 		//如果没有选中要取消维护的数据
 		if(tableCheckedObject.length === 0){
@@ -337,7 +358,7 @@ $(document).ready(function(){
 			//得到当前行的 序列号值
 			for(var i = 0; i < tableCheckedObject.length; i++ ){
 				//得到当前选中的行的索引值
-				var index = table.datagrid("getRowIndex", tableCheckedObject[i] );
+				var index = tableMonth.datagrid("getRowIndex", tableCheckedObject[i] );
 				
 				//得到隐藏的列
 				var currentObj = $("td[field = 'hiddenColumn']")[index];
@@ -345,10 +366,10 @@ $(document).ready(function(){
 				$(currentObj).val("");
 			}
 			//取消之前的操作
-			table.datagrid("rejectChanges");
+			tableMonth.datagrid("rejectChanges");
 			
 			//取消所有选中的项
-			table.datagrid("unselectAll");
+			tableMonth.datagrid("unselectAll");
 			
 			//重置验证参数
 			validPass = "";
@@ -362,7 +383,7 @@ $(document).ready(function(){
 	 * @param: index 取消编辑状态的行索引
 	 */
 	function endEditMethod(index){
-		table.datagrid("endEdit",index);
+		tableMonth.datagrid("endEdit",index);
 	}
 	
 	/**
@@ -371,12 +392,12 @@ $(document).ready(function(){
 	 * author: 高青
 	 */
 	//得到  更新到外网  按钮对象
-	var update2OuterButton = $("#update2Outer");
-	update2OuterButton.on("click", function(){
+	var update2OuterButtonMonth = $("#update2OuterMonth");
+	update2OuterButtonMonth.on("click", function(){
 		/*
 		 * 得到所有选中行的数据，并将该数据传到后台，存储到数据库和 XML 文件中
 		 */
-		var tableObject = table.datagrid("getChecked");
+		var tableObject = tableMonth.datagrid("getChecked");
 		
 		//参数字符串
 		var params = "";
@@ -384,13 +405,13 @@ $(document).ready(function(){
 		for(var i = 0; i < tableObject.length; i++){
 			
 			//得到当前选中的行的索引值
-			var index = table.datagrid("getRowIndex", tableObject[i] );
+			var index = tableMonth.datagrid("getRowIndex", tableObject[i] );
 			
 			//停止编辑
 			endEditMethod(index);
 			
 			//验证当前行
-			validPass += table.datagrid("validateRow", index) + ",";
+			validPass += tableMonth.datagrid("validateRow", index) + ",";
 			
 			//组织好参数
 			params += "schedule.scheduleID="+tableObject[i].scheduleID + "&" + 
@@ -399,9 +420,10 @@ $(document).ready(function(){
 			"schedule.bestVedio="+tableObject[i].bestVedio + "&" +
 			"schedule.broadcastName="+tableObject[i].broadcastName + "&";
 		}
+		
 		//将 时间参数绑定上
-		var paramsSub = params.concat("date=" + getSpecifiedFormmaterDate($date.val()))
-		.concat("&moduleName=schedule").concat("&innerUpdateModule=SCHEDULES");
+		var paramsSub = params.concat("month=" + $("input[name='monthID']").val())
+		.concat("&moduleName=schedule").concat("&innerUpdateModule=MONTH_SCHEDULE_LIST");
 		
 		//正则表达式对象
 		var regexp = new RegExp('false');
@@ -424,13 +446,13 @@ $(document).ready(function(){
 				//更新成功
 				if(str === "success"){
 					$.messager.alert("提示信息", "更新到外网成功！", "info",function(){
-						table.datagrid("load", {innerUpdateModule: 'SCHEDULES', 
-												date: getSpecifiedFormmaterDate($date.val()),
+						tableMonth.datagrid("load", {innerUpdateModule: 'MONTH_SCHEDULE_LIST', 
+												month: $("input[name='monthID']").val(),
 												loadRemarker: 'load',
 												moduleName: 'schedule'});
 					});
 					//将编辑后的数据，同步到当前表格中
-					table.datagrid("acceptChanges");
+					tableMonth.datagrid("acceptChanges");
 					
 					//重置参数
 					params = "";
@@ -438,10 +460,10 @@ $(document).ready(function(){
 					$.messager.alert("提示信息", "更新到外网失败，请重试！", "info");
 					
 					//将编辑后的数据，同步到当前表格中
-					table.datagrid("rejectChanges");
+					tableMonth.datagrid("rejectChanges");
 				}
 				//取消所有选中的项
-				table.datagrid("unselectAll");
+				tableMonth.datagrid("unselectAll");
 				
 				//重置参数
 				params = "";
@@ -451,13 +473,13 @@ $(document).ready(function(){
 			},
 			error: function(error){
 				$.messager.alert("提示信息", "更新到外网失败，请重试！", "info");
-				table.datagrid("rejectChanges");
+				tableMonth.datagrid("rejectChanges");
 				
 				//重置参数
 				params = "";
 				
 				//取消所有选中的项
-				table.datagrid("unselectAll");
+				tableMonth.datagrid("unselectAll");
 			}
 		});
 	}});
@@ -470,7 +492,7 @@ $(document).ready(function(){
 	 */
 	function getCheckedScheduleID(){
 		//得到选中的赛程数据的 id 
-		var checkedSchedule = table.datagrid("getChecked");
+		var checkedSchedule = tableMonth.datagrid("getChecked");
 		
 		var scheduleIDs = "";
 		
@@ -502,7 +524,7 @@ $(document).ready(function(){
 						//赛程基本信息
 						if(jsonParamObj.innerUpdateModule === "LIVE"){
 							//显示隐藏数据
-							$("#innerContent").show();
+							$("#innerContentMonth").show();
 							
 							bindBasicInfoData(json, "Home");
 							bindBasicInfoData(json, "Visiting");
@@ -514,18 +536,18 @@ $(document).ready(function(){
 						//****************** 球员分析 start *******************//
 						//本场比赛球员个人数据
 						if(jsonParamObj.innerUpdateModule === "LIVE_PLAYER_STAT"){
-							$("#playerAnalysis_bestPlayerInfoOuter").hide();
+							$("#playerAnalysis_bestPlayerInfoOuterMonth").hide();
 							//显示隐藏球员个人数据模块
-							$("#playerAnalysis_playerPersonalInfoOuter").show();
+							$("#playerAnalysis_playerPersonalInfoOuterMonth").show();
 							
 							//后续操作
 							bindPlayerPersonalInfo(json);
 						}
 						//本场比赛最佳球员数据
 						if(jsonParamObj.innerUpdateModule === "BEST_PLAYER"){
-							$("#playerAnalysis_playerPersonalInfoOuter").hide();
+							$("#playerAnalysis_playerPersonalInfoOuterMonth").hide();
 							//显示隐藏最佳球员的数据模块
-							$("#playerAnalysis_bestPlayerInfoOuter").show();
+							$("#playerAnalysis_bestPlayerInfoOuterMonth").show();
 							
 							//后续绑定显示操作
 							bindBestPlayerInfo(json);
@@ -535,30 +557,30 @@ $(document).ready(function(){
 						//********** 数据统计模块 start************//
 						//（1）球员数据分析部分：
 						if(jsonParamObj.innerUpdateModule === "LIVE_PLAY_STATS"){
-							$("#dataStatistics_corelativeData_outer").hide();
-							$("#dataStatistics_teamGatherData_outer").hide();
+							$("#dataStatistics_corelativeData_outerMonth").hide();
+							$("#dataStatistics_teamGatherData_outerMonth").hide();
 							//1、显示隐藏的球员数据分析部分
-							$("#dataStatistics_playerData_outer").show();
+							$("#dataStatistics_playerData_outerMonth").show();
 							
 							//2、绑定球员数据分析的信息
 							bindPlayerDataStats(json);
 						}
 						//（2）比赛相关数据部分：
 						if(jsonParamObj.innerUpdateModule === "LIVE_DATA"){
-							$("#dataStatistics_playerData_outer").hide();
-							$("#dataStatistics_teamGatherData_outer").hide();
+							$("#dataStatistics_playerData_outerMonth").hide();
+							$("#dataStatistics_teamGatherData_outerMonth").hide();
 							//1、显示隐藏的比赛相关数据部分：
-							$("#dataStatistics_corelativeData_outer").show();
+							$("#dataStatistics_corelativeData_outerMonth").show();
 							
 							//2、绑定比赛相关数据部分信息：
 							bindCorelativeData(json);
 						}
 						//（3）本场比赛球队汇总数据部分：
 						if(jsonParamObj.innerUpdateModule === "LIVE_TEAM_STAT"){
-							$("#dataStatistics_playerData_outer").hide();
+							$("#dataStatistics_playerData_outerMonth").hide();
 							//1、显示隐藏的比赛球队汇总数据部分：
-							$("#dataStatistics_corelativeData_outer").hide();
-							$("#dataStatistics_teamGatherData_outer").show();
+							$("#dataStatistics_corelativeData_outerMonth").hide();
+							$("#dataStatistics_teamGatherData_outerMonth").show();
 							
 							//2、绑定比赛球队汇总数据部分信息：
 							bindTeamGatherData(json);
@@ -568,25 +590,25 @@ $(document).ready(function(){
 						//********** 比赛事件模块 start************//
 							//1、比赛的相关事件：
 						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_SCHEDULE"){
-							$("#matchEventByTeam").hide();
-							$("#matchCorelativeEventByQuarter").hide();
+							$("#matchEventByTeamMonth").hide();
+							$("#matchCorelativeEventByQuarterMonth").hide();
 							
 							//显示比赛的相关事件部分
-							$("#matchCorelativeEvent").show();
+							$("#matchCorelativeEventMonth").show();
 							
 							//绑定比赛的相关事件数据
 							bindMatchCorelativeEvent(json);
 						}
 						//2、根据比赛节数，获取的比赛事件部分：
 						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_QUARTER"){
-							$("#matchCorelativeEventByQuarterData").show();
+							$("#matchCorelativeEventByQuarterDataMonth").show();
 							
 							//绑定比赛的相关事件数据
 							bindMatchEventByQuarter(json);
 						}
 						//3、根据比赛球队，获取的比赛事件部分
 						if(jsonParamObj.innerUpdateModule === "EVENTS_BY_TEAM"){
-							$("#matchEventByTeamData").show();
+							$("#matchEventByTeamDataMonth").show();
 							
 							//绑定比赛的相关事件数据
 							bindMatchEventByTeam(json);
@@ -625,38 +647,38 @@ $(document).ready(function(){
 			playerLeaderArray = $callbackData.HomeTeamPlayerDataLeader;
 			
 			//向表格赛程基本信息下的数据项赋值
-			$("#" + teamType + "CNAlias").text(basicInfoArray[0].HomeCNAlias);
-			$("#FirstQuart"+ teamType +"Score").text(scheduleQuarterArray[0].QuartHomeScore);
-			$("#SecondQuart"+ teamType +"Score").text(scheduleQuarterArray[1].QuartHomeScore);
-			$("#ThirdQuart"+ teamType +"Score").text(scheduleQuarterArray[2].QuartHomeScore);
-			$("#FourthQuart"+ teamType +"Score").text(scheduleQuarterArray[3].QuartHomeScore);
-			$("#"+ teamType +"Score").text(basicInfoArray[0].HomeScore);
+			$("#" + teamType + "CNAliasMonth").text(basicInfoArray[0].HomeCNAlias);
+			$("#FirstQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[0].QuartHomeScore);
+			$("#SecondQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[1].QuartHomeScore);
+			$("#ThirdQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[2].QuartHomeScore);
+			$("#FourthQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[3].QuartHomeScore);
+			$("#"+ teamType +"ScoreMonth").text(basicInfoArray[0].HomeScore);
 			
 			//合并了行的数据
-			$("#StatusCNName").text(basicInfoArray[0].StatusCNName);
-			$("#MatchTypeCNName").text(basicInfoArray[0].MatchTypeCNName);
+			$("#StatusCNNameMonth").text(basicInfoArray[0].StatusCNName);
+			$("#MatchTypeCNNameMonth").text(basicInfoArray[0].MatchTypeCNName);
 		}else{
 			playerLeaderArray = $callbackData.VisitTeamPlayerDataLeader;
 			//向表格赛程基本信息下的数据项赋值
-			$("#" + teamType + "CNAlias").text(basicInfoArray[0].VisitingCNAlias);
-			$("#FirstQuart"+ teamType +"Score").text(scheduleQuarterArray[0].QuartVisitingScore);
-			$("#SecondQuart"+ teamType +"Score").text(scheduleQuarterArray[1].QuartVisitingScore);
-			$("#ThirdQuart"+ teamType +"Score").text(scheduleQuarterArray[2].QuartVisitingScore);
-			$("#FourthQuart"+ teamType +"Score").text(scheduleQuarterArray[3].QuartVisitingScore);
-			$("#"+ teamType +"Score").text(basicInfoArray[0].VisitingScore);
+			$("#" + teamType + "CNAliasMonth").text(basicInfoArray[0].VisitingCNAlias);
+			$("#FirstQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[0].QuartVisitingScore);
+			$("#SecondQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[1].QuartVisitingScore);
+			$("#ThirdQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[2].QuartVisitingScore);
+			$("#FourthQuart"+ teamType +"ScoreMonth").text(scheduleQuarterArray[3].QuartVisitingScore);
+			$("#"+ teamType +"ScoreMonth").text(basicInfoArray[0].VisitingScore);
 		}
 		//球队领袖下的数据项赋值
-		$("#" + teamType + "LeaderCNAlias").text(playerLeaderArray[0].CNAlias);
-		$("#" + teamType + "Total").text(playerLeaderArray[0].Total);
-		$("#" + teamType + "Rebounds").text(playerLeaderArray[0].Rebounds);
-		$("#" + teamType + "Assists").text(playerLeaderArray[0].Assists);
+		$("#" + teamType + "LeaderCNAliasMonth").text(playerLeaderArray[0].CNAlias);
+		$("#" + teamType + "TotalMonth").text(playerLeaderArray[0].Total);
+		$("#" + teamType + "ReboundsMonth").text(playerLeaderArray[0].Rebounds);
+		$("#" + teamType + "AssistsMonth").text(playerLeaderArray[0].Assists);
 	}
 	
 	//得到 比赛基本信息 按钮对象
-	var $matchBasicInfo = $("#matchBasicInfo");
+	var $matchBasicInfoMonth = $("#matchBasicInfoMonth");
 	
 	//初始化 比赛信息面板
-	$("#basicInfoOuter").dialog({
+	$("#basicInfoOuterMonth").dialog({
 		title: '比赛信息',
 		width: 850,
 		height: 550,
@@ -694,21 +716,21 @@ $(document).ready(function(){
 	});
 	
 	//打开 dialog 窗口
-	openDialog("matchBasicInfo", "basicInfoOuter");
+	openDialog("matchBasicInfoMonth", "basicInfoOuterMonth");
 	/** ----------------------------比赛基本信息部分 end-------------------------*/
 	
 	
 	/** ----------------------------球员分析部分 start-------------------------*/
 	//球员分析部分变量
-	var $playerAnalysisOuter = $("#playerAnalysisOuter");
+	var $playerAnalysisOuterMonth = $("#playerAnalysisOuterMonth");
 	
 	//初始状态下的球员个人信息下的 tbody 的值
-	var $init_playerPersonalInfo_tbody = $("#playerAnalysis_playerInfo .playerPersonalInfo_table tbody");
+	var $init_playerPersonalInfo_tbody = $("#playerAnalysis_playerInfoMonth .playerPersonalInfo_tableMonth tbody");
 	//初始状态下的最佳球员信息下的 tbody 的值
-	var $init_bestPlayerInfo_tbody = $("#playerAnalysis_bestPlayerInfo .playerPersonalInfo_table tbody");
+	var $init_bestPlayerInfo_tbody = $("#playerAnalysis_bestPlayerInfoMonth .playerPersonalInfo_tableMonth tbody");
 	
 	//定义球员分析部分的 dialog 
-	$playerAnalysisOuter.dialog({
+	$playerAnalysisOuterMonth.dialog({
 		title: '球员分析',
 		width: 850,
 		height: 550,
@@ -725,7 +747,7 @@ $(document).ready(function(){
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//重置当前 tbody 中的值
-				$("#playerAnalysis_playerInfo .playerPersonalInfo_table tbody").html($init_playerPersonalInfo_tbody);
+				$("#playerAnalysis_playerInfoMonth .playerPersonalInfo_tableMonth tbody").html($init_playerPersonalInfo_tbody);
 				
 				//执行请求
 				ajaxMethod('playerPersonalInfo!updatePlayerPersonalInfo.action' ,{
@@ -742,7 +764,7 @@ $(document).ready(function(){
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//重置当前 tbody 中的值
-				$("#playerAnalysis_bestPlayerInfo .playerPersonalInfo_table tbody").html($init_bestPlayerInfo_tbody);
+				$("#playerAnalysis_bestPlayerInfoMonth .playerPersonalInfo_tableMonth tbody").html($init_bestPlayerInfo_tbody);
 				
 				//执行请求
 				ajaxMethod('bestPlayerInfo!updateBestPlayerInfo.action' ,{
@@ -838,8 +860,8 @@ $(document).ready(function(){
 		homePlayerPersonalInfo = livePlayerStat.Home;
 		
 		//得到球员的个人信息显示部分
-		$playerAnalysis_playerInfo = $("#playerAnalysis_playerInfo");
-		$playerPersonalInfo_tbody = $playerAnalysis_playerInfo.find(".playerPersonalInfo_table tbody");
+		$playerAnalysis_playerInfoMonth = $("#playerAnalysis_playerInfoMonth");
+		$playerPersonalInfo_tbody = $playerAnalysis_playerInfoMonth.find(".playerPersonalInfo_tableMonth tbody");
 		
 		//绑定数据
 		appendPlayerPersonalInfo(homePlayerPersonalInfo, $playerPersonalInfo_tbody, "home");
@@ -861,14 +883,14 @@ $(document).ready(function(){
 		//将后台返回的数据转为 Jquery 对象
 		var $json = $.parseJSON(json);
 		
-		//定义 table 中的 tbody 对象
+		//定义 tableMonth 中的 tbody 对象
 		var $bestPlayerInfo_tbody = "",
-			$playerAnalysis_bestPlayerInfo,
+			$playerAnalysis_bestPlayerInfoMonth,
 			bestPlayerArray;
 		
 		//得到球员的个人信息显示部分
-		$playerAnalysis_bestPlayerInfo = $("#playerAnalysis_bestPlayerInfo");
-		$bestPlayerInfo_tbody = $playerAnalysis_bestPlayerInfo.find(".playerPersonalInfo_table tbody");
+		$playerAnalysis_bestPlayerInfoMonth = $("#playerAnalysis_bestPlayerInfoMonth");
+		$bestPlayerInfo_tbody = $playerAnalysis_bestPlayerInfoMonth.find(".playerPersonalInfo_tableMonth tbody");
 		
 		//得到最佳球员的数组对象
 		bestPlayerArray = $json.BestPlayer;
@@ -897,22 +919,22 @@ $(document).ready(function(){
 	}
 	
 	//单击操作，弹出一个 dialog 
-	openDialog("playerAnalysis", "playerAnalysisOuter");
+	openDialog("playerAnalysisMonth", "playerAnalysisOuterMonth");
 	/** ----------------------------球员分析部分 end-------------------------*/
 	
 	/** ----------------------------数据统计部分 start -------------------------*/
 	//申明数据统计的外层对象
-	var dataStatistics = $("#dataStatisticsOuter");
+	var dataStatisticsMonth = $("#dataStatisticsOuterMonth");
 	
-		//初始状态下的 球员数据统计下的 table 中 tbody 
-	var $init_playerDataStats_tbody = $("#dataStatistics_playerData_outer .playerData_table tbody"),
-		//初始状态下的 比赛相关信息的 table 中 tbody 
-		$init_corelativeData_tbody = $("#dataStatistics_corelativeData_outer .corelativeData_table tbody"),
-		//初始状态下的球队汇总数据的 table 中的 tbody 
-		$init_teamGatherData_tbody = $("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody");
+		//初始状态下的 球员数据统计下的 tableMonth 中 tbody 
+	var $init_playerDataStats_tbody = $("#dataStatistics_playerData_outerMonth .playerData_tableMonth tbody"),
+		//初始状态下的 比赛相关信息的 tableMonth 中 tbody 
+		$init_corelativeData_tbody = $("#dataStatistics_corelativeData_outerMonth .corelativeData_tableMonth tbody"),
+		//初始状态下的球队汇总数据的 tableMonth 中的 tbody 
+		$init_teamGatherData_tbody = $("#dataStatistics_teamGatherData_outerMonth .teamGatherData_tableMonth tbody");
 	
 	//定义 dialog 对象
-	dataStatistics.dialog({
+	dataStatisticsMonth.dialog({
 		title: '数据统计',
 		width: 850,
 		height: 550,
@@ -928,8 +950,8 @@ $(document).ready(function(){
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID();
 				
-				//重置球员数据统计下的 table 中的 tbody 的值
-				$("#dataStatistics_playerData .playerData_table tbody").html($init_playerDataStats_tbody);
+				//重置球员数据统计下的 tableMonth 中的 tbody 的值
+				$("#dataStatistics_playerDataMonth .playerData_tableMonth tbody").html($init_playerDataStats_tbody);
 				
 				//执行请求
 				ajaxMethod('playerDataStatistics!updatePlayerDataStatistics.action' ,{
@@ -946,7 +968,7 @@ $(document).ready(function(){
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//重置当前 tbody 中的值
-				$("#dataStatistics_corelativeData_outer .corelativeData_table tbody").html($init_corelativeData_tbody);
+				$("#dataStatistics_corelativeData_outerMonth .corelativeData_tableMonth tbody").html($init_corelativeData_tbody);
 				
 				//执行请求
 				ajaxMethod('corelativeData!updateCorelativeData.action' ,{
@@ -963,7 +985,7 @@ $(document).ready(function(){
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//重置当前 tbody 中的值
-				$("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody").html($init_teamGatherData_tbody);
+				$("#dataStatistics_teamGatherData_outerMonth .teamGatherData_tableMonth tbody").html($init_teamGatherData_tbody);
 				
 				//执行请求
 				ajaxMethod('teamGatherData!updateTeamGatherData.action' ,{
@@ -985,7 +1007,7 @@ $(document).ready(function(){
 	function openDialog (moduleID, moduleDetailDivID){
 		//单击操作，弹出一个 dialog 
 		$("#" + moduleID).on('click', function(){
-			var checkedSchedules = table.datagrid("getChecked");
+			var checkedSchedules = tableMonth.datagrid("getChecked");
 			//判断是否选中赛程
 			if(checkedSchedules.length === 0){
 				$.messager.alert("提示信息", "请选择赛程！" ,"info");
@@ -996,14 +1018,14 @@ $(document).ready(function(){
 	}
 	
 	//打开数据统计的 dialog 
-	openDialog("dataStatistics", "dataStatisticsOuter");
+	openDialog("dataStatisticsMonth", "dataStatisticsOuterMonth");
 	
 	/**
 	 * 显示数据统计的信息
 	 * 2014-02-11
 	 * author: 高青
 	 * param: dataStatsArray 数据分析的数组对象
-	 * param: dataStats_tbody 数据分析的 table 下的 tbody 对象
+	 * param: dataStats_tbody 数据分析的 tableMonth 下的 tbody 对象
 	 * param: otherInfo 其他附加信息
 	 */
 	function appendDataStats(dataStatsArray, dataStats_tbody, otherInfo){
@@ -1078,7 +1100,7 @@ $(document).ready(function(){
 		playerDataStatsObj = callbackJSON.LiveStats;
 		
 		//得到球员数据统计的 tbody 对象
-		playerDataStats_tbody = $("#dataStatistics_playerData_outer .playerData_table tbody");
+		playerDataStats_tbody = $("#dataStatistics_playerData_outerMonth .playerData_tableMonth tbody");
 		
 		//(1)得到主队球员数据统计信息
 		homePlayerDataStatsArray = playerDataStatsObj.Home;
@@ -1101,7 +1123,7 @@ $(document).ready(function(){
 	function bindCorelativeData(json){
 			//首先将 json 数据转为 JQuery 的 json 对象
 		var  $corelativeData = $.parseJSON(json),
-			//table 下的 tbody 对象
+			//tableMonth 下的 tbody 对象
 			$corelativeData_tbody,
 			//客队球员的数据
 			corelativeData_visitingPlayerStatsArray,
@@ -1109,7 +1131,7 @@ $(document).ready(function(){
 			corelativeData_homePlayerStatsArray;
 		
 		//得到 tbody 对象
-		$corelativeData_tbody = $("#dataStatistics_corelativeData_outer .corelativeData_table tbody");
+		$corelativeData_tbody = $("#dataStatistics_corelativeData_outerMonth .corelativeData_tableMonth tbody");
 		
 		//得到主队球员信息
 		corelativeData_homePlayerStatsArray = $corelativeData.HomePlayerStats;
@@ -1125,7 +1147,7 @@ $(document).ready(function(){
 	 * 2014-02-13
 	 * author： 高青
 	 * param: teamGatherData_statArray 球队汇总的 JSON 数据
-	 * param: teamGatherData_tbody 球队汇总 table 下的 tbody 对象
+	 * param: teamGatherData_tbody 球队汇总 tableMonth 下的 tbody 对象
 	 * param: otherInfo 其他附加信息
 	 */
 	function appendTeamGatherData(teamGatherData_statArray, teamGatherData_tbody, otherInfo){
@@ -1176,7 +1198,7 @@ $(document).ready(function(){
 	function bindTeamGatherData(json){
 			//1、将后台返回的 json 字符串转为 JSON 对象
 		var $teamGatherDataJSON = $.parseJSON(json),
-			//2、table 下的 tbody 对象
+			//2、tableMonth 下的 tbody 对象
 			$teamGatherData_tbody,
 			//3、主队的球队汇总数据
 			teamGatherData_homeStatArray,
@@ -1184,7 +1206,7 @@ $(document).ready(function(){
 			teamGatherData_visitStatArray;
 		
 		//得到 tbody 对象
-		$teamGatherData_tbody = $("#dataStatistics_teamGatherData_outer .teamGatherData_table tbody");
+		$teamGatherData_tbody = $("#dataStatistics_teamGatherData_outerMonth .teamGatherData_tableMonth tbody");
 		//得到主队的球队汇总数据数组
 		teamGatherData_homeStatArray = $teamGatherDataJSON.HomeStat;
 		appendTeamGatherData(teamGatherData_homeStatArray, $teamGatherData_tbody, "home");
@@ -1197,19 +1219,19 @@ $(document).ready(function(){
 	
 	
 	/** ----------------------------比赛事件部分 start -------------------------*/
-	//初始化 table 下的 tbody 部分对象
-	var $init_matchCorelativeEvent_tbody = $("#matchCorelativeEvent .matchCorelativeEventTable tbody"),
-		//根据比赛节数下的比赛事件的 table 下的 tbody 数据部分
-		$init_matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody"),
-		//根据比赛球队下的比赛事件的 table 下的 tbody 数据部分
-		$init_matchEventByTeam_tbody = $("#matchEventByTeamData .matchEventByTeamTable tbody");
+	//初始化 tableMonth 下的 tbody 部分对象
+	var $init_matchCorelativeEvent_tbody = $("#matchCorelativeEventMonth .matchCorelativeEventTableMonth tbody"),
+		//根据比赛节数下的比赛事件的 tableMonth 下的 tbody 数据部分
+		$init_matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterDataMonth .matchCorelativeEventByQuarterTableMonth tbody"),
+		//根据比赛球队下的比赛事件的 tableMonth 下的 tbody 数据部分
+		$init_matchEventByTeam_tbody = $("#matchEventByTeamDataMonth .matchEventByTeamTableMonth tbody");
 	
 	//得到比赛事件对象
-	var $matchEvent = $("#matchEventOuter");
-	//单击比赛节数下的比赛事件操作标识
-	var quarterEventCounts = 1;
+	var $matchEvent = $("#matchEventOuterMonth");
+	
+	var quarterEventCountsMonth = 1;
 	//单击比赛球队下的比赛事件操作标识
-	var teamEventCounts = 1;
+	var teamEventCountsMonth = 1;
 	
 	//将该对象设为 Dialog 对象
 	$matchEvent.dialog({
@@ -1228,8 +1250,8 @@ $(document).ready(function(){
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID();
 				
-				//重置球员数据统计下的 table 中的 tbody 的值
-				$("#matchCorelativeEvent .matchCorelativeEventTable tbody").html($init_matchCorelativeEvent_tbody);
+				//重置球员数据统计下的 tableMonth 中的 tbody 的值
+				$("#matchCorelativeEventMonth .matchCorelativeEventTableMonth tbody").html($init_matchCorelativeEvent_tbody);
 				
 				//执行请求
 				ajaxMethod('matchCorelativeEvent!updateMatchCorelativeEvent.action' ,{
@@ -1242,44 +1264,42 @@ $(document).ready(function(){
 			text: '根据比赛和节数，获取比赛的相关事件',
 			iconCls: 'icon-print',
 			handler: function(){
-				$("#matchEventByTeam").hide();
-				$("#matchCorelativeEvent").hide();
-				
 				//显示该部分信息并隐藏其他部分
-				$("#matchCorelativeEventByQuarter").show();
+				$("#matchEventByTeamMonth").hide();
+				$("#matchCorelativeEventMonth").hide();
+				$("#matchCorelativeEventByQuarterMonth").show();
 				
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID();
 				
 				//重置球员数据统计下的 table 中的 tbody 的值
-				$("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody").html($init_matchEventByQuarter_tbody);
+				$("#matchCorelativeEventByQuarterDataMonth .matchCorelativeEventByQuarterTableMonth tbody").html($init_matchEventByQuarter_tbody);
 
-				updateMatchEvent("matchEventByQuarterLinkButton", 
+				updateMatchEvent("matchEventByQuarterLinkButtonMonth", 
 						"matchEventByQuarter!updateMatchEventByQuarter.action", 
-						scheduleIDs, null, "eventsByQuarter", quarterEventCounts);
+						scheduleIDs, null, "eventsByQuarter", quarterEventCountsMonth);
+				quarterEventCountsMonth++;
 				
-				//记录执行次数的变量
-				quarterEventCounts++;
 			}
 		}, ' ', '-',' ', {
 			text: '根据比赛和球队，获取比赛的相关事件',
 			iconCls: 'icon-print',
 			handler: function(){
-				$("#matchCorelativeEventByQuarter").hide();
-				$("#matchCorelativeEvent").hide();
-				$("#matchEventByTeam").show();
+				$("#matchEventByTeamMonth").show();
+				$("#matchCorelativeEventByQuarterMonth").hide();
+				$("#matchCorelativeEventMonth").hide();
 				
 				//得到选中的赛程编号字符集
 				var scheduleIDs = getCheckedScheduleID(),
 				//得到选中的赛程对象
-				checkedSchedule = table.datagrid("getChecked");
+				checkedSchedule = tableMonth.datagrid("getChecked");
 				
-				 $("#matchEventByTeamData .matchEventByTeamTable tbody").html($init_matchEventByTeam_tbody);
+				 $("#matchEventByTeamDataMonth .matchEventByTeamTableMonth tbody").html($init_matchEventByTeam_tbody);
 				
-				updateMatchEvent("matchEventByTeamLinkButton", 
+				updateMatchEvent("matchEventByTeamLinkButtonMonth", 
 						"matchEventByTeam!updateMatchEventByTeam.action", 
-						scheduleIDs, checkedSchedule, "eventsByTeam", teamEventCounts);
-				teamEventCounts++;
+						scheduleIDs, checkedSchedule, "eventsByTeam", teamEventCountsMonth);
+				teamEventCountsMonth++;
 			}
 		}, ' ', '-',' ', {
 			text: '更多比赛的相关事件',
@@ -1292,7 +1312,7 @@ $(document).ready(function(){
 	});
 	
 	//打开 Dialog 窗口
-	openDialog("matchEvent", "matchEventOuter");
+	openDialog("matchEventMonth", "matchEventOuterMonth");
 	
 	/**
 	 * 具体绑定比赛事件的方法
@@ -1340,14 +1360,14 @@ $(document).ready(function(){
 	function bindMatchCorelativeEvent(json){
 		//定义所需的变量
 			//1、将 json 字符串转为 JQuery 对象
-		var $matchCorelativeEvent = $.parseJSON(json),
+		var $matchCorelativeEventMonth = $.parseJSON(json),
 			//2、event 数组对象
 			matchCorelativeEventArray,
-			//3、比赛的相关事件 中 table 下的 tbody 对象
+			//3、比赛的相关事件 中 tableMonth 下的 tbody 对象
 			matchCorelativeEvent_tbody;
 		
-		matchCorelativeEventArray = $matchCorelativeEvent.Events;
-		matchCorelativeEvent_tbody = $("#matchCorelativeEvent .matchCorelativeEventTable tbody");
+		matchCorelativeEventArray = $matchCorelativeEventMonth.Events;
+		matchCorelativeEvent_tbody = $("#matchCorelativeEventMonth .matchCorelativeEventTableMonth tbody");
 		
 		//绑定比赛事件数据
 		appendMatchCorelativeEvent(matchCorelativeEventArray, matchCorelativeEvent_tbody, "eventsBySchedule");
@@ -1365,11 +1385,11 @@ $(document).ready(function(){
 		var $matchEventByQuarter = $.parseJSON(json),
 		//2、event 数组对象
 		matchEventByQuarterArray,
-		//3、比赛的相关事件 中 table 下的 tbody 对象
+		//3、比赛的相关事件 中 tableMonth 下的 tbody 对象
 		matchEventByQuarter_tbody;
 		
 		matchEventByQuarterArray = $matchEventByQuarter.Events;
-		matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody");
+		matchEventByQuarter_tbody = $("#matchCorelativeEventByQuarterDataMonth .matchCorelativeEventByQuarterTableMonth tbody");
 		
 		//绑定比赛事件数据
 		appendMatchCorelativeEvent(matchEventByQuarterArray, matchEventByQuarter_tbody, "eventsByQuarter");
@@ -1384,14 +1404,14 @@ $(document).ready(function(){
 	function bindMatchEventByTeam(json){
 		//定义所需的变量
 		//1、将 json 字符串转为 JQuery 对象
-		var $matchEventByTeam = $.parseJSON(json),
+		var $matchEventByTeamMonth = $.parseJSON(json),
 		//2、event 数组对象
 		matchEventByTeamArray,
-		//3、比赛的相关事件 中 table 下的 tbody 对象
+		//3、比赛的相关事件 中 tableMonth 下的 tbody 对象
 		matchEventByTeam_tbody;
 		
-		matchEventByTeamArray = $matchEventByTeam.Events;
-		matchEventByTeam_tbody = $("#matchEventByTeamData .matchEventByTeamTable tbody");
+		matchEventByTeamArray = $matchEventByTeamMonth.Events;
+		matchEventByTeam_tbody = $("#matchEventByTeamDataMonth .matchEventByTeamTableMonth tbody");
 		
 		//绑定比赛事件数据
 		appendMatchCorelativeEvent(matchEventByTeamArray, matchEventByTeam_tbody, "eventsByTeam");
@@ -1407,26 +1427,26 @@ $(document).ready(function(){
 	 * param: selectedObj 选中的对象
 	 * param: otherInfo 其他附加信息
 	 */
-	function updateMatchEvent(aID, updateURL, scheduleIDs, selectedObj, otherInfo, handlerCounts){
+	function updateMatchEvent(aID, updateURL, scheduleIDs, selectedObj, otherInfo, handlerEvent){
 				//更新的参数
 			var updateJSONParamObj;
 			
 			//根据比赛和比赛节数，获取比赛事件
 			if(otherInfo === "eventsByQuarter"){
-				$("#quarter").combobox({
+				$("#quarterMonth").combobox({
 					//将选中的
 					onSelect: function(valueObj){
-						$("#quarter").val(valueObj.value);
+						$("#quarterMonth").val(valueObj.value);
 					}
 				});
 			}
 		
 		//根据比赛和比赛球队，获取比赛事件
 		 if(otherInfo === "eventsByTeam"){
-			$("#teamQuarter").combobox({
+			$("#teamQuarterMonth").combobox({
 				//将选中的
 				onSelect: function(valueObj){
-					$("#teamQuarter").val(valueObj.value);
+					$("#teamQuarterMonth").val(valueObj.value);
 				}
 			});
 			
@@ -1443,30 +1463,31 @@ $(document).ready(function(){
 				                   		'TeamCNAlias': selectedObj[0].visitingCNAlias
 				                   	}];
 			}
+			console.info(selectedObjJSON);
 		    //球队下拉框列表
-		    $('#teamID').combobox({  
+		    $('#teamIDMonth').combobox({  
 		    	data: selectedObjJSON,  
 			    valueField:'TeamID',  
 			    textField:'TeamCNAlias',
 				onSelect: function(valueObj){
 					//得到球队id
-					$("#teamID").val(valueObj.value);
+					$("#teamIDMonth").val(valueObj.value);
 				}
 			});  
 		}
 		
 		//得到当前的按钮并绑定单击事件
 		$("#" + aID).on("click", function(){
+			
 			//根据比赛的节数，获得比赛的事件
 			if(otherInfo === "eventsByQuarter"){
-				
-			  if(handlerCounts === 1){
-					//重置球员数据统计下的 table 中的 tbody 的值
-					$("#matchCorelativeEventByQuarterData .matchCorelativeEventByQuarterTable tbody").html($init_matchEventByQuarter_tbody);		
+				if(handlerEvent === 1){
+					//重置球员数据统计下的 tableMonth 中的 tbody 的值
+					$("#matchCorelativeEventByQuarterDataMonth .matchCorelativeEventByQuarterTableMonth tbody").html($init_matchEventByQuarter_tbody);		
 									
 					updateJSONParamObj = {
 						scheduleIDs: scheduleIDs,
-						Quarter: $("#quarter").val(),
+						Quarter: $("#quarterMonth").val(),
 						moduleName: 'live',
 						innerUpdateModule: 'EVENTS_BY_QUARTER'
 					};
@@ -1476,37 +1497,36 @@ $(document).ready(function(){
 			
 			//根据比赛的球队，获得比赛的事件
 			if(otherInfo === "eventsByTeam"){
-				//当 handler 执行多次后，会循环单击次单击的次数，则此时只操作第一次
-				if(handlerCounts === 1){
-					var teamID = $("input[name=teamID]").val();
+				
+				if(handlerEvent === 1){
+					var teamIDMonth = $("input[name=teamIDMonth]").val();
 					
 					updateJSONParamObj = {
 							scheduleIDs: scheduleIDs,
-							Quarter: $("#teamQuarter").val(),
-							teamID: teamID,
+							Quarter: $("#teamQuarterMonth").val(),
+							teamID: teamIDMonth,
 							moduleName: 'live',
 							innerUpdateModule: 'EVENTS_BY_TEAM'
 					};
 					//如果比赛节数不存在，则查询全部的事件
-					if($("#teamQuarter").val() === "" || $("#teamQuarter").val() === null || $("#teamQuarter").val() === undefined){
+					if($("#teamQuarterMonth").val() === "" || $("#teamQuarterMonth").val() === null || $("#teamQuarterMonth").val() === undefined){
 						updateJSONParamObj = {
 								scheduleIDs: scheduleIDs,
-								teamID: teamID,
+								teamID: teamIDMonth,
 								moduleName: 'live',
 								innerUpdateModule: 'EVENTS_BY_TEAM'
 						};
 					}
-					if(teamID === null || teamID  === undefined || teamID === ""){
+					if(teamIDMonth === null || teamIDMonth  === undefined || teamIDMonth === ""){
 						$.messager.alert("提示信息", "请选择更新球队", "info");
 					}else{
-						//重置球员数据统计下的 table 中的 tbody 的值
-						$("#matchEventByTeamData .matchEventByTeamTable tbody").html($init_matchEventByTeam_tbody);		
+						//重置球员数据统计下的 tableMonth 中的 tbody 的值
+						$("#matchEventByTeamDataMonth .matchEventByTeamTableMonth tbody").html($init_matchEventByTeam_tbody);		
 
 						ajaxMethod(updateURL, updateJSONParamObj);
 					}
 				}
-
-			}				
+			}
 		});
 	}
 	/** ----------------------------比赛事件部分 end -------------------------*/
