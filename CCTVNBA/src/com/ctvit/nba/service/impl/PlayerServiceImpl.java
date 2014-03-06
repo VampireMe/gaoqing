@@ -81,11 +81,17 @@ public class PlayerServiceImpl implements PlayerService{
 			
 			//得到球员信息的实体类集合数据
 			if (updateModuleAlias.equals("playerPersonal")) {
-				playerList = PlayerUtil.getPlayerPersonalList(innerUpdateModule, urlJsonObject);
+				playerList = PlayerUtil.getPlayerPersonalList(
+						innerUpdateModule + "," + CommonUtil.getKeyConditions(innerUpdateModuleACondtions), 
+						urlJsonObject);
 			}
 			//得到本场比赛的最佳球员信息
 			if (updateModuleAlias.equals("bestPlayer")) {
-				playerList = URLContentUtil.getTListByURL(moduleName, innerUpdateModule, partURL, url);
+				playerList = URLContentUtil.getTListByURL(
+						moduleName, 
+						innerUpdateModule + "," + CommonUtil.getKeyConditions(innerUpdateModuleACondtions),
+						partURL, 
+						url);
 			}
 		}
 		return playerList;
@@ -133,7 +139,96 @@ public class PlayerServiceImpl implements PlayerService{
 		
 		return updateBestPlayerInfoFlag;
 	}
-	
-	
+
+	@Override
+	public int updateTeamPlayerInfo(String moduleName, String teamID,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String updateModuleAlias,
+			Player player) {
+		//更新标识
+		int updateTeamPlayerInfoFlag = 0;
+		
+		//更新球队下的球员信息
+		updateTeamPlayerInfoFlag = commonUpdatePlayerInfo(moduleName,
+				innerUpdateModuleACondtions, updateModuleAlias);
+		
+		return updateTeamPlayerInfoFlag;
+	}
+
+	@Override
+	public int updatePlayerDetailInfo(String moduleName, String playerID,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String updateModuleAlias, Player player) {
+		//更新标识
+		int updatePlayerDetailInfoFlag = 0;
+		
+		//更新球员详细信息
+		updatePlayerDetailInfoFlag = commonUpdatePlayerInfo(moduleName,
+				innerUpdateModuleACondtions, updateModuleAlias);
+		
+		return updatePlayerDetailInfoFlag;
+	}
+
+	/**
+	 * 通用更新球员信息的方法
+	 * @author 高青
+	 * 2014-2-28
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块和更新条件的 Map 对象
+	 * @param updateModuleAlias 更新模块名称的别名
+	 * @return int updatePlayerInfoFlag 更新球员信息的成功的标识（0：失败；1：成功）
+	 */
+	private int commonUpdatePlayerInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String updateModuleAlias) {
+		//更新标识
+		int updatePlayerInfoFlag = 0;
+		
+		//得到内部更新模块及部分链接地址和最终 URL 对象
+		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		
+		//得到内部更新模块
+		String innerUpdateModule = CommonUtil.getInnerUpdateModule(finalURLMap);
+		//得到 URL 地址及getURL
+		String url = URLUtil.getURL(finalURLMap);
+		//得到 get 部分的链接内容
+		String partURL = URLUtil.getPartGetURL(finalURLMap);
+		//得到内部更新模块和更新条件字符串
+		String innerUpdateModule_otherInfo = innerUpdateModule + "," + CommonUtil.getUpdateConditionNameString(moduleName, innerUpdateModuleACondtions);
+		
+		//得到实体类集
+		List<Player> playerList = URLContentUtil.getTListByURL(moduleName, innerUpdateModule_otherInfo, partURL, url);
+		
+		//更新到数据库中
+		
+		
+		//更新到 XML 中
+		int update2XMLFlag = XMLUtil.encapsulationGenerateXML(
+				moduleName, 
+				innerUpdateModuleACondtions, 
+				playerList, 
+				"com.ctvit.nba.expand.PlayerUtil", 
+				"getPlayerInfoChildrenElementList", 
+				updateModuleAlias);
+		
+		//当更新到 数据库 和 XML 文件都成功时，则此操作才标识更新成功
+		if(update2XMLFlag == 1){
+			updatePlayerInfoFlag = 1;
+		}
+		return updatePlayerInfoFlag;
+	}
+
+	@Override
+	public int updatePlayerAvgStat(String moduleName, String playerID,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String updateModuleAlias, Player player) {
+		//更新球员均场数据统计标识
+		int updatePlayerAvgStatFlag = 0;
+		
+		//更新球员场均数据统计
+		updatePlayerAvgStatFlag = commonUpdatePlayerInfo(moduleName, innerUpdateModuleACondtions, updateModuleAlias);
+		
+		return updatePlayerAvgStatFlag;
+	}
 
 }

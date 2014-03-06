@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</li>
 				<li id="nba_index_team">
 					<div>
-						<a href = "testmyaction!log4jNBA.action" target="_blank">球&nbsp;队&nbsp;信&nbsp;息&nbsp;更&nbsp;新</a>
+						<a href = "<%=basePath %>nba/teamInfo/teamInfo.jsp" target="_blank">球&nbsp;队&nbsp;信&nbsp;息&nbsp;更&nbsp;新</a>
 					</div>
 				</li>
 				<li id="nba_index_rank">

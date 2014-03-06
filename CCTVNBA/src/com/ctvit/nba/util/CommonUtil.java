@@ -9,12 +9,45 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import com.sun.tracing.dtrace.ModuleName;
+
 /**
  * 常用方法类
  * @author 高青
  * 2014-1-13
  */
 public class CommonUtil {
+	
+	/**
+	 * 得到更新条件（key）名称的字符串
+	 * @author 高青
+	 * 2014-2-27
+	 * @param <T> 泛型类型
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleAConditionMap 内部更新模块和更新条件的 Map 对象
+	 * @return String
+	 */
+	public static <T> String getUpdateConditionNameString(String moduleName, Map<String, Map<String, T>> innerUpdateModuleAConditionMap){
+		//更新条件的字符串
+		String keyConditions = "";
+		
+		//得到内部更新模块
+		String innerUpdateModule = CommonUtil.getMapKey(innerUpdateModuleAConditionMap);
+		
+		//得到更新条件的 map 对象
+		Map<String, T> updateConditionMap = innerUpdateModuleAConditionMap.get(innerUpdateModule);
+		
+		String partURL = URLUtil.getModulePartURL(moduleName).get(innerUpdateModule);
+		
+		//存在更新条件时
+		if (updateConditionMap.size() != 0) {
+			keyConditions = CommonUtil.getKeyConditions(innerUpdateModuleAConditionMap);
+		}else {
+			String deleteGetPart = partURL.substring(3, partURL.length());
+			keyConditions = deleteGetPart.substring(0, 1).toLowerCase() + deleteGetPart.substring(1, deleteGetPart.length());
+		}		
+		return keyConditions;
+	}
 	
 	/**
 	 * 得到内部更新模块的名称
@@ -34,6 +67,26 @@ public class CommonUtil {
 			innerUpdateModule = array[0];
 		}
 		return innerUpdateModule;
+	}
+	
+	/**
+	 * 得到其他附加信息
+	 * @author 高青
+	 * 2014-2-24
+	 * @param innerUpdateModule_otherInfo 内部更新模块和其他信息字符串 
+	 * @return otherInfo 其他附加信息
+	 */
+	public static String getOtherInfo(String innerUpdateModule_otherInfo){
+		//内部更新模块的名称
+		String otherInfo = "";
+		
+		if (innerUpdateModule_otherInfo != null && !innerUpdateModule_otherInfo.isEmpty()) {
+			String[] array = innerUpdateModule_otherInfo.split(",");
+			
+			//数组中的第一个就是内部更新模块
+			otherInfo = array[1];
+		}
+		return otherInfo;
 	}
 	
 	/**
@@ -77,6 +130,10 @@ public class CommonUtil {
 					//类型是 String 时：
 					}else if (firstWordOfDataType.equals("s") || firstWordOfDataType.equals("S")) {
 						value = jsonObject.getString(key);
+					
+					//类型是 long 时：
+					}else if(firstWordOfDataType.equalsIgnoreCase("l")){
+						value = String.valueOf(jsonObject.getLong(key));
 					}
 				}
 			}
@@ -145,6 +202,15 @@ public class CommonUtil {
 			} else {
 				result = Integer.toString((Integer) t);
 			}
+		}else if (t instanceof Double) {
+			//当前值为空时
+			if (t.equals("") || t.equals(null) || t == null) {
+				result = "0.0";
+			
+			//不为空时
+			} else {
+				result = String.valueOf(t);
+			}
 		}
 		//当没有传递参数时，即不存在时
 		if (t == null) {
@@ -154,7 +220,7 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * <p>根据  key 的值，得到  JSONObject 对象中相应的值 </p>
+	 * <p>根据  key 的值，得到  JSONObject 对象中相应整数值 </p>
 	 * 处理从 JSONObject 对象中取数值时的异常 
 	 * @author 高青
 	 * 2013-12-3
@@ -165,14 +231,48 @@ public class CommonUtil {
 	public static Integer getIntegerValueByKey(JSONObject jsonObject, String key){
 		int value = 0;
 		
-		//当前  key 下的值
-		Object keyValue = jsonObject.get(key);
-		
-		//当 当前的值为 null 时，就赋予当前的 value = 0；否则，是其  keyValue 值
-		if (keyValue == null || keyValue.toString().equals("null")) {
+		//首先判断当前 key 的值是否为 Null
+		if (jsonObject.isNull(key)) {
 			value = 0;
 		} else {
-			value = (Integer)keyValue;
+			//当前  key 下的值
+			Object keyValue = jsonObject.get(key);
+			
+			//当 当前的值为 null 时，就赋予当前的 value = 0；否则，是其  keyValue 值
+			if (keyValue == null || keyValue.toString().equals("null")) {
+				value = 0;
+			} else {
+				value = (Integer)keyValue;
+			}
+		}
+		return value;
+	}
+	
+	/**
+	 * <p>根据  key 的值，得到  JSONObject 对象中相应的 double 值 </p>
+	 * 处理从 JSONObject 对象中取数值时的异常 
+	 * @author 高青
+	 * 2013-12-3
+	 * @param jsonObject 封装数据的 JSONObject 对象
+	 * @param key key的值
+	 * @return value 根据 key 值得到的结果值
+	 */
+	public static Double getDoubleValueByKey(JSONObject jsonObject, String key){
+		Double value = 0.0;
+		
+		//首先判断当前 key 的值是否为 Null
+		if (jsonObject.isNull(key)) {
+			value = 0.0;
+		} else {
+			//当前  key 下的值
+			Object keyValue = jsonObject.get(key);
+			
+			//当 当前的值为 null 时，就赋予当前的 value = 0；否则，是其  keyValue 值
+			if (keyValue == null || keyValue.toString().equals("null")) {
+				value = 0.0;
+			} else {
+				value = (Double)keyValue;
+			}
 		}
 		return value;
 	}
@@ -224,22 +324,22 @@ public class CommonUtil {
 	 * @author 高青
 	 * 2014-1-14
 	 * @param <T> 泛型类型
-	 * @param uniqueRemarkerAndConditionMap 内部更新模块名称和查询条件map对象的集合数据
+	 * @param innerUpdateModuleAConditionMap 内部更新模块名称和查询条件map对象的集合数据
 	 * @return conditionRemarker 更新条件的字符串集
 	 */
-	public static <T> String getConditionRemarker(Map<String, Map<String, T>> uniqueRemarkerAndConditionMap){
+	public static <T> String getConditionRemarker(Map<String, Map<String, T>> innerUpdateModuleAConditionMap){
 		//查询条件标识 
 		String conditionRemarker = "";
 		
 		//得到更新模块标识
-		String updateModuleName = getMapKey(uniqueRemarkerAndConditionMap);
+		String updateModuleName = getMapKey(innerUpdateModuleAConditionMap);
 		
 		//得到查询条的  Map 对象
-		Map<String, T> conditionMap = uniqueRemarkerAndConditionMap.get(updateModuleName);
+		Map<String, T> conditionMap = innerUpdateModuleAConditionMap.get(updateModuleName);
 		//判断 查询条件的  Map 对象是否为空
 		if (conditionMap.size() == 0) {
 			//当前查询条件为空的时候，说明当前访问链接中，就不存在查询条件，则查询条件标识就是当前的 链接标识（）
-			
+			conditionRemarker = "";
 			
 		//查询条件的  Map 对象不为空时：
 		} else {
@@ -249,9 +349,9 @@ public class CommonUtil {
 				T t = conditionMap.get(condition);
 				conditionRemarker += t.toString() + "-";
 			}
+			//取消最后一个“-”
+			conditionRemarker = conditionRemarker.substring(0, conditionRemarker.length() - 1);
 		}
-		//取消最后一个“-”
-		conditionRemarker = conditionRemarker.substring(0, conditionRemarker.length() - 1);
 		
 		return conditionRemarker;
 	}

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.PlayerEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
+import com.ctvit.nba.expand.TeamEnum;
 
 /**
  * 链接地址的部分地址获取常用类
@@ -107,6 +108,9 @@ public class URLUtil {
 		
 		//球员信息 get部分链接地址
 		mapObject.put("player", playerMap());
+		
+		//球队信息 get 部分链接地址
+		mapObject.put("team", teamMap());
 		
 		return mapObject;
 	}
@@ -223,7 +227,31 @@ public class URLUtil {
 		return finalURLMap;
 	}
 	
-	public static Map<String, String> playerMap(){
+	private static Map<String, String> teamMap(){
+		//初始化 球队信息 的 Map 对象
+		Map<String, String> teamMap = new HashMap<String, String>();	
+		
+		//读取联赛全部球队列表
+		teamMap.put(TeamEnum.ALL_TEAMS.toString(), "GetAllTeams");
+		//读取全分区球队
+		teamMap.put(TeamEnum.DIVISION_TEAMS.toString(), "GetDivisionTeams");
+		//读取球队排名，全分区排名
+		teamMap.put(TeamEnum.DIVISION_TEAM_STANDINGS.toString(), "GetDivisionTeamStandings");
+		//读取球队排名，东西部联盟排名
+		teamMap.put(TeamEnum.CONFERENCE_TEAM_STANDINGS.toString(), "GetConferenceTeamStandings");
+		//本赛季东西部球队排行榜
+		teamMap.put(TeamEnum.TEAM_STANDINGS.toString(), "GetTeamStandings");
+		//当前赛季全区所有球队信息
+		teamMap.put(TeamEnum.ORDER_TEAM.toString(), "GetOrderTeam");
+		//当前赛季今天已统计球队信息
+		teamMap.put(TeamEnum.ORDER_TEAM_TODAY.toString(), "GetOrderTeamToday");
+		//获取球队排名信息以及球队的赛程
+		teamMap.put(TeamEnum.TEAM.toString(), "GetTeam");
+		
+		return teamMap;
+	}
+	
+	private static Map<String, String> playerMap(){
 		//初始化 球员信息 的 Map 对象
 		Map<String, String> playerMap = new HashMap<String, String>();
 		
@@ -266,7 +294,7 @@ public class URLUtil {
 	 * 2014-01-09
 	 * @return liveMap 封装后的直播get部分链接地址 Map 对象
 	 */
-	public static Map<String, String> liveMap(){
+	private static Map<String, String> liveMap(){
 		//初始化 Map 对象
 		Map<String, String> liveMap = new HashMap<String, String>();
 		
@@ -312,7 +340,7 @@ public class URLUtil {
 	 * 2013-12-4
 	 * @return schedulePartURLMap 封装后的赛程get部分链接地址的 Map 对象
 	 */
-	public static Map<String, String> scheduleMap(){
+	private static Map<String, String> scheduleMap(){
 		//初始化对象
 		Map<String, String> schedulePartURLMap = new HashMap<String, String>();
 		

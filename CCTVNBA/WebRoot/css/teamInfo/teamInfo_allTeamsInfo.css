@@ -1,0 +1,299 @@
+
+/**
+* 所有球队信息页面的样式
+* author: 高青
+* date: 2013-02-25
+* version: 0.0.0.1
+*/
+
+/** 数据更新操作按钮区 div 样式 */
+#allTeamInfo_control{
+	width: 80%;
+	height: 30px;
+	margin: 20px 60px 5px;	
+}
+
+/** 数据显示区 div 样式 */
+#allTeamInfo_data{
+	width:95%;
+	height:460px;
+	margin: 10px 50px 10px;
+}
+
+/******** 球队下的球员信息  Start **********/
+
+/** 操作区  div 样式 */
+#playerInfoCon{
+	width: 95%;
+	hegith: 30px;
+	margin: 15px 35px 10px; 
+	display: none;
+}
+
+/** 数据区 div 样式 */
+#playerInfoData{
+	width: 95%;
+	margin: 10px 20px 10px; 
+	display: none;
+}
+
+/** ----- 球员的详细信息 Start ------ */
+/** 内部的 div  */
+#playerDetailInfoInner{
+	width: 95%;
+	margin: 30px 30px;
+	display: none;
+}
+
+/** 基本信息模块 */
+#playerDetailBasicInfo{
+	width: 300px;
+	height: 100px;
+	margin: 10px 10px;
+	background-color: #FAFBFF;
+	box-shadow: 4px 4px 5px #DEDEDE;
+	float: left;
+}
+
+/** 球员数据统计模块 */
+#playerDetailStat{
+	width: 300px;
+	height: 100px;
+	background-color: #FAFBFF;
+	margin: 10px 10px;
+	box-shadow: 4px 4px 5px #DEDEDE; 
+	float: left;
+}
+
+/** 内层的 div 的样式 */
+#playerAvgStatInner{
+	display: none;
+}
+
+/** 球员均场数据统计信息--第七场  */
+#theSeventh{
+	width: 650px;
+	height: 120px;
+	background-color: #FAFBFF;
+	margin: 10px 10px;
+	box-shadow: 4px 4px 5px #DEDEDE; 
+}
+/** 球员均场数据统计信息--第十五场  */
+#theFifteen{
+	width: 650px;
+	height: 120px;
+	background-color: #FAFBFF;
+	margin: 10px 10px;
+	box-shadow: 4px 4px 5px #DEDEDE; 
+}
+/** 球员均场数据统计信息--第三十场  */
+#theThirty{
+	width: 650px;
+	height: 120px;
+	background-color: #FAFBFF;
+	margin: 10px 10px;
+	box-shadow: 4px 4px 5px #DEDEDE; 
+}
+/** 球员均场数据统计信息--所有场  */
+#theAll{
+	width: 650px;
+	height: 120px;
+	background-color: #FAFBFF;
+	margin: 10px 10px;
+	box-shadow: 4px 4px 5px #DEDEDE; 
+}
+
+/** 球队排名及赛程信息模块 */
+#teamRankAScheduleInner{
+	display: none;
+}
+
+/** 球队排名信息下的表格样式  */
+
+	/** 外层 DIV 样式 */
+	#teamRankInfo{
+		margin: 10px auto;
+		width: 95%;
+		height: 100px;
+	}
+	
+	.teamRankInfoTable {  
+    *border-collapse: collapse; /* IE7 and lower */  
+    border-spacing: 0;  
+    width: 100%;  
+    
+    border: solid #ccc 1px;  
+    -moz-border-radius: 6px;  
+    -webkit-border-radius: 6px;  
+    border-radius: 6px;  
+    -webkit-box-shadow: 1px 2px 2px #888888;  
+    -moz-box-shadow: 1px 2px 2px #888888;  
+    box-shadow: 1px 2px 2px #888888;  
+    }  
+      
+    .teamRankInfoTable tr:hover {  
+    background: #fbf8e9;  
+    -o-transition: all 0.1s ease-in-out;  
+    -webkit-transition: all 0.1s ease-in-out;  
+    -moz-transition: all 0.1s ease-in-out;  
+    -ms-transition: all 0.1s ease-in-out;  
+    transition: all 0.1s ease-in-out;  
+    }  
+      
+    .teamRankInfoTable td, .teamRankInfoTable th {  
+    border-left: 1px solid #ccc;  
+    border-top: 1px solid #ccc;  
+    padding: 6px;  
+    }  
+      
+    .teamRankInfoTable th {  
+    background-color: #dce9f9;  
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    border-top: none;  
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+    }  
+      
+    .teamRankInfoTable td:first-child, .teamRankInfoTable th:first-child {  
+    border-left: none;  
+    }  
+      
+    .teamRankInfoTable th:first-child {  
+    -moz-border-radius: 6px 0 0 0;  
+    -webkit-border-radius: 6px 0 0 0;  
+    border-radius: 6px 0 0 0;  
+    }  
+      
+    .teamRankInfoTable th:last-child {  
+    -moz-border-radius: 0 6px 0 0;  
+    -webkit-border-radius: 0 6px 0 0;  
+    border-radius: 0 6px 0 0;  
+    }  
+      
+    .teamRankInfoTable th:only-child{  
+    -moz-border-radius: 6px 6px 0 0;  
+    -webkit-border-radius: 6px 6px 0 0;  
+    border-radius: 6px 6px 0 0;  
+    }  
+      
+    .teamRankInfoTable tr:last-child td:first-child {  
+    -moz-border-radius: 0 0 0 6px;  
+    -webkit-border-radius: 0 0 0 6px;  
+    border-radius: 0 0 0 6px;  
+    }  
+      
+    .teamRankInfoTable tr:last-child td:last-child {  
+    -moz-border-radius: 0 0 6px 0;  
+    -webkit-border-radius: 0 0 6px 0;  
+    border-radius: 0 0 6px 0;  
+    } 
+
+	/** 球队赛程信息下的表格样式  */
+	
+	/** 外层 DIV 样式 */
+	#teamScheduleInfo{
+		margin: 10px auto;
+		width: 95%;
+	}
+	.teamScheduleInfoTable {  
+    *border-collapse: collapse; /* IE7 and lower */  
+    border-spacing: 0;  
+    width: 100%;  
+    
+    border: solid #ccc 1px;  
+    -moz-border-radius: 6px;  
+    -webkit-border-radius: 6px;  
+    border-radius: 6px;  
+    -webkit-box-shadow: 1px 2px 2px #888888;  
+    -moz-box-shadow: 1px 2px 2px #888888;  
+    box-shadow: 1px 2px 2px #888888;  
+    }  
+      
+    .teamScheduleInfoTable tr:hover {  
+    background: #fbf8e9;  
+    -o-transition: all 0.1s ease-in-out;  
+    -webkit-transition: all 0.1s ease-in-out;  
+    -moz-transition: all 0.1s ease-in-out;  
+    -ms-transition: all 0.1s ease-in-out;  
+    transition: all 0.1s ease-in-out;  
+    }  
+      
+    .teamScheduleInfoTable td, .teamScheduleInfoTable th {  
+    border-left: 1px solid #ccc;  
+    border-top: 1px solid #ccc;  
+    padding: 6px;  
+    }  
+      
+    .teamScheduleInfoTable th {  
+    background-color: #dce9f9;  
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));  
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);  
+    background-image: linear-gradient(top, #ebf3fc, #dce9f9);  
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  
+    border-top: none;  
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);  
+    }  
+      
+    .teamScheduleInfoTable td:first-child, .teamScheduleInfoTable th:first-child {  
+    border-left: none;  
+    }  
+      
+    .teamScheduleInfoTable th:first-child {  
+    -moz-border-radius: 6px 0 0 0;  
+    -webkit-border-radius: 6px 0 0 0;  
+    border-radius: 6px 0 0 0;  
+    }  
+      
+    .teamScheduleInfoTable th:last-child {  
+    -moz-border-radius: 0 6px 0 0;  
+    -webkit-border-radius: 0 6px 0 0;  
+    border-radius: 0 6px 0 0;  
+    }  
+      
+    .teamScheduleInfoTable th:only-child{  
+    -moz-border-radius: 6px 6px 0 0;  
+    -webkit-border-radius: 6px 6px 0 0;  
+    border-radius: 6px 6px 0 0;  
+    }  
+      
+    .teamScheduleInfoTable tr:last-child td:first-child {  
+    -moz-border-radius: 0 0 0 6px;  
+    -webkit-border-radius: 0 0 0 6px;  
+    border-radius: 0 0 0 6px;  
+    }  
+      
+    .teamScheduleInfoTable tr:last-child td:last-child {  
+    -moz-border-radius: 0 0 6px 0;  
+    -webkit-border-radius: 0 0 6px 0;  
+    border-radius: 0 0 6px 0;  
+    } 
+
+/** ----- 球员的详细信息 end ------ */
+
+/******** 球队下的球员信息  end **********/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

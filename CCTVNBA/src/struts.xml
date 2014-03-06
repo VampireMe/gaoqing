@@ -100,7 +100,59 @@
         
         <!-- 更新赛程  End -->
         
+        <!-- ********************************************* -->
+        <!-- 更新球队信息 Start -->
         
+        <!-- 联盟所有球队信息 -->
+         <action name="allTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到联盟所有球队信息 -->
+         <action name="getAllTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 更新联盟所有球队信息 -->
+         <action name="specifyTeamPlayerInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到联盟球队下的球员信息 -->
+         <action name="getTeamPlayerInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 更新球员详细信息 -->
+         <action name="updatePlayerDetail" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>  
+         
+        <!-- 更新球员场均统计信息 -->
+         <action name="updatePlayerDetailAvgStat" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>  
+         
+        <!-- 更新球队排名及赛程信息 -->
+         <action name="updateTeamRankASchedule" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 全分区球队信息 -->
+         <action name="divisionTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 更新球队信息 Start -->
+             
     </package>
     <!-- Add packages here -->
 

@@ -3,7 +3,7 @@
  */
 package com.ctvit.nba.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 球员信息的实体类
@@ -11,6 +11,9 @@ import java.sql.Date;
  * 2014-1-20
  */
 public class Player {
+	/** 主键 */
+	private String pID;
+	
 	/** 球员ID */
 	private String playerID;
 	
@@ -82,6 +85,9 @@ public class Player {
 	
 	/** 球衣号码 */
 	private String playerNumber;
+	
+	/** 球员年龄 */
+	private Integer age;
 	
 	/** 身高 */
 	private String height;
@@ -205,6 +211,16 @@ public class Player {
 	
 	/** 内部更新模块 */
 	private String innerUpdateModule;
+	
+	/** @return the pID */
+	public String getpID() {
+		return pID;
+	}
+
+	/** @param pID the pID to set */
+	public void setpID(String pID) {
+		this.pID = pID;
+	}
 
 	/** @return the playerID */
 	public String getPlayerID() {
@@ -854,6 +870,36 @@ public class Player {
 	/** @param innerUpdateModule 内部更新模块 */
 	public void setInnerUpdateModule(String innerUpdateModule) {
 		this.innerUpdateModule = innerUpdateModule;
+	}
+
+	/** @return the sPortrait */
+	public String getsPortrait() {
+		return sPortrait;
+	}
+
+	/** @param sPortrait the sPortrait to set */
+	public void setsPortrait(String sPortrait) {
+		this.sPortrait = sPortrait;
+	}
+
+	/** @return the lPortrait */
+	public String getlPortrait() {
+		return lPortrait;
+	}
+
+	/** @param lPortrait the lPortrait to set */
+	public void setlPortrait(String lPortrait) {
+		this.lPortrait = lPortrait;
+	}
+
+	/** @return the age */
+	public Integer getAge() {
+		return age;
+	}
+
+	/** @param age the age to set */
+	public void setAge(Integer age) {
+		this.age = age;
 	}
 	
 }

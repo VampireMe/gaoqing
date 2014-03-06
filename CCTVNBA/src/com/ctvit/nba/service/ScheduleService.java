@@ -20,7 +20,7 @@ public interface ScheduleService {
 	 * @author 高青
 	 * 2013-11-28
 	 * @param moduleName 当前模块名称
-	 * @param mapParam 参数 Map 对象
+	 * @param uniqueRemarkerAndConditionMap 链接唯一标识和更新条件的 Map 对象
 	 * @param tRemarkerAndParamsMap 更新唯一标识和查询条件map对象的集合数据
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
@@ -30,6 +30,7 @@ public interface ScheduleService {
 	 * 赛程维护操作
 	 * @author 高青
 	 * 2014-1-2
+	 * @param moduleName 模块名称
 	 * @param uniqueRemarkerAndConditionMap 更新唯一标识和查询条件map对象的集合数据
 	 * @param tRemarkerAndParamsMap 实体类唯一标识和具体实体类封装的参数
 	 * @return int 更新成功标识（0：失败；1：成功）

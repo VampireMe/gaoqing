@@ -1,0 +1,42 @@
+
+/**
+* 球队信息页面的样式
+* author: 高青
+* date: 2013-02-25
+* version: 0.0.0.1
+*/
+
+/*tabs 最外层 div 样式*/
+#teamInfo_outerFrameID{
+	width: 800px;
+	height: 700px;
+	margin: 30px auto;
+	background-color: #CDAA7D;
+}
+
+/*所有球队信息 div 样式*/
+#teamInfo_allTeamInfo{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}
+
+/*已统计球队信息 div 样式*/
+#teamInfo_statisticTeamInfo{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

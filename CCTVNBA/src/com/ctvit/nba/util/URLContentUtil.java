@@ -55,24 +55,33 @@ public class URLContentUtil {
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
-	 * @param innerUpdateModule 更新方式
+	 * @param innerUpdateModule_otherInfo 更新方式和其他附加信息字符串
 	 * @param partURL 部分链接地址
 	 * @param url 完整链接地址和
 	 * @return tlist 相应类型的数据对象
 	 */
-	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule, String partURL, String url){
+	public static <T> List<T> getTListByURL(String moduleName, String innerUpdateModule_otherInfo, String partURL, String url){
 		//初始化对象
 		List<T> tlist = new ArrayList<T>();
 		
 		try {
-			//得到  jsonArray 对象
-			JSONArray tJsonArray = getJsonArray(url,partURL);
+			//得到更新的模块名称
+			String innerUpdateModule = CommonUtil.getInnerUpdateModuleName(innerUpdateModule_otherInfo);
+			JSONArray tJsonArray = null;
+			
+			//球员详细信息模块
+			if ("PLAYER_DETAIL".equals(innerUpdateModule)) {
+				tJsonArray = getData2JsonArray(url, partURL);
+			} else {
+				//得到  jsonArray 对象
+				tJsonArray = getJsonArray(url,partURL);
+			}
 			
 			for (int i = 0; i < tJsonArray.length(); i++) {
 				//得到一个 JSONObject 对象
 				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
 				
-				T t = getEntityByJSONObject(jsonObject, moduleName, innerUpdateModule);
+				T t = getEntityByJSONObject(jsonObject, moduleName, innerUpdateModule_otherInfo);
 				
 				//将当前的  Schedule 对象，放到 List<Schedule> 中
 				tlist.add(t);
@@ -90,10 +99,10 @@ public class URLContentUtil {
 	 * @param <T> 动态实体类
 	 * @param jsonObject 封装数据的JSONArray对象
 	 * @param moduleName 模块名称
-	 * @param innerUpdateModule 更新方式
+	 * @param innerUpdateModule_otherInfo 更新方式和其他附加信息
 	 * @return T
 	 */
-	private static <T> T getEntityByJSONObject(JSONObject jsonObject, String moduleName, String innerUpdateModule) throws Exception {
+	private static <T> T getEntityByJSONObject(JSONObject jsonObject, String moduleName, String innerUpdateModule_otherInfo) throws Exception {
 		T t = null;
 		//包的前缀名
 		String packagePrefixName = CommonUtil.getPath("packagePrefixName");
@@ -115,7 +124,7 @@ public class URLContentUtil {
 		
 		//调用特定的方法
 		Method getMethod = forNameClass.getMethod(invokeMethodName,  String.class, JSONObject.class);		
-		t = (T) getMethod.invoke(t, innerUpdateModule, jsonObject);		
+		t = (T) getMethod.invoke(t, innerUpdateModule_otherInfo, jsonObject);		
 				
 		return t;
 	}
@@ -140,8 +149,38 @@ public class URLContentUtil {
 			
 			//得到 JSONArray 对象的  key 值，其中  key 的值是    partURL 去掉  “Get” 的部分
 			String jsonArrayMarker = partURL.substring(3);
-			
 			jsonArray = jsonObject.getJSONArray(jsonArrayMarker);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} 
+		return jsonArray;
+	}
+	
+	/**
+	 * 通过  字符串的 json 数据，得到其相应数据后，将其转为的  jsonArray 对象
+	 * @author 高青
+	 * 2013-12-2
+	 * @param url  json 字符串
+	 * @return jsonArray JSONArray对象
+	 */
+	public static JSONArray getData2JsonArray(String url, String partURL){
+		//初始化数据
+		JSONArray jsonArray = new JSONArray();
+		
+		try {
+			//根据 url 地址，得到链接后的   json 数据
+			String jsonData = URLContentUtil.getURLContent(url);
+			
+			//将 json 字符串转成JSONObject
+			JSONObject jsonObject = new JSONObject(jsonData);
+			
+			//得到 JSONArray 对象的  key 值，其中  key 的值是    partURL 去掉  “Get” 的部分
+			String jsonArrayMarker = partURL.substring(3);
+			
+			if (jsonObject.get(jsonArrayMarker) != null) {
+				//将JSONObject 对象放到 JSONArray 中
+				jsonArray.put(jsonObject.get(jsonArrayMarker));
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} 
