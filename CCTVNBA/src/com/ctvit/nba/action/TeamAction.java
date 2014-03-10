@@ -71,6 +71,61 @@ public class TeamAction extends BaseAction{
 	}
 	
 	/**
+	 * 得到统计球队信息数据
+	 * @author 高青
+	 * 2014-3-10
+	 * @return void 空
+	 */
+	public void getStatisticTeamInfo(){
+		//得到更新条件
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		//得到 url 的数据
+		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		String url = URLUtil.getURL(finalURLMap);
+		String initJSON = URLContentUtil.getURLContent(url);
+		
+		//得到 JSON 数组
+		JSONObject initJsonObject = new JSONObject(initJSON);
+		
+		//得到 AllTeams 的 JSONArray 对象
+		JSONArray statisticTeamInfoArray = initJsonObject.getJSONArray("OrderTeamToday");
+		
+		if(statisticTeamInfoArray != null && statisticTeamInfoArray.length() != 0){
+			json = statisticTeamInfoArray.toString();
+		}else {
+			json = 0 + "";
+		}
+		//写到前台
+		writeJson2Web(json);		
+	}
+	
+	/**
+	 * 更新已统计球队信息 
+	 * @author 高青
+	 * 2014-3-10
+	 * @return void 空
+	 */
+	public void updateStatisticTeamInfo(){
+		//更新已统计球队的信息
+		int updateStatisticTeamInfoFlag = 0;
+		
+		//得到更新条件信息
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		updateStatisticTeamInfoFlag = teamService.updateStatisticTeamInfo(
+				moduleName, 
+				null, 
+				innerUpdateModuleACondtions, 
+				"orderTeamToday", 
+				new Team());
+		
+		//将更新后的结果反馈到前台
+		json = updateStatisticTeamInfoFlag + "";
+		writeJson2Web(json);
+	}
+	
+	/**
 	 * 更新球队的排行信息及赛程信息
 	 * @author 高青
 	 * 2014-03-05
@@ -354,7 +409,8 @@ public class TeamAction extends BaseAction{
 						sepcifyMethod = t.getClass().getMethod(methodName, String.class, String.class, Map.class, String.class, Player.class);
 						//调用当前方法
 						commonUpdateFlag = (Integer) sepcifyMethod.invoke(t, moduleName, selectedID, innerUpdateModuleACondtions, updateModuleAlias, player);
-					}else if("team".equals(updateModuleAlias)){
+					}else if(
+							"team".equals(updateModuleAlias)){
 						//得到指定的方法
 						sepcifyMethod = t.getClass().getMethod(methodName, String.class, String.class, Map.class, String.class, Team.class);
 						//调用当前方法

@@ -151,6 +151,18 @@
             </result>
         </action>   
         
+        <!-- 更新已统计球队信息 -->
+         <action name="updateStatisticTeamInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到已统计球队信息 -->
+         <action name="getStatisticTeamInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
         <!-- 更新球队信息 Start -->
              
     </package>

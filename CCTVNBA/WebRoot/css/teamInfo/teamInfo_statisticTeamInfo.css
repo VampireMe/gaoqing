@@ -1,0 +1,19 @@
+/**
+* 已统计球队信息
+* @author 高青
+* 2014-03-10
+*/
+
+/** 操作部分的外层 div 样式 */
+#statisticTeamInfoCon{
+	width: 90%;
+	height: 30px;
+	margin: 20px auto 10px;
+}
+
+/** 数据部分的外层 div 样式 */
+#statisticTeamInfoData{
+	width: 90%;
+	margin: 10px auto;
+	display: none;
+}

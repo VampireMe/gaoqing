@@ -61,13 +61,13 @@ public enum TeamEnum {
 				return TeamEnum.DIVISION_TEAM_STANDINGS;
 			}else if ("CONFERENCE_TEAM_STANDINGS".equals(innerUpdateModule)) {
 				return TeamEnum.CONFERENCE_TEAM_STANDINGS;
-			}else if ("".equals(innerUpdateModule)) {
+			}else if ("TEAM_STANDINGS".equals(innerUpdateModule)) {
 				return TeamEnum.TEAM_STANDINGS;
-			}else if ("".equals(innerUpdateModule)) {
+			}else if ("ORDER_TEAM".equals(innerUpdateModule)) {
 				return TeamEnum.ORDER_TEAM;
-			}else if ("".equals(innerUpdateModule)) {
+			}else if ("ORDER_TEAM_TODAY".equals(innerUpdateModule)) {
 				return TeamEnum.ORDER_TEAM_TODAY;
-			}else if ("".equals(innerUpdateModule)) {
+			}else if ("TEAM".equals(innerUpdateModule)) {
 				return TeamEnum.TEAM;
 			}
 		}

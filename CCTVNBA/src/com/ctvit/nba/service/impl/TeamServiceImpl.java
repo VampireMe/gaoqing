@@ -31,7 +31,7 @@ public class TeamServiceImpl implements TeamService{
 		int updateAllTeamsInfoFlag = 0;
 		
 		//更新信息
-		updateAllTeamsInfoFlag = commonUpdatePlayerInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		updateAllTeamsInfoFlag = commonUpdateTeamInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
 		
 		return updateAllTeamsInfoFlag;
 	}
@@ -65,11 +65,11 @@ public class TeamServiceImpl implements TeamService{
 	 * @param updateModuleAlias 更新模块名称的别名
 	 * @return int updatePlayerInfoFlag 更新球员信息的成功的标识（0：失败；1：成功）
 	 */
-	private int commonUpdatePlayerInfo(String moduleName,
+	private int commonUpdateTeamInfo(String moduleName,
 			Map<String, Map<String, String>> innerUpdateModuleACondtions,
 			String updateModuleAlias) {
 		//更新标识
-		int updatePlayerInfoFlag = 0;
+		int updateTeamInfoFlag = 0;
 		
 		//得到内部更新模块及部分链接地址和最终 URL 对象
 		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
@@ -84,7 +84,7 @@ public class TeamServiceImpl implements TeamService{
 		String innerUpdateModule_otherInfo = innerUpdateModule + "," + CommonUtil.getUpdateConditionNameString(moduleName, innerUpdateModuleACondtions);
 		
 		//得到实体类集
-		List<Player> playerList = URLContentUtil.getTListByURL(moduleName, innerUpdateModule_otherInfo, partURL, url);
+		List<Team> teamList = URLContentUtil.getTListByURL(moduleName, innerUpdateModule_otherInfo, partURL, url);
 		
 		//更新到数据库中
 		
@@ -92,16 +92,28 @@ public class TeamServiceImpl implements TeamService{
 		int update2XMLFlag = XMLUtil.encapsulationGenerateXML(
 				moduleName, 
 				innerUpdateModuleACondtions, 
-				playerList, 
+				teamList, 
 				"com.ctvit.nba.expand.TeamUtil", 
 				"getTeamElementList", 
 				updateModuleAlias);
 		
 		//当更新到 数据库 和 XML 文件都成功时，则此操作才标识更新成功
 		if(update2XMLFlag == 1){
-			updatePlayerInfoFlag = 1;
+			updateTeamInfoFlag = 1;
 		}
-		return updatePlayerInfoFlag;
+		return updateTeamInfoFlag;
+	}
+
+	@Override
+	public int updateStatisticTeamInfo(String moduleName, String teamIDs,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, Team team) {
+		//更新已统计球队信息的标识
+		int updateStatisticTeamInfoFlag = 0;
+		
+		updateStatisticTeamInfoFlag = commonUpdateTeamInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		
+		return updateStatisticTeamInfoFlag;
 	}
 
 }

@@ -6,6 +6,8 @@ package com.ctvit.nba.expand;
 import java.util.ArrayList;
 import java.util.List;
 
+import oracle.net.aso.i;
+
 import org.jdom2.Element;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +50,32 @@ public class TeamUtil {
 		if ("TEAM".equals(innerUpdateModule)) {
 			getTeamRankASchedule(team, teamJsonObject, innerUpdateModule);
 		}
+		
+		//已统计球队信息
+		if ("ORDER_TEAM_TODAY".equals(innerUpdateModule)) {
+			getStatisticTeamInfo(team, teamJsonObject, innerUpdateModule);
+		}
 		return team;
+	}
+
+	/**
+	 * 得到已统计球队信息
+	 * @author 高青
+	 * 2014-3-10
+	 * @param team 球队实体类
+	 * @param teamJsonObject 球队的 JSONObject 数据对象
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return void 空
+	 */
+	private void getStatisticTeamInfo(Team team, JSONObject teamJsonObject,
+			String innerUpdateModule) {
+		//设置通用数据
+		commonTeamAttr(innerUpdateModule, teamJsonObject, team, "orderTeamToday");
+		
+		//设置私有属性
+		team.setWins(CommonUtil.getStringValueByKey(teamJsonObject, "Wins", "int"));
+		team.setLosses(CommonUtil.getStringValueByKey(teamJsonObject, "Losses", "int"));
+		team.setMatchPlayed(CommonUtil.getStringValueByKey(teamJsonObject, "MatchPlayed", "int"));
 	}
 
 	/**
@@ -112,11 +139,43 @@ public class TeamUtil {
 				if(updateModuleAlias != null && "allTeams".equals(updateModuleAlias)){
 					bindAllTeamsElement(teamChildrenElementList, team, updateModuleAlias);
 				}
+				
+				//已统计球队信息属性设置
+				if (updateModuleAlias != null && "orderTeamToday".equals(updateModuleAlias)) {
+					bindStatisticTeamInfoElement(teamChildrenElementList, team, updateModuleAlias);
+				}
 			}
 		}
 		return teamChildrenElementList;
 	}
 	
+	/**
+	 * 绑定已统计球队信息子元素
+	 * @author 高青
+	 * 2014-3-10
+	 * @param teamChildrenElementList 球队子元素集对象
+	 * @param team 球队实体对象
+	 * @param updateModuleAlias 更新模块的别名
+	 * @return void 空
+	 */
+	private static void bindStatisticTeamInfoElement(
+			List<Element> teamChildrenElementList, Team team,
+			String updateModuleAlias) {
+		//初始化子元素对象
+		Element element = new Element("orderTeamToday");
+		
+		//设置通用属性
+		commonTeamEleAttr(element, team, updateModuleAlias);
+		
+		//设置私有属性
+		element.setAttribute("Wins", team.getWins());
+		element.setAttribute("Losses", team.getLosses());
+		element.setAttribute("MatchPlayed", team.getMatchPlayed());
+		
+		//添加到子元素集中
+		teamChildrenElementList.add(element);
+	}
+
 	/**
 	 * 得到球队子元素集
 	 * @author 高青
