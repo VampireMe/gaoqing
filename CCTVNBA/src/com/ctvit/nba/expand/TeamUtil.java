@@ -55,7 +55,33 @@ public class TeamUtil {
 		if ("ORDER_TEAM_TODAY".equals(innerUpdateModule)) {
 			getStatisticTeamInfo(team, teamJsonObject, innerUpdateModule);
 		}
+		
+		//全分区球队信息
+		if ("DIVISION_TEAMS".equals(innerUpdateModule)) {
+			getDivisionTeamsInfo(team, teamJsonObject, innerUpdateModule);
+		}
 		return team;
+	}
+
+	/**
+	 * 得到全分区球队信息
+	 * @author 高青
+	 * 2014-3-10
+	 * @param team 球队实体类
+	 * @param teamJsonObject 球队的 JSONObject 数据对象
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return void 空
+	 */
+	private void getDivisionTeamsInfo(Team team, JSONObject teamJsonObject,
+			String innerUpdateModule) {
+		//设置通用数据
+		commonTeamAttr(innerUpdateModule, teamJsonObject, team, innerUpdateModule);
+		
+		//设置私有属性
+		team.setConferenceCNName(CommonUtil.getStringValueByKey(teamJsonObject, "ConferenceCNName", "String"));
+		team.setConferenceENName(CommonUtil.getStringValueByKey(teamJsonObject, "ConferenceENName", "String"));
+		team.setDivisionCNName(CommonUtil.getStringValueByKey(teamJsonObject, "DivisionCNName", "String"));
+		team.setDivisionENName(CommonUtil.getStringValueByKey(teamJsonObject, "DivisionENName", "String"));
 	}
 
 	/**
@@ -144,11 +170,44 @@ public class TeamUtil {
 				if (updateModuleAlias != null && "orderTeamToday".equals(updateModuleAlias)) {
 					bindStatisticTeamInfoElement(teamChildrenElementList, team, updateModuleAlias);
 				}
+				
+				//全分区球队信息属性设置
+				if (updateModuleAlias != null && "divisionTeams".equals(updateModuleAlias)) {
+					bindDivisionTeamsInfoElement(teamChildrenElementList, team, updateModuleAlias);
+				}
 			}
 		}
 		return teamChildrenElementList;
 	}
 	
+	/**
+	 * 绑定全分区球队信息子元素属性
+	 * @author 高青
+	 * 2014-3-10
+	 * @param teamChildrenElementList 球队子元素集对象
+	 * @param team 球队实体对象
+	 * @param updateModuleAlias 更新模块的别名
+	 * @return void 空
+	 */
+	private static void bindDivisionTeamsInfoElement(
+			List<Element> teamChildrenElementList, Team team,
+			String updateModuleAlias) {
+		//初始化子元素对象
+		Element element = new Element("divisionTeams");
+		
+		//通用属性设置
+		commonTeamEleAttr(element, team, updateModuleAlias);
+		
+		//设置私有属性
+		element.setAttribute("ConferenceCNName", team.getConferenceCNName());
+		element.setAttribute("ConferenceENName", team.getConferenceENName());
+		element.setAttribute("DivisionCNName", team.getDivisionCNName());
+		element.setAttribute("DivisionENName", team.getDivisionENName());
+		
+		//将子元素添加到子元素集中
+		teamChildrenElementList.add(element);
+	}
+
 	/**
 	 * 绑定已统计球队信息子元素
 	 * @author 高青

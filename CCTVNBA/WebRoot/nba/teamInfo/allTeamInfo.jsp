@@ -27,6 +27,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id = "allTeamInfoTableOuter">
 			<table id = "allTeamInfoTable"></table>
 		</div>
+		
+		<!-- 全分区球队信息部分 -->
+		<div id = "divisionTeamsTableOuter">
+			<table id = "divisionTeamsTable"></table>
+		</div>
 	</div>
 	
 	<!-- 指定球员的信息 Start -->

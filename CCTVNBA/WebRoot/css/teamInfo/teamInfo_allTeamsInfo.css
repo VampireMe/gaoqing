@@ -20,6 +20,16 @@
 	margin: 10px 50px 10px;
 }
 
+/** 联赛球队信息外部 div 样式 */
+#allTeamInfoTableOuter{
+	display: none;
+}
+
+/** 全分区球队信息外部 div 样式 */
+#divisionTeamsTableOuter{
+	display: none;
+}
+
 /******** 球队下的球员信息  Start **********/
 
 /** 操作区  div 样式 */

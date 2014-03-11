@@ -297,7 +297,51 @@ public class TeamAction extends BaseAction{
 	 * @return void
 	 */
 	public void updateDivisionTeamsInfo(){
+		//更新全分区球队信息标识
+		int updateDivisionTeamsInfoFlag = 0;
 		
+		//得到内部更新模块和更新条件 map 对象
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		//更新联赛的球队信息
+		updateDivisionTeamsInfoFlag = teamService.updateDivisionTeamsInfo(
+				moduleName, 
+				innerUpdateModuleACondtions, 
+				"divisionTeams", 
+				new Team());
+		
+		json = updateDivisionTeamsInfoFlag + "";
+		writeJson2Web(json);		
+	}
+
+	/**
+	 * 得到全分区球队信息
+	 * @author 高青
+	 * 2014-3-10
+	 * @return void 空
+	 */
+	public void getDivisionTeamsInfo(){
+		//得到更新条件
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		//得到 url 的数据
+		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
+		String url = URLUtil.getURL(finalURLMap);
+		String initJSON = URLContentUtil.getURLContent(url);
+		
+		//得到 JSON 数组
+		JSONObject initJsonObject = new JSONObject(initJSON);
+		
+		//得到 AllTeams 的 JSONArray 对象
+		JSONArray divisionTeamsArray = initJsonObject.getJSONArray("DivisionTeams");
+		
+		if(divisionTeamsArray != null && divisionTeamsArray.length() != 0){
+			json = divisionTeamsArray.toString();
+		}else {
+			json = 0 + "";
+		}
+		//写到前台
+		writeJson2Web(json);		
 	}
 	
 	/**

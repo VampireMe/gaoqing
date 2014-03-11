@@ -14,14 +14,19 @@ $(document).ready(function(){
 
 	//绑定联赛球队 dom 的单击事件
 	$allTeamsInfo.on("click", function(){
+		//区别已选中和未选中的按钮显示方法（灰色：已选中）
+		$divisionTeamsInfo.linkbutton('enable');
+		$allTeamsInfo.linkbutton('disable');
+		
 		//判断是否选中了记录，如果选中了表格的数据，提示“更新球员信息或球队排名信息及赛车”
 		var selectedTeamId =  $("#allTeamInfoTableOuter .datagrid-btable tbody tr").attr("class");
 		
-		//初始状态下为“undefined”,选中状态为“datagrid-row datagrid-row-selected”
-		if(selectedTeamId === undefined){
+		//初始状态下为“undefined”,未选中时的值为“datagrid-row”,选中状态为“datagrid-row datagrid-row-selected”
+		if(selectedTeamId === undefined || selectedTeamId === 'datagrid-row'){
 			//发送 ajax 请求
 			ajaxMethod("allTeamsInfo!updateAllTeamsInfo.action", 
-						{moduleName: 'team', innerUpdateModule: 'ALL_TEAMS'}, 
+						{moduleName: 'team', 
+						innerUpdateModule: 'ALL_TEAMS'}, 
 						"allTeamsInfo");
 		}else if(selectedTeamId === "datagrid-row datagrid-row-selected"){
 			$.messager.alert("重复操作", "请更新球员信息或球队排名信息及赛程信息！", "info");
@@ -30,10 +35,24 @@ $(document).ready(function(){
 
 	//绑定全分区球队 dom 的单击事件
 	$divisionTeamsInfo.on("click", function(){
-		//发送 ajax 请求
-		ajaxMethod("divisionTeamsInfo!updateDivisionTeamsInfo.action", 
-					{moduleName: 'team', innerUpdateModule: 'DIVISION_TEAMS'}, 
-					"divisionTeamsInfo");
+		//区别已选中和未选中的按钮显示方法（灰色：已选中）
+		$divisionTeamsInfo.linkbutton('disable');
+		$allTeamsInfo.linkbutton('enable');
+		
+		//判断是否选中了记录，如果选中了表格的数据，提示“更新球员信息或球队排名信息及赛车”
+		
+		var selectedTeamId =  $("#divisionTeamsTableOuter").parent().find("div[class='datagrid-view2'] div[class='datagrid-body'] .datagrid-btable tbody tr").attr("class");
+		
+		//初始状态下为“undefined”,未选中时的值为“datagrid-row”,选中状态为“datagrid-row datagrid-row-selected”
+		if(selectedTeamId === undefined || selectedTeamId === 'datagrid-row'){
+			//发送 ajax 请求
+			ajaxMethod("divisionTeamsInfo!updateDivisionTeamsInfo.action", 
+						{moduleName: 'team', 
+						innerUpdateModule: 'DIVISION_TEAMS'}, 
+						"divisionTeamsInfo");
+		}else if(selectedTeamId === "datagrid-row datagrid-row-selected"){
+			$.messager.alert("重复操作", "请更新球员信息或球队排名信息及赛程信息！", "info");
+		}
 	});
 
 	/**
@@ -56,12 +75,27 @@ $(document).ready(function(){
 					$.messager.alert("提示信息", "更新成功！", "info", function(){
 						//联赛下的所有球队信息
 						if(jsonParamObj.innerUpdateModule === "ALL_TEAMS"){
+							//初始状态下，全分区球队部分的 html 对象值
+							var divisionTeamsTableOuter_table = $("#divisionTeamsTableOuter").parent().attr('id');
+							
+							//判断全分区球队数据是否初始化过（全分区球队未操作时）
+							if(divisionTeamsTableOuter_table === "allTeamInfo_data"){
+								$("#divisionTeamsTableOuter").hide();
+							}else{
+								$("#divisionTeamsTableOuter").parent().parent().parent().hide();
+							}
+							$("#allTeamInfoTableOuter").show();
+							
 							exhibitAllTeamsInfo("allTeams");
 						}
 						
 						//全分区下的球队列表
 						if(jsonParamObj.innerUpdateModule === "DIVISION_TEAMS"){
+							$("#allTeamInfoTableOuter").hide();
+							//显示全分区球队的信息，隐藏联赛球队的信息
+							$("#divisionTeamsTableOuter").show();
 							
+							exhibitDivisionTeamsInfo("divisionTeams");
 						}
 						
 						//球队下的球员信息
@@ -132,8 +166,11 @@ $(document).ready(function(){
 
 
 	/***** 数据显示区 Start *****/
-	//得到联赛球队表格对象
+		//得到联赛球队表格对象
 	var $allTeamInfoTable = $("#allTeamInfoTable"),
+		//全分区球队信息表格对象
+		$divisionTeamInfoTable = $("#divisionTeamsTableOuter"),
+	
 		$specifyTeamPlayerInfo = $("#specifyTeamPlayerInfo"),
 		//球员基本信息部分的初始 tbody 对象
 		$init_playerDetailBasicInfoTbody = $("#playerDetailBasicInfo #playerDetailBasicInfoTable tbody"),
@@ -144,7 +181,11 @@ $(document).ready(function(){
 		$init_theSeventhTbody = $("#theSeventh #theSevenTable tbody"),
 		$init_theFifteenTbody = $("#theFifteen #theFifteenTable tbody"),
 		$init_theThirtyTbody = $("#theThirty #theThirtyTable tbody"),
-		$init_theAllTbody = $("#theAll #theAllTable tbody");
+		$init_theAllTbody = $("#theAll #theAllTable tbody"),
+		
+		//球队排名及赛程信息的初始 tbody 对象
+		$init_teamRankTbody = $("#teamRankInfo .teamRankInfoTable tbody"),
+		$init_teamScheduleTbody = $("#teamScheduleInfo .teamScheduleInfoTable tbody");
 
 	/**
 	 * 绑定球队信息
@@ -249,7 +290,113 @@ $(document).ready(function(){
 			            		}			            		
 			            	}
 			            }
-			            ]		
+			         ]		
+		});
+	}
+	
+	/**
+	 * 绑定全分区球队信息
+	 * 2014-03-10
+	 * author: 高青
+	 * param: otherInfo 其他附加信息
+	 */
+	function exhibitDivisionTeamsInfo(otherInfo){
+		//设置 datagrid 对象
+		$divisionTeamInfoTable.datagrid({
+			loadMsg: '数据加载中......',
+			striped: true, //条纹所有行
+			fitColumns: false,//自适应列的宽度
+			
+			//远程访问地址
+			url: 'getDivisionTeamsInfo!getDivisionTeamsInfo.action',
+			
+			//参数
+			queryParams:{
+				moduleName: 'team',
+				innerUpdateModule: 'DIVISION_TEAMS'
+			},
+			columns:[[  
+			          {field: 'TeamID', checkbox: true, width: 60},
+			          {field:'SmallLogo',title:'球队图标', align: 'center', width: 200,
+			        	  formatter: function(value, row, index){
+			        		  //获取当前的访问路径
+			        		  var currentHref = window.location.href;
+			        		  //截取基本路径
+			        		  var reg = new RegExp('^h.+(?=nba)');
+			        		  
+			        		  var basicPath = reg.exec(currentHref);
+			        		  
+			        		  return '<img title = "'+value+'" src = "'+basicPath+'images/teamIcon/'+value+'" />';
+			        	  }},  
+			        	  {field:'DivisionCNName',title:'所属区域', align: 'center', width: 200},  
+			        	  {field:'ConferenceCNName',title:'所属联盟', align: 'center', width: 200},  
+			        	  {field:'TeamENAlias',title:'球队英文简称', align: 'center', width: 200},  
+			        	  {field:'TeamCNAlias',title:'球队中文简称', align: 'center', width: 200}
+			        	  ]],
+			        	  //工具条
+			        	  toolbar:[
+			        	           ' ',{
+			        	        	   text: '更新球员信息',
+			        	        	   iconCls: 'icon-print', 
+			        	        	   handler: function(){
+			        	        		   //得到选中的记录
+			        	        		   var checkedObj = $divisionTeamInfoTable.datagrid('getChecked'),
+			        	        		   //选中的记录的 球队 id 
+			        	        		   teamIDs = "";
+			        	        		   
+			        	        		   //判断是否选中了记录
+			        	        		   if(checkedObj.length === 0){
+			        	        			   $.messager.alert("提示信息", "请选择球队！", "info");
+			        	        		   }else{
+			        	        			   $(checkedObj).each(function(i){
+			        	        				   //得到选中的球队 ID 字符串集
+			        	        				   teamIDs += this.TeamID + ",";
+			        	        			   });
+			        	        			   
+			        	        			   //更新指定球队下的球员信息
+			        	        			   ajaxMethod(
+			        	        					   "specifyTeamPlayerInfo!updateTeamPlayerInfo.action", 
+			        	        					   {
+			        	        						   teamIDs: teamIDs,
+			        	        						   moduleName: "player",
+			        	        						   innerUpdateModule:'TEAM_PLAYERS'
+			        	        					   },
+			        	        			   "teamPlayerInfo");
+			        	        		   }
+			        	        	   }
+			        	           },
+			        	           ' ','-',' ',
+			        	           {
+			        	        	   text: '更新球队排名及赛程信息',
+			        	        	   iconCls: 'icon-tip', 
+			        	        	   handler: function(){
+			        	        		   //得到选中的记录
+			        	        		   var checkedObj = $divisionTeamInfoTable.datagrid('getChecked'),
+			        	        		   //选中的记录的 球队 id 
+			        	        		   teamIDs = "";
+			        	        		   
+			        	        		   //判断是否选中了记录
+			        	        		   if(checkedObj.length === 0){
+			        	        			   $.messager.alert("提示信息", "请选择球队！", "info");
+			        	        		   }else{
+			        	        			   $(checkedObj).each(function(i){
+			        	        				   //得到选中的球队 ID 字符串集
+			        	        				   teamIDs += this.TeamID + ",";
+			        	        			   });
+			        	        			   
+			        	        			   //更新指定球队下的球员信息
+			        	        			   ajaxMethod(
+			        	        					   "updateTeamRankASchedule!updateTeamRankASchedule.action", 
+			        	        					   {
+			        	        						   teamIDs: teamIDs,
+			        	        						   moduleName: "team",
+			        	        						   innerUpdateModule:'TEAM'
+			        	        					   },
+			        	        			   "team");
+			        	        		   }			            		
+			        	        	   }
+			        	           }
+			        	         ]		
 		});
 	}
 
@@ -380,16 +527,6 @@ $(document).ready(function(){
 			resizable: true
 		});
 		$("#playerDetailInfoOuter").dialog('open');
-		
-		//定义内部 div 为一个panel 
-		/*$("#playerDetailInfoInner").panel({
-			width: 400,
-			heiht: 200,
-			title: '球员详细信息',
-			top: 50,
-			left: 50,
-			collapsible: true
-		});*/
 	}
 	
 	/**
@@ -577,9 +714,12 @@ $(document).ready(function(){
 		 //下的 tbody 对象
 		 $teamScheduleTbody = $("#teamScheduleInfo .teamScheduleInfoTable tbody");
 		
+		//初始化当前 tbody 中的值
+		$teamRankInfoTbody.html($init_teamRankTbody);
 		//绑定球队排名信息
 		appendTeamRankInfo(teamRankInfoObj, $teamRankInfoTbody, "teamRankInfo");
 		
+		$teamScheduleTbody.html($init_teamScheduleTbody);
 		//绑定球队赛程信息
 		appendTeamScheduleInfo(teamScheduleInfoObj, $teamScheduleTbody, "teamScheduleInfo");
 	}

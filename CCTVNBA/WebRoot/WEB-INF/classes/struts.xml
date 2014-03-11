@@ -151,6 +151,12 @@
             </result>
         </action>   
         
+        <!-- 全分区球队信息 -->
+         <action name="getDivisionTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
         <!-- 更新已统计球队信息 -->
          <action name="updateStatisticTeamInfo" class = "com.ctvit.nba.action.TeamAction">
             <result type = "json">

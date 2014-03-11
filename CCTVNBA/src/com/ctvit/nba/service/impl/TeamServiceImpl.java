@@ -115,5 +115,17 @@ public class TeamServiceImpl implements TeamService{
 		
 		return updateStatisticTeamInfoFlag;
 	}
+	
+	@Override
+	public <T> int updateDivisionTeamsInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, T t) {
+		//更新全分区球队信息标识
+		int updateDivisionTeamsInfoFlag = 0;
+		
+		updateDivisionTeamsInfoFlag = commonUpdateTeamInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		
+		return updateDivisionTeamsInfoFlag;
+	}
 
 }
