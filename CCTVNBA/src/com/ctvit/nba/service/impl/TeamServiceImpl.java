@@ -127,5 +127,30 @@ public class TeamServiceImpl implements TeamService{
 		
 		return updateDivisionTeamsInfoFlag;
 	}
+	
+	@Override
+	public <T> int updateLeagueTeamRankInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, T t) {
+		//更新联盟球队排名信息的表格
+		int updateLeagueTeamRankFlag = 0;
+		
+		updateLeagueTeamRankFlag = commonUpdateTeamInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		
+		return updateLeagueTeamRankFlag;
+	}
+
+	@Override
+	public <T> int updateDivisionTeamRankInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, T t) {
+		//更新全分区球队排名信息标识
+		int updateDivisionTeamRankInfo = 0;
+		
+		updateDivisionTeamRankInfo = commonUpdateTeamInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		
+		return updateDivisionTeamRankInfo;
+	}
+
 
 }

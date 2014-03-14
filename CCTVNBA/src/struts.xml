@@ -145,6 +145,18 @@
             </result>
         </action>   
         
+        <!-- 更新联盟球队排名信息 -->
+         <action name="updateLeagueRankInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到联盟球队排名信息 -->
+         <action name="getLeagueTeamRankInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
         <!-- 全分区球队信息 -->
          <action name="divisionTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
             <result type = "json">
@@ -153,6 +165,18 @@
         
         <!-- 全分区球队信息 -->
          <action name="getDivisionTeamsInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 全分区下的球队排名信息 -->
+         <action name="updateDivisionRankInfo" class = "com.ctvit.nba.action.TeamAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到全分区下的球队排名信息 -->
+         <action name="getDivisionRankInfo" class = "com.ctvit.nba.action.TeamAction">
             <result type = "json">
             </result>
         </action>   
@@ -169,6 +193,23 @@
             </result>
         </action>   
         
+        <!-- 更新球员 TopN 排名信息 -->
+         <action name="updatePlayerTopNRankInfo" class = "com.ctvit.nba.action.PlayerAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 得到球员 TopN 排名信息 -->
+         <action name="getPlayerTopNRankInfo" class = "com.ctvit.nba.action.PlayerAction">
+            <result type = "json">
+            </result>
+        </action>   
+        
+        <!-- 更新每日球员排名信息 -->
+         <action name="updateTodayPlayerRankInfo" class = "com.ctvit.nba.action.PlayerAction">
+            <result type = "json">
+            </result>
+        </action>  
         <!-- 更新球队信息 Start -->
              
     </package>

@@ -231,4 +231,34 @@ public class PlayerServiceImpl implements PlayerService{
 		return updatePlayerAvgStatFlag;
 	}
 
+	@Override
+	public int updatePlayerTopNRankInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, Player player) {
+		//更新球员 TopN 排名信息标识
+		int updatePlayerTopNRankFlag = 0;
+		
+		updatePlayerTopNRankFlag = commonUpdatePlayerInfo(moduleName, innerUpdateModuleACondtions, otherInfo);
+		
+		return updatePlayerTopNRankFlag;
+	}
+
+	@Override
+	public int updateTodayPlayerRankInfo(String moduleName,
+			Map<String, Map<String, String>> innerUpdateModuleACondtions,
+			String otherInfo, Player player) {
+		//更新每日球员排名数据标识
+		int updateTodayRankInfoFlag = 0;
+		
+		//更新到 xml 文件中
+		updateTodayRankInfoFlag = XMLUtil.encapsulationGenerateXML(
+				moduleName, 
+				innerUpdateModuleACondtions, 
+				"com.ctvit.nba.expand.PlayerUtil", 
+				"getPlayerInfoChildrenElementList", 
+				otherInfo);
+		
+		return updateTodayRankInfoFlag;
+	}
+
 }

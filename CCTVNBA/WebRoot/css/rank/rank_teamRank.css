@@ -1,0 +1,43 @@
+/**
+* 球队排行信息
+* @author 高青
+* 2014-03-11
+*/
+
+/** 数据更新操作按钮区 div 样式 */
+#teamRankInfo_control{
+	width: 80%;
+	height: 30px;
+	margin: 20px 60px 5px;	
+}
+
+/** 数据显示区 div 样式 */
+#teamRankInfo_data{
+	width:95%;
+	height:460px;
+	margin: 10px 50px 10px;
+}
+
+/** 联盟下的球队数据 div  */
+#leagueRankInfoTableOuter{
+	display: none;
+}
+
+/** 联盟下的球队更新条件区域 */
+#leagueRankInfoCon{
+	width: 95%;
+	height: 30px;
+	margin: 20px auto 10px;
+}
+
+/** 联盟下的内部表格 div 样式 */
+#leagueRankInfoTableInner{
+	display: none;
+	width: 95%;
+	margin: 10px auto;
+}
+
+/** 全分区下的球队数据 div  */
+#divisionRankInfoTableOuter{
+	display: none;
+}

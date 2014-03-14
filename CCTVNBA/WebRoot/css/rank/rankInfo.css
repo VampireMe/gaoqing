@@ -1,0 +1,27 @@
+/**
+* 排名信息的 css 文件
+* @author 高青
+* 2014-03-11
+*/
+
+/*tabs 最外层 div 样式*/
+#rankInfo_outerFrameID{
+	width: 800px;
+	height: 700px;
+	margin: 30px auto;
+	background-color: #CDAA7D;
+}
+
+/** 球队排名信息  */
+#rankInfo_teamRankInfo{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}
+
+/** 球员排名信息  */
+#rankInfo_playerRankInfo{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}

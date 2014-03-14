@@ -60,6 +60,9 @@ public class TeamAction extends BaseAction{
 	/** 球员 ID 字符串集 */
 	private String playerIDs;
 	
+	/** 联盟 ID */
+	private String conferenceID;
+	
 	/**
 	 * 初始化对象
 	 */
@@ -71,12 +74,47 @@ public class TeamAction extends BaseAction{
 	}
 	
 	/**
-	 * 得到统计球队信息数据
+	 * 更新全分区下的球队排名信息
 	 * @author 高青
-	 * 2014-3-10
+	 * 2014-3-11
 	 * @return void 空
 	 */
-	public void getStatisticTeamInfo(){
+	public void updateDivisionTeamRankInfo(){
+		//更新全分区球队排名的信息
+		int updateDivisionTeamRankFlag = 0;
+		
+		//得到更新条件信息
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		updateDivisionTeamRankFlag = teamService.updateDivisionTeamRankInfo(
+				moduleName,
+				innerUpdateModuleACondtions, 
+				"divisionTeamStandings", 
+				new Team());
+		
+		//将更新后的结果反馈到前台
+		json = updateDivisionTeamRankFlag + "";
+		writeJson2Web(json);			
+	}
+	
+	/**
+	 * 得到全分区下的球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @return void 空
+	 */
+	public void getDivisionTeamRankInfo(){
+		commonGetInfoAsTabLeData("DivisionTeamStandings");		
+	}
+
+	/**
+	 * 通用获取数据的方法（获取表格数据的方法）
+	 * @author 高青
+	 * 2014-3-11
+	 * @param moduleRemarker 模块标识
+	 * @return void 空
+	 */
+	private void commonGetInfoAsTabLeData(String moduleRemarker) {
 		//得到更新条件
 		getInnerUpdateModuleACondtions(innerUpdateModule);
 		
@@ -89,15 +127,59 @@ public class TeamAction extends BaseAction{
 		JSONObject initJsonObject = new JSONObject(initJSON);
 		
 		//得到 AllTeams 的 JSONArray 对象
-		JSONArray statisticTeamInfoArray = initJsonObject.getJSONArray("OrderTeamToday");
+		JSONArray jsonArray = initJsonObject.getJSONArray(moduleRemarker);
 		
-		if(statisticTeamInfoArray != null && statisticTeamInfoArray.length() != 0){
-			json = statisticTeamInfoArray.toString();
+		if(jsonArray != null && jsonArray.length() != 0){
+			json = jsonArray.toString();
 		}else {
 			json = 0 + "";
 		}
 		//写到前台
+		writeJson2Web(json);
+	}
+	
+	/**
+	 * 更新联盟下的球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @return void 空
+	 */
+	public void updateLeagueTeamRankInfo(){
+		//更新联盟球队排名的信息
+		int updateLeagueTeamRankFlag = 0;
+		
+		//得到更新条件信息
+		getInnerUpdateModuleACondtions(innerUpdateModule);
+		
+		updateLeagueTeamRankFlag = teamService.updateLeagueTeamRankInfo(
+				moduleName,
+				innerUpdateModuleACondtions, 
+				"conferenceTeamStandings", 
+				new Team());
+		
+		//将更新后的结果反馈到前台
+		json = updateLeagueTeamRankFlag + "";
 		writeJson2Web(json);		
+	}
+	
+	/**
+	 * 得到联盟下的球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @return void 空
+	 */
+	public void getLeagueTeamRankInfo(){
+		commonGetInfoAsTabLeData("ConferenceTeamStandings");
+	}
+	
+	/**
+	 * 得到统计球队信息数据
+	 * @author 高青
+	 * 2014-3-10
+	 * @return void 空
+	 */
+	public void getStatisticTeamInfo(){
+		commonGetInfoAsTabLeData("OrderTeamToday");
 	}
 	
 	/**
@@ -266,28 +348,7 @@ public class TeamAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void getAllTeamsInfo(){
-		
-		//得到更新条件
-		getInnerUpdateModuleACondtions(innerUpdateModule);
-		
-		//得到 url 的数据
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-		String url = URLUtil.getURL(finalURLMap);
-		String initJSON = URLContentUtil.getURLContent(url);
-		
-		//得到 JSON 数组
-		JSONObject initJsonObject = new JSONObject(initJSON);
-		
-		//得到 AllTeams 的 JSONArray 对象
-		JSONArray allTeamsArray = initJsonObject.getJSONArray("AllTeams");
-		
-		if(allTeamsArray != null && allTeamsArray.length() != 0){
-			json = allTeamsArray.toString();
-		}else {
-			json = 0 + "";
-		}
-		//写到前台
-		writeJson2Web(json);
+		commonGetInfoAsTabLeData("AllTeams");
 	}
 	
 	/**
@@ -321,27 +382,7 @@ public class TeamAction extends BaseAction{
 	 * @return void 空
 	 */
 	public void getDivisionTeamsInfo(){
-		//得到更新条件
-		getInnerUpdateModuleACondtions(innerUpdateModule);
-		
-		//得到 url 的数据
-		Map<String, Map<String, String>> finalURLMap = URLUtil.getFinalURLMap(moduleName, innerUpdateModuleACondtions);
-		String url = URLUtil.getURL(finalURLMap);
-		String initJSON = URLContentUtil.getURLContent(url);
-		
-		//得到 JSON 数组
-		JSONObject initJsonObject = new JSONObject(initJSON);
-		
-		//得到 AllTeams 的 JSONArray 对象
-		JSONArray divisionTeamsArray = initJsonObject.getJSONArray("DivisionTeams");
-		
-		if(divisionTeamsArray != null && divisionTeamsArray.length() != 0){
-			json = divisionTeamsArray.toString();
-		}else {
-			json = 0 + "";
-		}
-		//写到前台
-		writeJson2Web(json);		
+		commonGetInfoAsTabLeData("DivisionTeams");
 	}
 	
 	/**
@@ -544,6 +585,10 @@ public class TeamAction extends BaseAction{
 	/** @return the innerConditionMap */
 	@JSON(serialize = false)
 	public Map<String, String> getInnerConditionMap() {
+		
+		if (conferenceID != null && !"".equals(conferenceID)) {
+			innerConditionMap.put("conferenceID", conferenceID);
+		}
 		return innerConditionMap;
 	}
 
@@ -587,6 +632,17 @@ public class TeamAction extends BaseAction{
 	/** @param playerIDs the playerIDs to set */
 	public void setPlayerIDs(String playerIDs) {
 		this.playerIDs = playerIDs;
+	}
+
+	/** @return the conferenceID */
+	@JSON(serialize = false)
+	public String getConferenceID() {
+		return conferenceID;
+	}
+
+	/** @param conferenceID the conferenceID to set */
+	public void setConferenceID(String conferenceID) {
+		this.conferenceID = conferenceID;
 	}
 	
 }

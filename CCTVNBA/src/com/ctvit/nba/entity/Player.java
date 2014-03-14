@@ -206,6 +206,15 @@ public class Player {
 	/** 逐出球场 */
 	private Integer ejections;
 	
+	/** 排名 */
+	private Integer ranking;
+	
+	/** 该数据项总数 */
+	private Integer totalData;
+	
+	/** 该数据项场均数据 */
+	private Double avgData;
+	
 	/** 其他 */
 	private String other;
 	
@@ -901,5 +910,34 @@ public class Player {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	
+
+	/** @return the ranking */
+	public Integer getRanking() {
+		return ranking;
+	}
+
+	/** @param ranking the ranking to set */
+	public void setRanking(Integer ranking) {
+		this.ranking = ranking;
+	}
+
+	/** @return the totalData */
+	public Integer getTotalData() {
+		return totalData;
+	}
+
+	/** @param totalData the totalData to set */
+	public void setTotalData(Integer totalData) {
+		this.totalData = totalData;
+	}
+
+	/** @return the avgData */
+	public Double getAvgData() {
+		return avgData;
+	}
+
+	/** @param avgData the avgData to set */
+	public void setAvgData(Double avgData) {
+		this.avgData = avgData;
+	}
 }

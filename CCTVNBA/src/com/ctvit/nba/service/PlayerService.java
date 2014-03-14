@@ -15,6 +15,38 @@ import com.ctvit.nba.entity.Player;
 public interface PlayerService {
 	
 	/**
+	 * 更新每日球员排名的信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块名称和更新条件的 Map 对象
+	 * @param otherInfo 其他附加信息
+	 * @param player 球员实体对象
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 */
+	public int updateTodayPlayerRankInfo(
+			String moduleName, 
+			Map<String, Map<String, String>> innerUpdateModuleACondtions, 
+			String otherInfo,
+			Player player);	
+	
+	/**
+	 * 更新球员 TopN 排名的信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块名称和更新条件的 Map 对象
+	 * @param otherInfo 其他附加信息
+	 * @param player 球员实体对象
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 */
+	public int updatePlayerTopNRankInfo(
+			String moduleName, 
+			Map<String, Map<String, String>> innerUpdateModuleACondtions, 
+			String otherInfo,
+			Player player);	
+	
+	/**
 	 * 更新球员的个人数据到数据库
 	 * @author 高青
 	 * 2014-1-21

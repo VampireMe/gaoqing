@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -23,6 +22,309 @@ import com.ctvit.nba.util.CommonUtil;
  */
 public class PlayerUtil {
 	
+	/**
+	 * 得到球员信息子元素集
+	 * <strong>适合通过 url 直接生成 xml 文件，没有存放到 player 实体中 </strong>
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerInfoJsonObject 球员信息的 JSONObject 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return playerChildrenElementList 球员信息的子元素集
+	 */
+	public static List<Element> getPlayerInfoChildrenElementList(JSONObject playerInfoJsonObject, String otherInfo){
+		//初始化球队子元素集
+		List<Element> playerChildrenElementList = new ArrayList<Element>();		
+		
+		if (playerInfoJsonObject != null && playerInfoJsonObject.length() != 0) {
+			//每日球员排行信息
+			if ("todayRank".equals(otherInfo)) {
+				bindTodayPlayerRankInfoElement(playerChildrenElementList, playerInfoJsonObject, otherInfo);
+			}
+		}
+		return playerChildrenElementList;
+	}
+	/**
+	 * 绑定每日球员排行信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param playerInfoJsonObject 球员信息的 JSONObject 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayPlayerRankInfoElement(
+			List<Element> playerChildrenElementList,
+			JSONObject playerInfoJsonObject, String otherInfo) {
+		//得到外层的 每日球员排名 JSONOBject 数据对象
+		JSONObject todayRankJsonObject = playerInfoJsonObject.getJSONObject("TodayRank");
+		
+		//得到篮板排名数据
+		JSONArray reboundsJsonArray = todayRankJsonObject.getJSONArray("Rebounds");
+		bindTodayReboundsRankElement(playerChildrenElementList, reboundsJsonArray, otherInfo);
+		
+		//得到盖帽排名数据
+		JSONArray blockedsJsonArray = todayRankJsonObject.getJSONArray("Blockeds");
+		bindTodayBlockedsRankElement(playerChildrenElementList, blockedsJsonArray, otherInfo);
+		
+		//得到助攻排名数据
+		JSONArray assistsJsonArray = todayRankJsonObject.getJSONArray("Assists");
+		bindTodayAssistsRankElement(playerChildrenElementList, assistsJsonArray, otherInfo);
+		
+		//得到综合排名数据
+		JSONArray allJsonArray = todayRankJsonObject.getJSONArray("All");
+		bindTodayAllRankElement(playerChildrenElementList, allJsonArray, otherInfo);
+		
+		//得到得分排名数据
+		JSONArray pointsJsonArray = todayRankJsonObject.getJSONArray("Points");
+		bindTodayPointsRankElement(playerChildrenElementList, pointsJsonArray, otherInfo);
+		
+		//得到三分排名数据
+		JSONArray threePointsJsonArray = todayRankJsonObject.getJSONArray("ThreePoints");
+		bindTodayThreePointsRankElement(playerChildrenElementList, threePointsJsonArray, otherInfo);
+		
+		//得到抢断排名数据
+		JSONArray stealsJsonArray = todayRankJsonObject.getJSONArray("Steals");
+		bindTodayStealsRankElement(playerChildrenElementList, stealsJsonArray, otherInfo);
+	}
+	
+	/**
+	 * 绑定每日球员排行下的抢断排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param stealsJsonArray 抢断排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayStealsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray stealsJsonArray, String otherInfo) {
+		
+		//当前的抢断 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < stealsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("threePoints");
+			
+			jsonObject = stealsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "threePoints");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的三分排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param threePointsJsonArray 三分排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayThreePointsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray threePointsJsonArray, String otherInfo) {
+		
+		//当前的三分 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < threePointsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("threePoints");
+			
+			jsonObject = threePointsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "threePoints");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的得分排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param pointsJsonArray 得分排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayPointsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray pointsJsonArray, String otherInfo) {
+		
+		//当前的得分 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < pointsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("points");
+			
+			jsonObject = pointsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "points");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的综合排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param allJsonArray 综合排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayAllRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray allJsonArray, String otherInfo) {
+		
+		//当前的综合 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < allJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("all");
+			
+			jsonObject = allJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "all");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的助攻排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param assistsJsonArray 助攻排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayAssistsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray assistsJsonArray, String otherInfo) {
+		
+		//当前的助攻 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < assistsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("assists");
+			
+			jsonObject = assistsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "assists");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的盖帽排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param blockedsJsonArray 篮板排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayBlockedsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray blockedsJsonArray, String otherInfo) {
+		
+		//当前的盖帽 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < blockedsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("blockeds");
+			
+			jsonObject = blockedsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "blockeds");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	
+	/**
+	 * 绑定每日球员排行下的篮板排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param reboundsJsonArray 篮板排名信息的 JSONArray 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void bindTodayReboundsRankElement(
+			List<Element> playerChildrenElementList,
+			JSONArray reboundsJsonArray, String otherInfo) {
+		
+		//当前的篮板 JSONObject 数据对象
+		JSONObject jsonObject = null;
+		
+		for (int i = 0; i < reboundsJsonArray.length(); i++) {
+			//初始化子元素对象
+			Element element = new Element("rebounds");
+			
+			jsonObject = reboundsJsonArray.getJSONObject(i);
+			
+			//设置属性
+			commonTodayRankElement(jsonObject, element, "rebounds");
+			
+			//添加到子元素集中
+			playerChildrenElementList.add(element);
+		}
+	}
+	/**
+	 * 每日球员排名各项数据排名属性设置
+	 * @author 高青
+	 * 2014-3-12
+	 * @param todayRankJsonObject 每日球员的当前排类型名下的 JSONObject 数据对象
+	 * @param todayRankElement 每日球员的当前排名类型下的 JSONObject 数据对象
+	 * @param otherInfo 其他附加信息
+	 * @return void 空
+	 */
+	private static void commonTodayRankElement(JSONObject todayRankJsonObject,
+			Element todayRankElement, String otherInfo) {
+		todayRankElement.setAttribute("Ranking", CommonUtil.getStringValueByKey(todayRankJsonObject, "Ranking", "int"));
+		todayRankElement.setAttribute("LeagueID", CommonUtil.getStringValueByKey(todayRankJsonObject, "LeagueID", "int"));
+		todayRankElement.setAttribute("LeagueCNName", CommonUtil.getStringValueByKey(todayRankJsonObject, "LeagueCNName", "String"));
+		todayRankElement.setAttribute("LeagueCNAlias", CommonUtil.getStringValueByKey(todayRankJsonObject, "LeagueCNAlias", "String"));
+		todayRankElement.setAttribute("LeagueENName", CommonUtil.getStringValueByKey(todayRankJsonObject, "LeagueENName", "String"));
+		todayRankElement.setAttribute("LeagueENAlias", CommonUtil.getStringValueByKey(todayRankJsonObject, "LeagueENAlias", "String"));
+		todayRankElement.setAttribute("TeamID", CommonUtil.getStringValueByKey(todayRankJsonObject, "TeamID", "int"));
+		todayRankElement.setAttribute("TeamCNName", CommonUtil.getStringValueByKey(todayRankJsonObject, "TeamCNName", "String"));
+		todayRankElement.setAttribute("TeamCNAlias", CommonUtil.getStringValueByKey(todayRankJsonObject, "TeamCNAlias", "String"));
+		todayRankElement.setAttribute("TeamENName", CommonUtil.getStringValueByKey(todayRankJsonObject, "TeamENName", "String"));
+		todayRankElement.setAttribute("PlayerID", CommonUtil.getStringValueByKey(todayRankJsonObject, "PlayerID", "int"));
+		todayRankElement.setAttribute("PlayerCNName", CommonUtil.getStringValueByKey(todayRankJsonObject, "PlayerCNName", "String"));
+		todayRankElement.setAttribute("PlayerCNAlias", CommonUtil.getStringValueByKey(todayRankJsonObject, "PlayerCNAlias", "String"));
+		todayRankElement.setAttribute("FirstName", CommonUtil.getStringValueByKey(todayRankJsonObject, "FirstName", "String"));
+		todayRankElement.setAttribute("LastName", CommonUtil.getStringValueByKey(todayRankJsonObject, "LastName", "String"));
+		todayRankElement.setAttribute("StatsValue", CommonUtil.getStringValueByKey(todayRankJsonObject, "StatsValue", "int"));
+		todayRankElement.setAttribute("Season", CommonUtil.getStringValueByKey(todayRankJsonObject, "Season", "int"));
+	}
 	/**
 	 * 得到球员信息子元素集
 	 * @author 高青
@@ -52,11 +354,53 @@ public class PlayerUtil {
 				if("playerAvgStat".equals(updateModuleAlias)){
 					bindPlayerAvgStatElement(playerChildrenElementList, player, updateModuleAlias);
 				}
+				
+				//球员 TopN 排名信息
+				if ("playerRankTopN".equals(updateModuleAlias)) {
+					bindPlayerTopNRankElement(playerChildrenElementList, player, updateModuleAlias);
+				}
 			}
 		}
 		return playerChildrenElementList;
 	}
 	
+	/**
+	 * 绑定球员 TopN 排名信息
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerChildrenElementList 球员信息的子元素集
+	 * @param player 球员实体类数据
+	 * @param updateModuleAlias 更新模块的别名
+	 * @return void 空
+	 */
+	private static void bindPlayerTopNRankElement(
+			List<Element> playerChildrenElementList, Player player,
+			String updateModuleAlias) {
+		//初始化子元素对象
+		Element element = new Element("playerRankTopN");
+		
+		//设置通用属性
+		commonPlayerInfoElement(element, player, updateModuleAlias);
+		
+		//设置私有属性
+		element.setAttribute("Ranking", String.valueOf(player.getRanking()));
+		element.setAttribute("LeagueID", player.getLeagueID());
+		element.setAttribute("LeagueCNName", player.getLeagueCNName());
+		element.setAttribute("LeagueCNAlias", player.getLeagueCNAlias());
+		element.setAttribute("LeagueENName", player.getLeagueENName());
+		element.setAttribute("LeagueENAlias", player.getLeagueENAlias());
+		element.setAttribute("LeagueCNName", player.getLeagueENAlias());
+		element.setAttribute("LeagueENAlias", player.getLeagueENAlias());
+		element.setAttribute("PositionDescription", player.getPositionDescription());
+		element.setAttribute("Games", String.valueOf(player.getGames()));
+		element.setAttribute("TotalData", String.valueOf(player.getTotalData()));
+		element.setAttribute("AvgData", String.valueOf(player.getAvgData()));
+		element.setAttribute("Season", player.getSeason());
+		
+		//添加到子元素集中
+		playerChildrenElementList.add(element);
+	}
+
 	/**
 	 * 绑定球员均场统计的数据子元素
 	 * @author 高青
@@ -217,6 +561,11 @@ public class PlayerUtil {
 				getPlayerAvgStatInfo(playerJsonObject, player, innerUpdateModule);
 			}
 			
+			//球员 TopN 排名信息
+			if (innerUpdateModule.equals("PLAYER_RANK_TOPN")) {
+				getPlayerTopNRankInfo(playerJsonObject, player, innerUpdateModule);
+			}
+			
 			//内部更新模块
 			if (innerUpdateModule != null) {
 				player.setInnerUpdateModule(innerUpdateModule);
@@ -226,6 +575,36 @@ public class PlayerUtil {
 		return player;
 	}
 	
+	/**
+	 * 得到球员 TopN 排名信息数据
+	 * @author 高青
+	 * 2014-3-12
+	 * @param playerJsonObject 球员信息的 JsonObject 对象
+	 * @param player 球员实体类对象
+	 * @param innerUpdateModule 内部更新模块
+	 * @return void 空
+	 */
+	private static void getPlayerTopNRankInfo(JSONObject playerJsonObject,
+			Player player, String innerUpdateModule) {
+		//设置通用数据
+		commonPlayerBasicInfo(playerJsonObject, player, innerUpdateModule);
+		
+		//设置私有数据
+		player.setRanking(CommonUtil.getIntegerValueByKey(playerJsonObject, "Ranking"));
+		player.setLeagueID(CommonUtil.getStringValueByKey(playerJsonObject, "LeagueID", "int"));
+		player.setLeagueCNName(CommonUtil.getStringValueByKey(playerJsonObject, "LeagueCNName", "String"));
+		player.setLeagueCNAlias(CommonUtil.getStringValueByKey(playerJsonObject, "LeagueCNAlias", "String"));
+		player.setLeagueENName(CommonUtil.getStringValueByKey(playerJsonObject, "LeagueENName", "String"));
+		player.setLeagueENAlias(CommonUtil.getStringValueByKey(playerJsonObject, "LeagueENAlias", "String"));
+		
+		player.setPositionID(CommonUtil.getStringValueByKey(playerJsonObject, "PositionID", "String"));
+		player.setPositionDescription(CommonUtil.getStringValueByKey(playerJsonObject, "PositionDescription", "String"));
+		player.setGames(CommonUtil.getIntegerValueByKey(playerJsonObject, "Games"));
+		player.setTotalData(CommonUtil.getIntegerValueByKey(playerJsonObject, "TotalData"));
+		player.setAvgData(CommonUtil.getDoubleValueByKey(playerJsonObject, "AvgData"));
+		player.setSeason(CommonUtil.getStringValueByKey(playerJsonObject, "CurrSeason", "int"));
+	}
+
 	/**
 	 * 得到球员均场比赛的数据统计信息
 	 * @author 高青
@@ -375,7 +754,8 @@ public class PlayerUtil {
 		//球员个人数据
 		if ("LIVE_PLAYER_STAT".equals(innerUpdateModule)||
 			"TEAM_PLAYERS".equals(innerUpdateModule) || 
-			"PLAYER_DETAIL".equals(innerUpdateModule) ) {
+			"PLAYER_DETAIL".equals(innerUpdateModule) ||
+			"PLAYER_RANK_TOPN".equals(innerUpdateModule)) {
 			player.setPlayerCNName(playerJsonObject.getString("PlayerCNName"));
 			player.setPlayerCNAlias(playerJsonObject.getString("PlayerCNAlias"));	
 		}
@@ -583,7 +963,9 @@ public class PlayerUtil {
 		//球队下的球员信息列表
 		if("teamPlayers".equals(updateModuleAlias)){
 			element.setAttribute("PositionID", player.getPositionID());
-		}else if ("playerPersonalABest".equals(updateModuleAlias)) {
+		}else if (
+				"playerPersonalABest".equals(updateModuleAlias) || 
+				"playerRankTopN".equals(updateModuleAlias)) {
 			element.setAttribute("TeamENName", player.getTeamENName());
 			element.setAttribute("TeamCNName", player.getTeamCNName());
 			element.setAttribute("TeamCNAlias", CommonUtil.resoleEmptyParam(player.getTeamCNAlias()));

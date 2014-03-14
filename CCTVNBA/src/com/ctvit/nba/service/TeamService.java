@@ -31,6 +31,22 @@ public interface TeamService {
 			T t);
 	
 	/**
+	 * 更新全分区球队排名的信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param <T> 定义的泛型类型
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块名称和更新条件的 Map 对象
+	 * @param otherInfo 其他附加信息
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 */
+	public <T> int updateDivisionTeamRankInfo(
+			String moduleName, 
+			Map<String, Map<String, String>> innerUpdateModuleACondtions, 
+			String otherInfo,
+			T t);
+	
+	/**
 	 * 更新全分区球队信息
 	 * @author 高青
 	 * 2014-3-10
@@ -41,6 +57,22 @@ public interface TeamService {
 	 * @return int 更新成功标识（0：失败；1：成功）
 	 */
 	public <T> int updateDivisionTeamsInfo(
+			String moduleName, 
+			Map<String, Map<String, String>> innerUpdateModuleACondtions, 
+			String otherInfo,
+			T t);
+	
+	/**
+	 * 更新联盟球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param <T> 定义的泛型类型
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModuleACondtions 内部更新模块名称和更新条件的 Map 对象
+	 * @param otherInfo 其他附加信息
+	 * @return int 更新成功标识（0：失败；1：成功）
+	 */
+	public <T> int updateLeagueTeamRankInfo(
 			String moduleName, 
 			Map<String, Map<String, String>> innerUpdateModuleACondtions, 
 			String otherInfo,

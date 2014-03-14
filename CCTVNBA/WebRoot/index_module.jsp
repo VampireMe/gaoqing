@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</li>
 				<li id="nba_index_rank">
 					<div>
-						<a href = "<%=basePath %>" target="_blank">排&nbsp;行&nbsp;信&nbsp;息&nbsp;更&nbsp;新</a>
+						<a href = "<%=basePath %>nba/rank/rankInfo.jsp" target="_blank">排&nbsp;行&nbsp;信&nbsp;息&nbsp;更&nbsp;新</a>
 					</div>
 				</li>
 			</ul>

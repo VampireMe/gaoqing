@@ -60,7 +60,68 @@ public class TeamUtil {
 		if ("DIVISION_TEAMS".equals(innerUpdateModule)) {
 			getDivisionTeamsInfo(team, teamJsonObject, innerUpdateModule);
 		}
+		
+		//联盟球队排名信息
+		if ("CONFERENCE_TEAM_STANDINGS".equals(innerUpdateModule)) {
+			getLeagueTeamRankInfo(team, teamJsonObject, innerUpdateModule);
+		}
+		
+		//全分区球队排名信息
+		if ("DIVISION_TEAM_STANDINGS".equals(innerUpdateModule)) {
+			getDivisionTeamRankInfo(team, teamJsonObject, innerUpdateModule);
+		}
 		return team;
+	}
+
+	/**
+	 * 得到全分区球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param team 球队实体类
+	 * @param teamJsonObject 球队的 JSONObject 数据对象
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return void 空
+	 */
+	private void getDivisionTeamRankInfo(Team team, JSONObject teamJsonObject,
+			String innerUpdateModule) {
+		//设置通用数据
+		commonTeamAttr(innerUpdateModule, teamJsonObject, team, innerUpdateModule);
+		
+		//设置私有数据
+		team.setDivisionID(CommonUtil.getStringValueByKey(teamJsonObject, "DivisionID", "int"));
+		team.setConferenceCNName(CommonUtil.getStringValueByKey(teamJsonObject, "ConferenceCNName", "String"));
+		team.setConferenceENName(CommonUtil.getStringValueByKey(teamJsonObject, "ConferenceENName", "String"));
+		team.setDivisionCNName(CommonUtil.getStringValueByKey(teamJsonObject, "DivisionCNName", "String"));
+		team.setDivisionENName(CommonUtil.getStringValueByKey(teamJsonObject, "DivisionENName", "String"));
+		
+		team.setRank(CommonUtil.getStringValueByKey(teamJsonObject, "Rank", "int"));
+		team.setLosses(CommonUtil.getStringValueByKey(teamJsonObject, "Losses", "int"));
+		team.setWinningPercentage(CommonUtil.getStringValueByKey(teamJsonObject, "WinningPercentage", "Double"));
+		team.setWins(CommonUtil.getStringValueByKey(teamJsonObject, "Wins", "int"));
+		team.setGamesBack(CommonUtil.getStringValueByKey(teamJsonObject, "GamesBack", "int"));
+	}
+
+	/**
+	 * 得到联盟球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param team 球队实体类
+	 * @param teamJsonObject 球队的 JSONObject 数据对象
+	 * @param innerUpdateModule 内部更新模块名称
+	 * @return void 空
+	 */
+	private void getLeagueTeamRankInfo(Team team, JSONObject teamJsonObject,
+			String innerUpdateModule) {
+		//设置通有数据
+		commonTeamAttr(innerUpdateModule, teamJsonObject, team, innerUpdateModule);
+		
+		//设置私有数据
+		team.setRank(CommonUtil.getStringValueByKey(teamJsonObject, "Rank", "int"));
+		team.setLosses(CommonUtil.getStringValueByKey(teamJsonObject, "Losses", "int"));
+		team.setWinningPercentage(CommonUtil.getStringValueByKey(teamJsonObject, "WinningPercentage", "Double"));
+		team.setWins(CommonUtil.getStringValueByKey(teamJsonObject, "Wins", "int"));
+		team.setGamesBack(CommonUtil.getStringValueByKey(teamJsonObject, "GamesBack", "int"));
+		team.setMatchPlayed(CommonUtil.getStringValueByKey(teamJsonObject, "MatchPlayed", "int"));
 	}
 
 	/**
@@ -175,11 +236,86 @@ public class TeamUtil {
 				if (updateModuleAlias != null && "divisionTeams".equals(updateModuleAlias)) {
 					bindDivisionTeamsInfoElement(teamChildrenElementList, team, updateModuleAlias);
 				}
+				
+				//联盟球队排名信息属性设置
+				if (updateModuleAlias != null && "conferenceTeamStandings".equals(updateModuleAlias)) {
+					bindLeagueTeamRankElement(teamChildrenElementList, team, updateModuleAlias);
+				}
+				
+				//全分区球队排名信息属性设置
+				if (updateModuleAlias != null && "divisionTeamStandings".equals(updateModuleAlias)) {
+					bindDivisionTeamRankElement(teamChildrenElementList, team, updateModuleAlias);
+				}
 			}
 		}
 		return teamChildrenElementList;
 	}
 	
+	/**
+	 * 绑定全分区球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param teamChildrenElementList 球队子元素集对象
+	 * @param team 球队实体对象
+	 * @param updateModuleAlias 更新模块的别名
+	 * @return void 空
+	 */
+	private static void bindDivisionTeamRankElement(
+			List<Element> teamChildrenElementList, Team team,
+			String updateModuleAlias) {
+		//初始化子元素对象
+		Element element = new Element("divisionTeamStandings");
+		
+		//绑定通用属性
+		commonTeamEleAttr(element, team, updateModuleAlias);
+		
+		//绑定私有属性
+		element.setAttribute("DivisionID", team.getDivisionID());
+		element.setAttribute("ConferenceCNName", team.getConferenceCNName());
+		element.setAttribute("ConferenceENName", team.getConferenceENName());
+		element.setAttribute("DivisionCNName", team.getDivisionCNName());
+		element.setAttribute("DivisionENName", team.getDivisionENName());
+		
+		element.setAttribute("Rank", team.getRank());
+		element.setAttribute("Losses", team.getLosses());
+		element.setAttribute("WinningPercentage", team.getWinningPercentage());
+		element.setAttribute("Wins", team.getWins());
+		element.setAttribute("GamesBack", team.getGamesBack());
+		
+		//添加到子元素集中
+		teamChildrenElementList.add(element);
+	}
+
+	/**
+	 * 绑定联盟下的球队排名信息
+	 * @author 高青
+	 * 2014-3-11
+	 * @param teamChildrenElementList 球队子元素集对象
+	 * @param team 球队实体对象
+	 * @param updateModuleAlias 更新模块的别名
+	 * @return void 空
+	 */
+	private static void bindLeagueTeamRankElement(
+			List<Element> teamChildrenElementList, Team team,
+			String updateModuleAlias) {
+		//初始化子元素对象
+		Element element = new Element("conferenceTeamStandings");
+		
+		//设置通用属性
+		commonTeamEleAttr(element, team, updateModuleAlias);
+		
+		//设置私有属性
+		element.setAttribute("Rank", team.getRank());
+		element.setAttribute("Losses", team.getLosses());
+		element.setAttribute("WinningPercentage", team.getWinningPercentage());
+		element.setAttribute("Wins", team.getWins());
+		element.setAttribute("GamesBack", team.getGamesBack());
+		element.setAttribute("MatchPlayed", team.getMatchPlayed());
+		
+		//添加到子元素集中
+		teamChildrenElementList.add(element);
+	}
+
 	/**
 	 * 绑定全分区球队信息子元素属性
 	 * @author 高青
