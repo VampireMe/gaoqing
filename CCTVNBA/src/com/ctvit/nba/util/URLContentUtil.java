@@ -51,7 +51,50 @@ public class URLContentUtil {
 	
 	
 	/**
-	 * 根据URL地址，得到相应的  数据对象
+	 * <p>根据URL地址，得到相应的  数据对象</p>
+	 * <strong>适合使用自定义的 key，得到 JSONObject 下的 指定的 JSONArray 对象</strong>
+	 * @author 高青
+	 * 2014-03-18
+	 * @param moduleName 模块名称
+	 * @param innerUpdateModule_otherInfo 更新方式和其他附加信息字符串
+	 * @param partURL 部分链接地址
+	 * @param url 完整链接地址和
+	 * @return tlist 相应类型的数据对象
+	 */
+	public static <T> List<T> getTListByURL(
+			String moduleName, 
+			String innerUpdateModule_otherInfo, 
+			String partURL, 
+			String url,
+			String jsonObjectKey
+			){
+		//初始化对象
+		List<T> tlist = new ArrayList<T>();
+		
+		try {
+			JSONArray tJsonArray = null;
+			
+			//得到  jsonArray 对象
+			tJsonArray = getJsonArrayBySpecialKey(url,jsonObjectKey);
+			
+			for (int i = 0; i < tJsonArray.length(); i++) {
+				//得到一个 JSONObject 对象
+				JSONObject jsonObject = (JSONObject)tJsonArray.get(i);
+				
+				T t = getEntityByJSONObject(jsonObject, moduleName, innerUpdateModule_otherInfo);
+				
+				//将当前的  Schedule 对象，放到 List<Schedule> 中
+				tlist.add(t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tlist;
+	}
+	
+	/**
+	 * <p>根据URL地址，得到相应的  数据对象</p>
+	 * <strong>适合根据 get 部分的链接地址，自动获取JSONObject 下的对应 key 的JSONArray 对象值</strong>
 	 * @author 高青
 	 * 2013-11-29
 	 * @param moduleName 模块名称
@@ -130,10 +173,39 @@ public class URLContentUtil {
 	}
 	
 	/**
+	 * 通过 URL 获取JSONObejct值，<br/>
+	 * 并使用指定的 key 值，得到其相应的  jsonArray 对象
+	 * @author 高青
+	 * 2014-03-18
+	 * @param url  json 字符串
+	 * @param jsonObjectKey 自定义的获取 JSONArray 的 key 
+	 * @return jsonArray JSONArray对象
+	 */
+	public static JSONArray getJsonArrayBySpecialKey(String url, String jsonObjectKey){
+		//初始化数据
+		JSONArray jsonArray = new JSONArray();
+		
+		try {
+			//根据 url 地址，得到链接后的   json 数据
+			String jsonData = URLContentUtil.getURLContent(url);
+			
+			//将 json 字符串转成JSONObject
+			JSONObject jsonObject = new JSONObject(jsonData);
+			
+			//得到 JSONArray 对象的  key 值，其中  key 的值是    partURL 去掉  “Get” 的部分
+			jsonArray = jsonObject.getJSONArray(jsonObjectKey);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} 
+		return jsonArray;
+	}
+	
+	/**
 	 * 通过  字符串的 json 数据，得到其相应的  jsonArray 对象
 	 * @author 高青
 	 * 2013-12-2
 	 * @param url  json 字符串
+	 * @param partURL get部分的链接地址
 	 * @return jsonArray JSONArray对象
 	 */
 	public static JSONArray getJsonArray(String url, String partURL){

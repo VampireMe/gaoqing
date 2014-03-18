@@ -1,0 +1,27 @@
+/**
+* 球员伤情信息
+* author: 高青
+* 2014-03-17
+*/
+
+/*tabs 最外层 div 样式*/
+#injury_outerFrameID{
+	width: 800px;
+	height: 700px;
+	margin: 30px auto;
+	background-color: #CDAA7D;
+}
+
+/** 球员伤情列表 */
+#injury_injuryList{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}
+
+/** 球队球员伤情列表 */
+#injury_teamInjuryList{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}

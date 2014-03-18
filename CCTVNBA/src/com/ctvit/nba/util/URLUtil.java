@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.ctvit.nba.expand.InjuryEnum;
 import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.PlayerEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
@@ -111,6 +112,9 @@ public class URLUtil {
 		
 		//球队信息 get 部分链接地址
 		mapObject.put("team", teamMap());
+		
+		//球员伤情 get 部分链接地址
+		mapObject.put("injury", injuryMap());
 		
 		return mapObject;
 	}
@@ -379,6 +383,23 @@ public class URLUtil {
 		schedulePartURLMap.put(ScheduleEnum.LAST_N_SCHEDULES.toString(), "GetLastNSchedules");
 		
 		return schedulePartURLMap;
+	}
+	
+	private static Map<String, String> injuryMap(){
+		//初始化对象
+		Map<String, String> injuryPartURLMap = new HashMap<String, String>();	
+		
+		/*
+		 * 将对应的查询参数及 get 部分链接地址放到   map 对象中
+		 */		
+		
+		//球员伤情列表
+		injuryPartURLMap.put(InjuryEnum.INJURY_LIST.toString(), "GetInjuryList");
+		
+		//球队球员伤情列表
+		injuryPartURLMap.put(InjuryEnum.TEAM_INJURY_LIST.toString(), "GetTeamInjuryList");
+		
+		return injuryPartURLMap;
 	}
 
 }

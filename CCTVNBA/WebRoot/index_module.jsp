@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<ul id = "anotherULID">
 				<li id="nba_index_injury">
 					<div>
-						<a href = "<%=basePath %>" target="_blank">球&nbsp;员&nbsp;伤&nbsp;情&nbsp;更&nbsp;新</a>
+						<a href = "<%=basePath %>nba/injury/injury.jsp" target="_blank">球&nbsp;员&nbsp;伤&nbsp;情&nbsp;更&nbsp;新</a>
 					</div>
 				</li> 
 				<li id="nba_index_transaction">

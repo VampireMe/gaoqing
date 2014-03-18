@@ -1,0 +1,21 @@
+/**
+* 球队球员伤情列表信息样式
+* author：高青
+* 2014-03-18
+*/
+
+/** 球队球员伤情列表的操作按钮区样式 */
+#teamInjury_control{
+	width: 95%;
+	height: 40px;
+	margin: 30px 60px 5px;
+}
+
+/** 球队球员伤情列表的数据区样式 */
+#teamInjury_data{
+	width: 95%;
+	height: 460px;
+	margin: 10px auto;
+	display: none;
+}
+
