@@ -24,7 +24,7 @@ public enum InjuryEnum {
 	}
 	
 	/**
-	 * 更新内部更新模块名称，得到对应的球员伤情枚举值
+	 * 根据内部更新模块名称，得到对应的球员伤情枚举值
 	 * @author 高青
 	 * 2014-3-17
 	 * @param innerUpdateModule 内部更新模块名称

@@ -14,6 +14,7 @@ import com.ctvit.nba.expand.LiveEnum;
 import com.ctvit.nba.expand.PlayerEnum;
 import com.ctvit.nba.expand.ScheduleEnum;
 import com.ctvit.nba.expand.TeamEnum;
+import com.ctvit.nba.expand.TransactionEnum;
 
 /**
  * 链接地址的部分地址获取常用类
@@ -115,6 +116,9 @@ public class URLUtil {
 		
 		//球员伤情 get 部分链接地址
 		mapObject.put("injury", injuryMap());
+		
+		//球员转会 get 部分链接地址
+		mapObject.put("transaction", transactionMap());
 		
 		return mapObject;
 	}
@@ -385,6 +389,12 @@ public class URLUtil {
 		return schedulePartURLMap;
 	}
 	
+	/**
+	 * 伤情(Injury) 所有get部分链接地址封装
+	 * @author 高青
+	 * 2014-03-17
+	 * @return injuryPartURLMap 封装后的伤情get部分链接地址的 Map 对象
+	 */	
 	private static Map<String, String> injuryMap(){
 		//初始化对象
 		Map<String, String> injuryPartURLMap = new HashMap<String, String>();	
@@ -401,5 +411,27 @@ public class URLUtil {
 		
 		return injuryPartURLMap;
 	}
-
+	
+	/**
+	 * 转会(Transaction) 所有get部分链接地址封装
+	 * @author 高青
+	 * 2014-03-18
+	 * @return transactionPartURLMap 封装后的转会get部分链接地址的 Map 对象
+	 */	
+	private static Map<String, String> transactionMap(){
+		//初始化对象
+		Map<String, String> transactionPartURLMap = new HashMap<String, String>();	
+		
+		/*
+		 * 将对应的查询参数及 get 部分链接地址放到   map 对象中
+		 */		
+		
+		//球员伤情列表
+		transactionPartURLMap.put(TransactionEnum.TRANSACTION_LIST.toString(), "GetTransactionList");
+		
+		//球队球员伤情列表
+		transactionPartURLMap.put(TransactionEnum.TEAM_TRANSACTION_LIST.toString(), "GetTeamTransactionList");
+		
+		return transactionPartURLMap;
+	}
 }

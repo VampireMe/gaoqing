@@ -1,0 +1,27 @@
+/**
+* 球员转会信息的 css 表
+* author: 高青
+* 2014-03-18
+*/
+
+/*tabs 最外层 div 样式*/
+#transaction_outerFrameID{
+	width: 800px;
+	height: 700px;
+	margin: 30px auto;
+	background-color: #CDAA7D;
+}
+
+/** 球员伤情列表 */
+#transaction_transactionList{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}
+
+/** 球队球员伤情列表 */
+#transaction_teamTransactionList{
+	width: 780px;
+	height: 550px;
+	background-color: #E0FFFF;
+}

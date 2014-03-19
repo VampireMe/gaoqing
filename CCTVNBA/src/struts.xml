@@ -235,6 +235,29 @@
             </result>
         </action>  
         
+        <!-- 更新球员转会列表 -->
+         <action name="updateTransactionList" class = "com.ctvit.nba.action.TransactionAction">
+            <result type = "json">
+            </result>
+        </action>  
+        
+        <!-- 得到球员转会列表 -->
+         <action name="getTransactionList" class = "com.ctvit.nba.action.TransactionAction">
+            <result type = "json">
+            </result>
+        </action>  
+        
+        <!-- 更新球队球员转会列表 -->
+         <action name="updateTeamTransactionList" class = "com.ctvit.nba.action.TransactionAction">
+            <result type = "json">
+            </result>
+        </action>  
+        
+        <!-- 得到球队球员转会列表 -->
+         <action name="getTeamTransactionList" class = "com.ctvit.nba.action.TransactionAction">
+            <result type = "json">
+            </result>
+        </action>  
         <!-- 更新球队信息 Start -->
              
     </package>

@@ -8,23 +8,23 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.struts2.json.annotations.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.ctvit.nba.entity.Injury;
-import com.ctvit.nba.expand.InjuryEnum;
-import com.ctvit.nba.service.InjuryService;
-import com.ctvit.nba.service.impl.InjuryServiceImpl;
+import com.ctvit.nba.entity.Transaction;
+import com.ctvit.nba.expand.TransactionEnum;
+import com.ctvit.nba.service.TransactionService;
+import com.ctvit.nba.service.impl.TransactionServiceImpl;
 import com.ctvit.nba.util.URLContentUtil;
 import com.ctvit.nba.util.URLUtil;
 
+
 /**
- * 球员伤情 action 类
+ * 球员转会列表的 action 类
  * @author 高青
- * 2014-3-17
+ * 2014-3-18
  */
-public class InjuryAction extends BaseAction{
+public class TransactionAction extends BaseAction{
 
 	/**
 	 * serialVersionUID
@@ -50,7 +50,7 @@ public class InjuryAction extends BaseAction{
 	private Map<String, Map<String, String>> innerUpdateModuleACondtions;	
 	
 	/** 伤情 service */
-	private InjuryService injuryService;
+	private TransactionService transactionService;
 	
 	/**
 	 * 初始化对象
@@ -58,66 +58,69 @@ public class InjuryAction extends BaseAction{
 	{
 		innerConditionMap = new HashMap<String, String>();
 		innerUpdateModuleACondtions = new HashMap<String, Map<String,String>>();
-		injuryService = new InjuryServiceImpl();
+		transactionService = new TransactionServiceImpl();
 	}
 	
 	/**
-	 * 得到球队球员伤情信息
+	 * 得到球队球员转会信息 
 	 * @author 高青
-	 * 2014-3-18
+	 * 2014-3-19
 	 * @return void 空
 	 */
-	public void getTeamInjuryList(){
-		commonGetInfoAsTabLeData("InjuryList");
+	public void getTeamTransactionList(){
+		commonGetInfoAsTabLeData("TeamTransactionList");
 	}
 	
 	/**
-	 * 更新球队球员伤情信息
+	 * 更新球队球员转会信息
 	 * @author 高青
-	 * 2014-3-18
+	 * 2014-3-19
 	 * @return void 空
 	 */
-	public void updateTeamInjuryList(){
-		//更新球队球员伤情列表信息标识
-		int updateTeamInjuryListFlag = 0;
+	public void updateTeamTransactionList(){
+		//更新球队球员转会信息标识
+		int updateTeamTransactionListFlag = 0;
 		
-		updateTeamInjuryListFlag = commonUpdateMethod(injuryService, "updateTeamInjuryList", "teamInjuryList");
+		//更新球队球员转会
+		updateTeamTransactionListFlag = commonUpdateMethod(
+				transactionService, 
+				"updateTeamTransactionList", 
+				"teamTransactionList");
+		
+		//将更新后的情况反馈到前端
+		writeJson2Web(updateTeamTransactionListFlag);
+	}
+	
+	/**
+	 * 更新球员转会列表信息
+	 * @author 高青
+	 * 2014-3-18
+	 * @return void 空
+	 */
+	public void updateTransactionList(){
+		//球员转会列表信息的标识
+		int updateTransactionFlag = 0;
+		
+		updateTransactionFlag = commonUpdateMethod(transactionService, "updateTransactionList", "transactionList");
 		
 		//将更新后的结果反馈到前台
-		writeJson2Web(updateTeamInjuryListFlag + "");
+		writeJson2Web(updateTransactionFlag + "");
 	}
 	
 	/**
-	 * 得到球员伤情列表 
+	 * 得到球员转会列表信息
 	 * @author 高青
-	 * 2014-3-17
+	 * 2014-3-18
 	 * @return void 空
 	 */
-	public void getInjuryList(){
-		commonGetInfoAsTabLeData("InjuryList");
-	}
-	
-	/**
-	 * 更新球员伤情列表 
-	 * @author 高青
-	 * 2014-3-17
-	 * @return void 空
-	 */
-	public void updateInjuryList(){
-		//更新球员伤情列表标识
-		int udpateInjuryListFlag = 0;
-		
-		//更新球员伤情列表
-		udpateInjuryListFlag = commonUpdateMethod(injuryService, "updateInjuryList", "injuryList");
-		
-		//将更新后的数据反馈到前台
-		writeJson2Web(udpateInjuryListFlag + "");
+	public void getTransactionList(){
+		commonGetInfoAsTabLeData("TransactionList");
 	}
 	
 	/**
 	 * 通用获取数据的方法（获取表格数据的方法）
 	 * @author 高青
-	 * 2014-3-17
+	 * 2014-3-18
 	 * @param moduleRemarker 模块标识
 	 * @return void 空
 	 */
@@ -149,7 +152,7 @@ public class InjuryAction extends BaseAction{
 	 * <p>通用更新方法</p>
 	 * <strong>适合直接生成 XML 文件的通用方法</strong>
 	 * @author 高青
-	 * 2014-3-17
+	 * 2014-3-18
 	 * @param T 泛型类型
 	 * @param t 调用方法的实例类
 	 * @param methodName 方法名称
@@ -184,7 +187,7 @@ public class InjuryAction extends BaseAction{
 	 * <p>通用更新方法</p>
 	 * <strong>适合通过实体类集生成XML文件及保存到数据库的通用方法</strong>
 	 * @author 高青
-	 * 2014-3-17
+	 * 2014-3-18
 	 * @param T 泛型类型
 	 * @param TEntity 动态实体类类型
 	 * @param t 调用方法的实例类
@@ -203,9 +206,9 @@ public class InjuryAction extends BaseAction{
 		Method sepcifyMethod = null;
 		try {
 			//得到指定的方法
-			sepcifyMethod = t.getClass().getMethod(methodName, String.class, Map.class, String.class, Injury.class);
+			sepcifyMethod = t.getClass().getMethod(methodName, String.class, Map.class, String.class, Transaction.class);
 			//调用当前方法
-			commonUpdateFlag = (Integer) sepcifyMethod.invoke(t, moduleName, innerUpdateModuleACondtions, updateModuleAlias, new Injury());
+			commonUpdateFlag = (Integer) sepcifyMethod.invoke(t, moduleName, innerUpdateModuleACondtions, updateModuleAlias, new Transaction());
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -224,7 +227,7 @@ public class InjuryAction extends BaseAction{
 	 * <p>统一将 json 写到前台的方法</p>
 	 * <b>适合将全部的数据写到前台，再在前台进行挑取数据显示</b>
 	 * @author 高青
-	 * 2014-3-17
+	 * 2014-2-10
 	 * @param update2XMLFlag 更新到 xml 文件成功标识
 	 * @return void 空
 	 */
@@ -240,47 +243,50 @@ public class InjuryAction extends BaseAction{
 		}
 		//返回更新的数据
 		writeJson2Web(json);
-	}
-	
+	}	
+
 	/** @return the moduleName */
-	@JSON(serialize = false)
 	public String getModuleName() {
 		return moduleName;
 	}
+
 	/** @param moduleName the moduleName to set */
 	public void setModuleName(String moduleName) {
 		this.moduleName = moduleName;
 	}
+
 	/** @return the innerUpdateModule */
-	@JSON(serialize = false)
 	public String getInnerUpdateModule() {
 		return innerUpdateModule;
 	}
+
 	/** @param innerUpdateModule the innerUpdateModule to set */
 	public void setInnerUpdateModule(String innerUpdateModule) {
 		this.innerUpdateModule = innerUpdateModule;
 	}
-	/** @return the teamIDs */
-	@JSON(serialize = false)
+
+	/** @return the teamID */
 	public String getTeamID() {
 		return teamID;
 	}
-	/** @param teamIDs the teamIDs to set */
+
+	/** @param teamID the teamID to set */
 	public void setTeamID(String teamID) {
 		this.teamID = teamID;
 	}
+
 	/** @return the json */
 	public String getJson() {
 		return json;
 	}
+
 	/** @param json the json to set */
 	public void setJson(String json) {
 		this.json = json;
 	}
+
 	/** @return the innerConditionMap */
-	@JSON(serialize = false)
 	public Map<String, String> getInnerConditionMap() {
-		
 		//球队 ID
 		if (teamID != null && !"".equals(teamID)) {
 			innerConditionMap.put("teamID", teamID);
@@ -288,26 +294,30 @@ public class InjuryAction extends BaseAction{
 		
 		return innerConditionMap;
 	}
+
 	/** @param innerConditionMap the innerConditionMap to set */
 	public void setInnerConditionMap(Map<String, String> innerConditionMap) {
 		this.innerConditionMap = innerConditionMap;
 	}
+
 	/** @return the innerUpdateModuleACondtions */
-	@JSON(serialize = false)
 	public Map<String, Map<String, String>> getInnerUpdateModuleACondtions(String innerUpdateModule) {
+		
 		//得到内部更新条件的 map 数据对象
 		getInnerConditionMap();
 		
 		//根据内部更新模块名称，得到对应的枚举类型的更新标识
 		innerUpdateModuleACondtions.put(
-				InjuryEnum.getInjuryEnumByName(innerUpdateModule).toString(), 
+				TransactionEnum.getTransactionEnumByName(innerUpdateModule).toString(), 
 				innerConditionMap
-		);
+		);		
+		
 		return innerUpdateModuleACondtions;
 	}
+
 	/** @param innerUpdateModuleACondtions the innerUpdateModuleACondtions to set */
 	public void setInnerUpdateModuleACondtions(
 			Map<String, Map<String, String>> innerUpdateModuleACondtions) {
 		this.innerUpdateModuleACondtions = innerUpdateModuleACondtions;
-	}		
+	}	
 }

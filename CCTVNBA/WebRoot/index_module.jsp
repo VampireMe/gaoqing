@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</li> 
 				<li id="nba_index_transaction">
 					<div>
-						<a href = "<%=basePath %>" target="_blank">球&nbsp;员&nbsp;转&nbsp;会&nbsp;更&nbsp;新</a>
+						<a href = "<%=basePath %>nba/transaction/transaction.jsp" target="_blank">球&nbsp;员&nbsp;转&nbsp;会&nbsp;更&nbsp;新</a>
 					</div>
 				</li>
 			</ul>

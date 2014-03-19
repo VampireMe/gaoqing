@@ -1,0 +1,20 @@
+/**
+* 球队球员的转会列表信息
+* author: 高青
+* 2014-03-19
+*/
+
+/** 球队球员转会列表的操作按钮区样式 */
+#teamTransaction_control{
+	width: 95%;
+	height: 40px;
+	margin: 30px 60px 5px;
+}
+
+/** 球队球员伤情列表的数据区样式 */
+#teamTransaction_data{
+	width: 95%;
+	height: 460px;
+	margin: 10px auto;
+	display: none;
+}
