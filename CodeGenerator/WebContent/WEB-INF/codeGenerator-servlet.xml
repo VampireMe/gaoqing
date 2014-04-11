@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+						http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd ">
+	<!-- 加入注解的驱动 -->		
+	<mvc:annotation-driven/>
+	
+	<!-- 配置控制器的扫描 -->
+	<context:component-scan base-package="com.codegenerator.controller"></context:component-scan>
+	
+	<!-- 配置 FreeMarker 的管理器 -->
+	<bean id = "freemarkerConfig" class = "org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- <property name = "templateLoaderPath" value = "/template/"></property> -->
+	</bean>
+	<!-- 配置 FreeMarker 解析器 -->
+	<bean id = "viewResoler" class = "org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name = "viewClass" value = "org.springframework.web.servlet.view.freemarker.FreeMarkerView"></property>
+		<property name = "cache" value = "true"></property>
+		<property name = "prefix" value = ""></property>
+		<property name = "suffix" value = ".jsp"></property>
+		<property name = "contentType" value = "text/html;charset=utf-8"></property>
+	</bean>
+	
+	<!-- 视图解析器的配置 -->					
+	<bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name = "viewClass" value = "org.springframework.web.servlet.view.JstlView"></property>
+		<property name = "prefix" value = ""></property>
+		<property name = "suffix" value = ".jsp"></property>
+	</bean>
+</beans>
