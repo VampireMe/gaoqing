@@ -6,10 +6,14 @@ package com.codegenerator.util;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+
+import com.codegenerator.entity.Database;
 
 /**
  * 数据库连接池
@@ -70,20 +74,55 @@ public class ConnectionPool {
 	}
 	
 	/**
+	 * 回收数据库连接对象
+	 * @author 高青
+	 * 2014-04-15
+	 * @param connection 要回收的数据库连接对象
+	 * @return 空
+	 */
+	public static void recycleConnection(Connection connection){
+		//遍历连接池中的对象，得到当前对象所对应的 连接管控者
+		if (poolConnections == null || poolConnections.size() == 0) {
+			log.info("请先初始化数据库连接池，再进行回收连接！");
+			return;
+		}
+		ConnectionController connectionController = getConnectionController(connection);
+		//设置当前的数据库连接对象为空
+		connectionController.setBusy(true);
+	}
+
+	/**
+	 * 得到连接管控者
+	 * @author 高青
+	 * 2014-4-15
+	 * @param connection 数据库连接对象
+	 * @return connectionController 数据管控对象
+	 */
+	private static ConnectionController getConnectionController(Connection connection) {
+		//初始化数据库管控对象
+		ConnectionController connectionController = null;
+		
+		for (ConnectionController connectionControllerPool : poolConnections) {
+			//如果当前的数据库连接对应着数据库管控者的连接，就将该连接的状态改为空闲
+			if (connection == connectionControllerPool.getConnection()) {
+				
+				connectionController = connectionControllerPool;
+				
+				//找到当前连接后，停止寻找
+				break;
+			}
+		}
+		return connectionController;
+	}
+	
+	/**
 	 * 得到一个可用的数据库链接
 	 * @author 高青
 	 * 2014-04-11
-	 * @param databaseType 数据库类型
-	 * @param url 数据库连接地址
-	 * @param user 连接数据的用户名
-	 * @param password 连接数据的密码 
+	 * @param database 数据库连接对象
 	 * @return connection 数据库连接池中的一个可用连接
 	 */
-	public Connection getConnection(
-			String databaseType, 
-			String url, 
-			String user, 
-			String password)
+	public Connection getConnection(Database database)
 	{
 		/*
 		 * （1）判断数据库连接池中，是否有空闲的链接，
@@ -99,7 +138,7 @@ public class ConnectionPool {
 		Connection connection = null;
 		
 		//判断连接池中，是否存在空闲的连接
-		connection = getEnableConnection(databaseType, url, user, password);
+		connection = getEnableConnection(database);
 		
 		while (connection == null) {
 			//暂停五秒钟，再从连接池中取
@@ -109,14 +148,12 @@ public class ConnectionPool {
 				log.info("暂停获取数据库连接池中的连接，发生异常！");
 				e.printStackTrace();
 			}
-			connection = getEnableConnection(databaseType, url, user, password);
+			connection = getEnableConnection(database);
 		}
-		
 		//判断是否得到了可用的连接,如果没有空闲的连接，则自动的增加连接数
 		if (connection == null) {
 			log.info("当前数据库连接池中，没有空闲的连接，请稍后重试！");   			//--------------可以编写一个队列，进行排队获取
 		}
-		
 		return connection;
 	}
 
@@ -124,17 +161,10 @@ public class ConnectionPool {
 	 * 从数据库连接池中，取出一个可用的连接
 	 * @author 高青
 	 * 2014-4-14
-	 * @param databaseType 数据库类型
-	 * @param url 数据库连接地址
-	 * @param user 连接数据的用户名
-	 * @param password 连接数据的密码 
+	 * @param database 数据库连接对象
 	 * @return connection 数据连接对象
 	 */
-	private synchronized Connection getEnableConnection(
-			String databaseType, 
-			String url, 
-			String user, 
-			String password)
+	private synchronized Connection getEnableConnection(Database database)
 	{
 		//数据库连接对象
 		Connection connection = null;
@@ -142,9 +172,8 @@ public class ConnectionPool {
 		//判断数据库连接池是否初始化过
 		if (poolConnections == null || poolConnections.size() == 0) {
 			//初始化数据库连接池
-			createConnectionPool(databaseType, url, user, password, minConnections);
+			createConnectionPool(database, minConnections);
 		}
-		
 		//循环连接池中的对象
 		for (ConnectionController connectionController : poolConnections) {
 			//判断当前的连接管控对象是否可用
@@ -155,12 +184,10 @@ public class ConnectionPool {
 				break;
 			}
 		}
-		
 		//如果没有获取到空闲的连接，则增加数据库中的连接数
 		if (connection == null) {
-			createConnectionPool(databaseType, url, user, password, autoIncrementConnections);
+			createConnectionPool(database, autoIncrementConnections);
 		}
-		
 		return connection;
 	}
 	
@@ -168,19 +195,11 @@ public class ConnectionPool {
 	 * 创建初始数据库连接池
 	 * @author 高青
 	 * 2014-04-14
-	 * @param databaseType 数据库类型
-	 * @param url 数据库连接地址
-	 * @param user 连接数据的用户名
-	 * @param password 连接数据的密码 
+	 * @param database 数据库连接对象
 	 * @param addConnectionCounts 添加到数据库连接池中的数量
 	 * @return 空
 	 */
-	private synchronized void createConnectionPool(
-			String databaseType, 
-			String url, 
-			String user, 
-			String password, 
-			int addConnectionCounts)
+	private synchronized void createConnectionPool(Database database, int addConnectionCounts)
 	{
 		//判断最小连接数是否比最大连接数大
 		if (minConnections >= maxConnections) {
@@ -193,7 +212,7 @@ public class ConnectionPool {
 				if (maxConnections <= poolConnections.size()) {
 					break;
 				}else {
-					poolConnections.add(getConnectionController(databaseType, url, user, password));
+					poolConnections.add(getConnectionController(database));
 				}
 			}
 		}
@@ -204,17 +223,10 @@ public class ConnectionPool {
 	 * 得到初始状态下的数据连接管控对象
 	 * @author 高青
 	 * 2014-4-14
-	 * @param databaseType 数据库类型
-	 * @param url 数据库连接地址
-	 * @param user 连接数据的用户名
-	 * @param password 连接数据的密码 
+	 * @param database 数据库连接对象
 	 * @return connectionController 数据连接管控对象
 	 */
-	private ConnectionController getConnectionController(
-			String databaseType, 
-			String url, 
-			String user, 
-			String password)
+	private ConnectionController getConnectionController(Database database)
 	{
 		//初始化一个连接管控对象
 		ConnectionController connectionController = new ConnectionController();
@@ -222,8 +234,11 @@ public class ConnectionPool {
 		//向管控对象中添加连接对象及状态
 		Driver driver = null;
 		try {
+			//驱动类的标识
+			String driverName = database.getDatabaseType() + "_" + "databaseDriver";
+			
 			try {
-				driver = (Driver)Class.forName(CommonUtil.getPropertiesValue(databaseType)).newInstance();
+				driver = (Driver)Class.forName(CommonUtil.getPropertiesValue(driverName)).newInstance();
 			} catch (InstantiationException e) {
 				log.error("实例化当前驱动的驱动器异常！");
 				e.printStackTrace();
@@ -232,12 +247,16 @@ public class ConnectionPool {
 				e.printStackTrace();
 			}
 		} catch (ClassNotFoundException e) {
-			log.error("加载 " + databaseType + " 的数据库驱动，发生异常！");
+			log.error("加载 " + database.getDatabaseType() + " 的数据库驱动，发生异常！");
 			e.printStackTrace();
 		}
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(url, user, password);
+			connection = DriverManager.getConnection(
+						CommonUtil.getConnectionURL(database), 
+						database.getUser(), 
+						database.getPassword()
+			);
 			
 			//判断当前数据库的最大连接数和配置的数据库最大连接数的大小关系
 			if (connection.getMetaData().getMaxConnections() < maxConnections) {
@@ -246,7 +265,7 @@ public class ConnectionPool {
 				maxConnections = connection.getMetaData().getMaxConnections();
 			}
 		} catch (SQLException e) {
-			log.error("连接 " + databaseType + " 的数据库时，发生异常！");
+			log.error("连接 " + database.getDatabaseType() + " 的数据库时，发生异常！");
 			e.printStackTrace();
 		}
 		connectionController.setConnection(connection);
@@ -255,13 +274,90 @@ public class ConnectionPool {
 		return connectionController;
 	}
 	
+	/**
+	 * 测试得到的数据库连接是否可用
+	 * @author 高青
+	 * 2014-04-15
+	 * @param connection 当前数据库连接
+	 * @param database 数据库连接实体类
+	 * @return isEnable 当前连接是否可用
+	 */
+	public static boolean testConnection(Connection connection, Database database){
+		//是否可用
+		boolean isEnable = false;
+		// sql 语句发送对象
+		Statement statement = null;
+		
+		if (database != null) {
+			//判断数据库连接实体对象中，是否有测试的表
+			if (database.getTable() != null && !"".equals(database.getTable())) {
+				
+				try {
+					//得到 Statement 对象
+					statement = connection.createStatement();
+					statement.executeQuery("select * from " + database.getTable());
+					
+					isEnable = true;
+				} catch (SQLException e) {
+					log.error("得到 Statement 对象出现异常！");
+					e.printStackTrace();
+				}
+			}else {
+				log.info("测试的数据库表不存在，请重试！");
+			}
+		}else {
+			log.info("数据库实体类不存在，请重试！");
+		}
+		return isEnable;
+	} 
+	
+	/**
+	 * 关闭数据库连接
+	 * @author 高青
+	 * 2014-04-15
+	 */
+	public static void closeConnection(Connection connection){
+		//首先判断当前连接是否处于工作状态，如果任在执行，则等待五秒，然后关闭
+		ConnectionController connectionController = getConnectionController(connection);
+		if (connectionController.isBusy()) {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				log.info("当前线程处于休眠状态时，发生异常！");
+				e.printStackTrace();
+			}
+		}
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			log.info("关闭数据库连接发生异常！");
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * 清空连接池中的链接
 	 * @author 高青
 	 * 2014-04-11
 	 */
-	
+	public static void clearConnectionPool(){
+		//判断当前的数据库连接池是否存在
+		if (poolConnections == null || poolConnections.size() == 0) {
+			log.info("当前连接池已经清空！");
+			return;
+		}
+		//判断当前连接池中的连接是否处于工作状态
+		for (ConnectionController connectionController : poolConnections) {
+			if (connectionController.isBusy()) {
+				//等待 5 秒，然后关闭当前
+				closeConnection(connectionController.getConnection());
+			}
+			//移除当前连接
+			poolConnections.removeElement(connectionController);
+		}
+		//置空连接池
+		poolConnections = null;
+	}
 	
 	/**
 	 * 连接池中的数据库连接管控内部类<br>
@@ -304,5 +400,4 @@ public class ConnectionPool {
 			this.isBusy = isBusy;
 		}
 	}
-
 }

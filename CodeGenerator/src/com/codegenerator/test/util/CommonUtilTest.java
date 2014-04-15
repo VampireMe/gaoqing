@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.codegenerator.entity.Database;
 import com.codegenerator.util.CommonUtil;
 
 /**
@@ -36,10 +37,25 @@ public class CommonUtilTest {
 	 */
 	@Test
 	public void testGetPropertiesValue() {
-		
+		String url = "localhost";
 		String value = CommonUtil.getPropertiesValue("mysql");
 		
+		String replace = value.replace("${url}", url);
+		
+		log.info(value);
+		log.info(replace);
+		
 		assertNotNull(value);
+	}
+	
+	@Test
+	public void testGetConnectionURL(){
+		//Database database = new Database("mysql", "localhost", "3306", "root", "root", "myDatabase", null);
+		Database database = new Database("sqlserver", "localhost", "3306", "root", "root", "myDatabase", null);
+		
+		String connectionURL = CommonUtil.getConnectionURL(database);
+		
+		log.info(connectionURL);
 	}
 
 }
