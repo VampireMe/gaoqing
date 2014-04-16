@@ -26,4 +26,25 @@
   </servlet-mapping>
   <!-- SpringMVC 配置  End-->
   
+  <!-- 配置定时恢复数据库连接池大小的任务调度器 -->
+ <context-param>
+    <param-name>quartz:config-file</param-name>
+    <param-value>/quartz.properties</param-value>
+  </context-param>
+  <context-param>
+    <param-name>quartz:shutdown-on-unload</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>quartz:wait-on-shutdown</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>quartz:start-on-load</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+  </listener>  
+  
 </web-app>

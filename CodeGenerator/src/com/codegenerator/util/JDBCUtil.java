@@ -4,6 +4,10 @@
 package com.codegenerator.util;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.codegenerator.entity.Database;
 
 /**
  * jdbc 公用类
@@ -16,7 +20,7 @@ public class JDBCUtil {
 	 * 构造方法
 	 * 2014-4-11
 	 */
-	private JDBCUtil() {
+	public JDBCUtil() {
 		
 	}
 	
@@ -30,11 +34,29 @@ public class JDBCUtil {
 	 * @param password 密码
 	 * @return connection 数据库链接对象
 	 */
-	public static Connection getConnection(String hostAddr, String port, String userName, String password){
+	public static Connection getConnection(Database database){
 		//初始化数据库链接对象
 		Connection connection = null;
 		
-		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(CommonUtil.getConnectionURL(database), database.getUser(), database.getPassword());
+			
+			int maxConnections = connection.getMetaData().getMaxConnections();
+			
+			System.out.println(maxConnections);
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}catch (ClassNotFoundException e) {
+			
+		}finally{
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return connection;
 	}
 

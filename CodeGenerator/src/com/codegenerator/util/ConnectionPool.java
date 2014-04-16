@@ -6,7 +6,6 @@ package com.codegenerator.util;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
@@ -35,9 +34,6 @@ public class ConnectionPool {
 	
 	/** 数据库连接池 */
 	private static Vector<ConnectionController> poolConnections;
-	
-	/** 数据库驱动 */
-	private static String databaseDriver;
 	
 	/** 数据库连接池对象 */
 	private static ConnectionPool connectionPool = null;
@@ -87,8 +83,74 @@ public class ConnectionPool {
 			return;
 		}
 		ConnectionController connectionController = getConnectionController(connection);
-		//设置当前的数据库连接对象为空
-		connectionController.setBusy(true);
+		//设置当前的数据库连接对象为空闲
+		connectionController.setBusy(false);
+	}
+	
+	/**
+	 * 回滚数据库连接池到最初的大小 
+	 * @author 高青
+	 * 2014-4-16
+	 * @return 空
+	 */
+	public static void backToOriginConnectionPool(){
+		//判断当前连接池是否存在
+		if (poolConnections == null || poolConnections.size() == 0) {
+			log.info("请初始数据库连接池！");
+			return;
+		}
+		//判断当前数据库连接池的大小，如果超过最佳容量，则恢复到最初容量大小
+		if (poolConnections.size() > minConnections) {
+			
+			//移除多余的空闲的数据库连接对象
+			int beyondConnections = poolConnections.size() - minConnections;
+			for (int i = 0; i < beyondConnections; i++) {
+				
+				ConnectionController freeConnectionController = getConnectionController();
+				
+				//如果没有空闲的数据连接管控对象，则等待五秒钟，再进行查找
+				while (freeConnectionController == null) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						log.info("线程休眠时，发生异常！");
+						e.printStackTrace();
+					}
+					freeConnectionController = getConnectionController();
+				}
+				
+				//如果仍然没有空闲的连接，则提示：没有空闲的连接，保持当前数据库连接池中的数量
+				if (freeConnectionController == null) {
+					log.info("没有空闲的连接，保持当前数据库连接池中的数量！");
+				}else {
+					//移除空闲的数据库连接
+					poolConnections.removeElement(freeConnectionController);
+				}
+			}
+		}else {
+			log.info("数据库连接池的大小，处于最佳容量状态！");
+		}
+	}
+
+	/**
+	 * 得到数据库连接池中的空闲连接管控对象
+	 * @author 高青
+	 * 2014-4-16
+	 * @return freeConnectionController 空闲的数据管控对象
+	 */
+	private static ConnectionController getConnectionController() {
+		//空闲的数据库连接管控对象
+		ConnectionController freeConnectionController = null;
+		
+		for (ConnectionController connectionController : poolConnections) {
+			if (!connectionController.isBusy()) {
+				freeConnectionController = connectionController;
+				
+				//找到空闲的管控对象后，就停止查找
+				break;
+			}
+		}
+		return freeConnectionController;
 	}
 
 	/**
@@ -154,6 +216,7 @@ public class ConnectionPool {
 		if (connection == null) {
 			log.info("当前数据库连接池中，没有空闲的连接，请稍后重试！");   			//--------------可以编写一个队列，进行排队获取
 		}
+		System.out.println(poolConnections.size());
 		return connection;
 	}
 
@@ -239,12 +302,17 @@ public class ConnectionPool {
 			
 			try {
 				driver = (Driver)Class.forName(CommonUtil.getPropertiesValue(driverName)).newInstance();
+				
+				//注册 JDBC 
+				DriverManager.registerDriver(driver);
 			} catch (InstantiationException e) {
 				log.error("实例化当前驱动的驱动器异常！");
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				log.error("传入的数据库驱动名称有误，请检查！");
 				e.printStackTrace();
+			}catch (SQLException e) {
+				log.info("注册 JDBC 驱动出现异常！");
 			}
 		} catch (ClassNotFoundException e) {
 			log.error("加载 " + database.getDatabaseType() + " 的数据库驱动，发生异常！");
@@ -259,10 +327,13 @@ public class ConnectionPool {
 			);
 			
 			//判断当前数据库的最大连接数和配置的数据库最大连接数的大小关系
-			if (connection.getMetaData().getMaxConnections() < maxConnections) {
-				//将配置的最大连接数自动调整到数据库的最大连接数
-				log.info("设置的数据库连接池的最大连接数超过了数据库的最大承载数，系统自动将其调整为数据库的最大承载数！");
-				maxConnections = connection.getMetaData().getMaxConnections();
+			int databaseMaxConnections = connection.getMetaData().getMaxConnections();
+			if (databaseMaxConnections > 0) {
+				if (databaseMaxConnections < maxConnections) {
+					//将配置的最大连接数自动调整到数据库的最大连接数
+					log.info("设置的数据库连接池的最大连接数超过了数据库的最大承载数，系统自动将其调整为数据库的最大承载数！");
+					maxConnections = connection.getMetaData().getMaxConnections();
+				}
 			}
 		} catch (SQLException e) {
 			log.error("连接 " + database.getDatabaseType() + " 的数据库时，发生异常！");
@@ -297,6 +368,7 @@ public class ConnectionPool {
 					statement = connection.createStatement();
 					statement.executeQuery("select * from " + database.getTable());
 					
+					//只要查询当前表的时候，没有出现异常，就表示数据库配置正确
 					isEnable = true;
 				} catch (SQLException e) {
 					log.error("得到 Statement 对象出现异常！");
