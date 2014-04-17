@@ -1,0 +1,158 @@
+/**
+* index.html 中的样式表
+* author: 高青
+* 2014-04-16
+*/
+
+/** ----------- 设置头部的样式 ----------- */
+#header{
+	width: 90%;
+	height: 75px;
+	margin: 10px auto 10px;
+	background-image: -moz-linear-gradient(top, #fbe7b6, #f7f0de);
+	background-image: -webkit-linear-gradient(top, #fbe7b6, #f7f0de);
+	background-image: -ms-linear-gradient(top, #fbe7b6, #f7f0de);
+	background-image: linear-gradient(top, #fbe7b6, #f7f0de);
+}
+
+#contentID{
+	position: absolute;
+	left: 30%;
+	width: 30%;
+	height: 50px;
+	margin: 10px auto 5px;
+	font-size: 40px;
+	font-famliy: Courier New;
+	text-align: center;
+	text-shadow: 2px 4px 3px #888888;
+	-webkit-box-reflect: below 1px -webkit-gradient(
+						linear, 0 0, 0 100%, 
+						from(transparent), 
+						color-stop(.5, transparent), to(rgba(3,3,3,.2)));
+	-moz-box-reflect: below 1px gradient(
+						linear, 0 0, 0 100%, 
+						from(transparent), 
+						color-stop(.5, transparent), to(rgba(3,3,3,.2)));
+	box-reflect: below 1px gradient(
+						linear, 0 0, 0 100%, 
+						from(transparent), 
+						color-stop(.5, transparent), to(rgba(3,3,3,.2)));
+	transform: perspective(1000px) rotateX(-10deg) rotateY(15deg);
+	-webkit-transform: perspective(1000px) rotateX(-10deg) rotateY(15deg);
+}
+
+/** ----------- 设置体部的样式 ----------- */
+#bodyOuter{
+	width: 90%;
+	height: 490px;
+	margin: 10px auto;
+	background-image: -moz-linear-gradient(left top, #fdeed8, #fbe7b6);
+}
+
+#database{
+	width: 90%;
+	height: 100px;
+	margin: 5px auto;
+	border: 1px solid #ce9a4b;
+	box-shadow: 2px 2px 3px #bbbfb5;
+}
+
+#databaseForm table{
+	border-spacing: 10px;
+}
+
+/** 将所有必填的项，做上标记 */
+[required]{
+	background-color: #fcefde;
+}
+
+[name]{
+	border: 2px solid #f2c68c;
+}
+
+[name]:focus{
+	box-shadow: 2px 2px 2px #7e6558,  -2px -2px 2px #7e6558,  -2px 2px 2px #7e6558,  2px -2px 2px #7e6558;
+}
+
+[type="button"]{
+	background-image: -moz-linear-gradient(left, #eee6e2, #7e6558);
+	font-size: 15px;
+	border: 1px solid #7e6558;
+	font-famliy: Courier New;
+	box-shadow: 2px 2px 1px #c1c7b8,  -2px -2px 1px #c1c7b8,  -2px 2px 1px #c1c7b8,  2px -2px 1px #c1c7b8;
+	border-radius:10px;
+}
+
+#infoOuter{
+	width: 90%;
+	height: 300px;
+	margin: 10px auto 5px;
+	border: 1px solid #ce9a4b;
+	box-shadow: 2px 2px 3px #bbbfb5;
+}
+
+#tableSection{
+	width: 140px;
+	height: 25px;
+	background-image: -moz-linear-gradient(top, #f1fddd, #b2ee49);
+	float: left;
+	cursor: pointer;
+	box-shadow: 2px 2px 2px #908374, 
+				-2px -2px 2px #908374, 
+				2px -2px 2px #908374, 
+				-2px 2px 2px #908374;
+	transition: box-shadow 2s ease-in-out 0.1s;
+	-moz-transition: box-shadow 2s ease-in-out 0.1s;
+	-webkit-transition: box-shadow 2s ease-in-out 0.1s;
+	-ms-transition: box-shadow 2s ease-in-out 0.1s;
+}
+
+#sqlSection{
+	width: 140px;
+	height: 25px;
+	float: left;
+	margin-left: 10px;
+	background-image: -moz-linear-gradient(top, #f1fddd, #b2ee49);
+	cursor: pointer;
+	box-shadow: 2px 2px 2px #908374, 
+				-2px -2px 2px #908374, 
+				2px -2px 2px #908374, 
+				-2px 2px 2px #908374;
+	transition: box-shadow 2s ease-in-out 0.1s;
+	-moz-transition: box-shadow 2s ease-in-out 0.1s;
+	-webkit-transition: box-shadow 2s ease-in-out 0.1s;
+	-ms-transition: box-shadow 2s ease-in-out 0.1s;
+}
+
+#tableData{
+	clear: left;
+	width: 100%;
+	height:280px;
+	background-color: #FBEAD5;
+	transform: none;
+	-webkit-transform: none;
+	
+	transition: display 5s ease-in-out 0.1s;
+	-moz-transition: display 5s ease-in-out 0.1s;
+	-webkit-transition: display 5s ease-in-out 0.1s; 
+}
+
+#sqlData{
+	clear: left;
+	width: 100%;
+	height:280px;
+	display: none;
+	background-color: #FBEAD5;
+	
+	transform: none;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	-webkit-transform: none;
+	
+ 	transition: display 5s ease-in-out 0.1s;
+	-moz-transition: display 5s ease-in-out 0.1s;
+	-webkit-transition: display 5s ease-in-out 0.1s; 
+}
+
+/** ----------- 设置底部的样式 ----------- */
+
