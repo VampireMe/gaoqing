@@ -10,9 +10,7 @@
 
 <!-- 引入外部样式 -->
 <link rel="stylesheet" href="${basePath }Resource/CSS/index.css" />
-
 </head>
-
 
 <body>
 	
@@ -25,49 +23,18 @@
 	<!-- 体部 Start -->
 	<div id = "bodyOuter">
 	
-		<fieldset id = "database">
-			<form id = "databaseForm">
-				<table>
-					<tr>
-						<td>数据库类型：</td>
-						<td>
-							<select name = "databaseType" id = "databaseType" required = "required" width = "100">
-								<option value = "oracle">oracle</option>
-								<option value = "mysql">mysql</option>
-								<option value = "sqlserver">sqlserver</option>
-							</select>
-						</td>
-						<td>数据库地址：</td>
-						<td><input name = "url" value = ""  placeholder = "数据库所在主机 IP"  required = "required"/></td>
-						<td>端口：</td>
-						<td><input name = "port" value = "" required = "required" pattern = "[0-9]*" maxlength = "5"/></td>
-						<td>数据库名称：</td>
-						<td><input name = "databaseName" value = "" required = "required"/></td>
-					</tr>
-					
-					<tr>
-						<td>用户名：</td>
-						<td><input name = "user" value = "" required = "required"/></td>
-						<td>密码：</td>
-						<td><input type = "password" name = "password" value = "" required = "required"/></td>
-						<td>表名：</td>
-						<td><input name = "table" value = "" placeholder = "数据库中存在的表"/></td>
-						<td ><input type = "button" name = "test" value = "测试连接数据库"/></td>
-						<td ><input type = "button" name = "connect" value = "连接数据库"/></td>
-					</tr>
-				</table>
-			</form>
-		</fieldset>
+	<%@include file="./Resource/JSP/database.jsp" %>
 		
 		<fieldset id = "infoOuter">
 			<div id = "tableSection">根据数据库表生成</div>
 			<div id = "sqlSection">根据 SQL 语句生成</div>
 			
-			<div id = "tableData">this is the table section</div>
-			<div id = "sqlData">this is the sql section</div>
+			<!-- 根据表格生成部分 -->
+			<%@include file="./Resource/JSP/tableData.jsp" %>
 			
+			<!-- 根据 SQL 生成部分 -->
+			<%@include file="./Resource/JSP/sqlData.jsp" %>
 		</fieldset>
-		
 	</div>
 	<!-- 体部 End -->
 	

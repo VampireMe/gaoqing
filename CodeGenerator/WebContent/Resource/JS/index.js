@@ -8,11 +8,13 @@ $(document).ready(function(){
 	
 	//根据表格的页签对象
 	var tableTab = $("#tableSection"),
-		tableShadow = getStyle(tableTab.get(0), "boxShadow");
+		tableShadow = getStyle(tableTab.get(0), "boxShadow"),
+		chromeTableShadow = window.getComputedStyle(tableTab.get(0), false)["boxShadow"];;
 	
 	//根据根据 SQL 的页签对象
 	var sqlTab = $("#sqlSection"),
-		sqlShadow = getStyle(sqlTab.get(0), "boxShadow");
+		sqlShadow = getStyle(sqlTab.get(0), "boxShadow"),
+		chromeSqlShadow = window.getComputedStyle(sqlTab.get(0), false)["boxShadow"];
 	
 	//添加其单击事件
 	tableTab.on("click", function(){
@@ -21,14 +23,39 @@ $(document).ready(function(){
 		$("#sqlData").hide();
 		$("#tableData").show();
 		tableTab.get(0).style.boxShadow = "none";
-		sqlTab.get(0).style.boxShadow = sqlShadow;
+		
+		//谷歌浏览器
+		if(window.navigator.userAgent.indexOf("Chrome") != -1){
+			sqlTab.get(0).style.boxShadow = chromeSqlShadow;
+		}
+		//火狐浏览器
+		if(window.navigator.userAgent.indexOf("Firefox") != -1){
+			sqlTab.get(0).style.boxShadow = sqlShadow;
+		}
+		//IE 浏览器
+		if(window.navigator.userAgent.indexOf("MSIE") != -1){
+			sqlTab.get(0).style.boxShadow = sqlShadow;
+		}
 	});
 	sqlTab.on("click", function(){
+		
 		//$("#tableData").get(0).style.transform = "perspective(1200px) rotateY(180deg)";
 		$("#tableData").hide();
 		$("#sqlData").show();	
 		sqlTab.get(0).style.boxShadow = "none";
-		tableTab.get(0).style.boxShadow = tableShadow;
+		
+		//谷歌浏览器
+		if(window.navigator.userAgent.indexOf("Chrome") != -1){
+			tableTab.get(0).style.boxShadow = chromeTableShadow;
+		}
+		//火狐浏览器
+		if(window.navigator.userAgent.indexOf("Firefox") != -1){
+			tableTab.get(0).style.boxShadow = tableShadow;
+		}
+		//IE 浏览器
+		if(window.navigator.userAgent.indexOf("MSIE") != -1){
+			tableTab.get(0).style.boxShadow = tableShadow;
+		}
 	});
 	
 	function transformDiv(obj){
@@ -53,9 +80,6 @@ $(document).ready(function(){
 		}else{
 			var computedStyles = window.getComputedStyle(obj, false);
 			style = computedStyles[attr];
-			
-			
-			console.info(computedStyles);
 		}
 		return style;
 	}
