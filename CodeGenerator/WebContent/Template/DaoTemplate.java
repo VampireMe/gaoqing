@@ -3,7 +3,7 @@
  */
 package ${package}.dao;
 
-import java.util.List;
+import java.util.List; 
 
 /**
  * ${module} 的 Dao 接口
