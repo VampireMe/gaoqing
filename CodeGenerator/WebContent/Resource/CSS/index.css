@@ -141,6 +141,12 @@ textarea{
 	-moz-transition: box-shadow 2s ease-in-out 0.1s;
 	-webkit-transition: box-shadow 2s ease-in-out 0.1s;
 	-ms-transition: box-shadow 2s ease-in-out 0.1s;
+	
+	/**旋转属性*/
+	perspective: 1000px;
+	transform-style: preserve-3d;	
+	-webkit-perspective: 1000px;
+	-webkit-transform-style: preserve-3d;	
 }
 
 /** 根据 sql 生成代码部分  */
@@ -164,6 +170,12 @@ textarea{
 	-moz-transition: box-shadow 2s ease-in-out 0.1s;
 	-webkit-transition: box-shadow 2s ease-in-out 0.1s;
 	-ms-transition: box-shadow 2s ease-in-out 0.1s;
+	
+	/**旋转属性*/
+	perspective: 1000px;
+	transform-style: preserve-3d;		
+	-webkit-perspective: 1000px;
+	-webkit-transform-style: preserve-3d;		
 }
 
 #tableData{
