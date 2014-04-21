@@ -51,7 +51,8 @@ public class CommonUtilTest {
 	@Test
 	public void testGetConnectionURL(){
 		//Database database = new Database("mysql", "localhost", "3306", "root", "root", "myDatabase", null);
-		Database database = new Database("sqlserver", "localhost", "3306", "root", "root", "myDatabase", null);
+		Database.init("sqlserver", "localhost", "3306", "root", "root", "myDatabase");
+		Database database =Database.getDatabase();
 		
 		String connectionURL = CommonUtil.getConnectionURL(database);
 		

@@ -1,7 +1,7 @@
 /**
  * 0.0.0.1
  */
-package ${package}.dao;
+package ${package}.service;
 
 import java.util.List; 
 
@@ -12,7 +12,7 @@ import com.codegenerator.entity.Database;
  * @author ${author}
  * ${date}
  */
-public interface ${module}Dao {
+public interface ${module}Service {
 	
 	/**
 	 * 新增 ${table} 表中的数据
@@ -29,7 +29,7 @@ public interface ${module}Dao {
 	 * @author ${author}
 	 * ${date}
 	 * @param id 主键 ID 
-	 * @param ${param} 实体类对象
+	 * @param ${param} 实例化对象数据
 	 * @return ${return} 增加成功标识（0：失败；1：成功）
 	 */
 	public int update${module}(String id, ${module} ${param});

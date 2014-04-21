@@ -40,3 +40,7 @@
 				</table>
 			</form>
 		</fieldset>
+		
+		<!-- 引入外部脚本 Start -->
+		<script type="text/javascript" src="${basePath }Resource/JS/database.js"></script>
+		<!-- 引入外部脚本 End -->

@@ -3,6 +3,7 @@
  */
 package com.codegenerator.entity;
 
+
 /**
  * 数据库对象
  * @author 高青
@@ -11,48 +12,72 @@ package com.codegenerator.entity;
 public class Database {
 	
 	/** 数据库类型 */
-	private String databaseType;
+	private static String databaseType;
 	
 	/** 连接地址 */
-	private String url;
+	private static String url;
 	
 	/** 端口 */
-	private String port;
+	private static String port;
 	
 	/** 用户 */
-	private String user;
+	private static String user;
 	
 	/** 密码 */
-	private String password;
+	private static String password;
 	
 	/** 数据库名称 */
-	private String databaseName;
+	private static String databaseName;
 	
 	/** 数据库表名 */
 	private String table;
+	
+	/** 数据库实例化对象 */
+	private static Database database;
 
 	/**
 	 * 构造方法
 	 * 2014-4-15
 	 */
-	public Database() {
+	private Database() {
 		
 	}
-
+	
 	/**
-	 * 构造方法
-	 * 2014-4-15
+	 * 得到数据库连接对象
+	 * @author 高青
+	 * 2014-04-21
 	 */
-	public Database(String databaseType, String url, String port, String user,
-			String password, String databaseName, String table) {
-		super();
-		this.databaseType = databaseType;
-		this.url = url;
-		this.port = port;
-		this.user = user;
-		this.password = password;
-		this.databaseName = databaseName;
-		this.table = table;
+	public static Database getDatabase(){
+		//判断数据库实例化对象是否初始化
+		if (database == null) {
+			database = new Database();
+		}
+		return database;
+	}
+	
+	/**
+	 * 初始化数据库
+	 * @author 高青
+	 * 2014-04-21
+	 * @param databaseType 数据库类型
+	 * @param url 数据库连接地址
+	 * @param port 数据库端口
+	 * @param user 用户名
+	 * @param password 密码
+	 * @param databaseName 数据库名称
+	 */
+	public static void init(String databaseType, String url, String port, String user,
+			String password, String databaseName){
+		if (database == null) {
+			database = new Database();
+		}
+		database.databaseType = databaseType;
+		database.url = url;
+		database.port = port;
+		database.user = user;
+		database.password = password;
+		database.databaseName = databaseName;
 	}
 
 	/**

@@ -10,6 +10,11 @@
 
 <!-- 引入外部样式 -->
 <link rel="stylesheet" href="${basePath }Resource/CSS/index.css" />
+
+<!-- 引入外部脚本 Start -->
+<script type="text/javascript" src="${basePath }Resource/JS/jquery-1.10.2.min.js"></script>
+<!-- 引入外部脚本 End -->
+
 </head>
 
 <body>
@@ -46,9 +51,7 @@
 	
 </body>
 
-<!-- 引入外部脚本 Start -->
-<script type="text/javascript" src="${basePath }Resource/JS/jquery-1.10.2.min.js"></script>
-<!-- 引入外部脚本 End -->
+
 
 <!-- 自定义脚本 Start -->
 <script type="text/javascript" src="${basePath }Resource/JS/index.js"></script>

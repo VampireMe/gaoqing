@@ -28,15 +28,8 @@ public class ConnectionPoolTest {
 	private static Logger log = Logger.getLogger(ConnectionPoolTest.class);
 	
 	//设置数据库属性
-	private Database database = new Database(
-			"mysql", 
-			"localhost", 
-			"3307", 
-			"root", 
-			"root", 
-			"world", 
-			"city"
-	);
+	
+	private Database database = Database.getDatabase();
 	
 	/** 数据库连接池 */
 	private ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
@@ -49,6 +42,7 @@ public class ConnectionPoolTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		Database.init("sqlserver", "localhost", "3306", "root", "root", "myDatabase");
 	}
 
 	/**
