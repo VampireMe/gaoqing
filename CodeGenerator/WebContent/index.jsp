@@ -15,6 +15,13 @@
 <script type="text/javascript" src="${basePath }Resource/JS/jquery-1.10.2.min.js"></script>
 <!-- 引入外部脚本 End -->
 
+<!-- 引入 easy ui Start -->
+<link type = "text/css" rel = "stylesheet" href = "${basePath }Resource/Easyui/themes/default/easyui.css"> 
+<link type = "text/css" rel = "stylesheet" href = "${basePath }Resource/Easyui/themes/icon.css"> 
+<script type = "text/javascript" src = "${basePath }Resource/Easyui/jquery.easyui.min.js" ></script>
+<script type = "text/javascript" src = "${basePath }Resource/Easyui/locale/easyui-lang-zh_CN.js"></script>
+<!-- 引入 easy ui End -->
+
 </head>
 
 <body>

@@ -10,8 +10,8 @@
 						<td>数据库类型:</td>
 						<td>
 							<select name = "databaseType" id = "databaseType" required = "required" width = "100">
-								<option value = "oracle">oracle</option>
 								<option value = "mysql">mysql</option>
+								<option value = "oracle">oracle</option>
 								<option value = "sqlserver">sqlserver</option>
 							</select>
 						</td>

@@ -8,23 +8,6 @@
 		<div id = "tables">
 			<ul>
 				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
-				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
-				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
-				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
-				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
-				
-				<li><input type = "checkbox" name = ""  />sdf</li>
-				<hr align="left" width="90%" color="#9ff52e" size="1"/>
 			</ul>
 		</div>
 	</section>

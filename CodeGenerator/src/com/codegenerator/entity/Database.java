@@ -12,22 +12,22 @@ package com.codegenerator.entity;
 public class Database {
 	
 	/** 数据库类型 */
-	private static String databaseType;
+	private String databaseType;
 	
 	/** 连接地址 */
-	private static String url;
+	private String url;
 	
 	/** 端口 */
-	private static String port;
+	private String port;
 	
 	/** 用户 */
-	private static String user;
+	private String user;
 	
 	/** 密码 */
-	private static String password;
+	private String password;
 	
 	/** 数据库名称 */
-	private static String databaseName;
+	private String databaseName;
 	
 	/** 数据库表名 */
 	private String table;
@@ -66,9 +66,10 @@ public class Database {
 	 * @param user 用户名
 	 * @param password 密码
 	 * @param databaseName 数据库名称
+	 * @param table 表名
 	 */
 	public static void init(String databaseType, String url, String port, String user,
-			String password, String databaseName){
+			String password, String databaseName, String table){
 		if (database == null) {
 			database = new Database();
 		}
@@ -78,6 +79,7 @@ public class Database {
 		database.user = user;
 		database.password = password;
 		database.databaseName = databaseName;
+		database.table = table;
 	}
 
 	/**

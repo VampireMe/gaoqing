@@ -48,6 +48,9 @@ public class BasePathFilter implements Filter {
 		
 		request.setAttribute("basePath", basePath);
 		
+		//设置字符串返回的数据类型
+		response.setCharacterEncoding("UTF-8");
+		
 		chain.doFilter(request, response);
 	}
 
