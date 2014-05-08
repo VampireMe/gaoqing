@@ -1,7 +1,7 @@
 /**
  * 0.0.0.1
  */
-package ${package}.dao.impl;
+package ${packageName}.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

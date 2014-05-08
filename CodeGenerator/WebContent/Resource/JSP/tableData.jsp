@@ -20,7 +20,7 @@
 						<tr>
 							<td>包名：</td>
 							<td>
-								<input type = "text" name = "packageName" value = "" placeholder = "完整包名"/>
+								<input type = "text" id = "packageNameID" name = "packageName" value = "" placeholder = "完整包名"/>
 							</td>
 							<td>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -30,7 +30,7 @@
 						<tr>
 							<td>类名：</td>
 							<td>
-								<input type = "text" name = "packageName" value = "" placeholder = ""/>
+								<input type = "text" id = "classNameID" name = "className" value = "" placeholder = ""/>
 							</td>
 							<td>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -41,7 +41,7 @@
 						<tr>
 							<td>作者：</td>
 							<td>
-								<input type = "text" name = "packageName" value = "" placeholder = ""/>
+								<input type = "text" id = "authorNameID" name = "authorName" value = "" placeholder = ""/>
 							</td>
 							<td>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -50,7 +50,7 @@
 						</tr>
 						<tr align="right">
 							<td colspan="3">
-								<input type = "button" name = "generateCode" 
+								<input type = "button" name = "generateCode" id = "generateCodeID"
 										value = "&nbsp;生&nbsp;成&nbsp;代&nbsp;码&nbsp;" />
 							</td>
 						</tr>
@@ -65,5 +65,9 @@
 			</div>
 		</div>
 	</section>
+	
+	<!-- 自定义脚本文件 Start -->
+	<script type="text/javascript" src = "${basePath }Resource/JS/tableData.js"></script>
+	<!-- 自定义脚本文件 End -->
 	
 </div>

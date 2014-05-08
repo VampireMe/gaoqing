@@ -6,6 +6,11 @@ package com.codegenerator.util;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 import com.codegenerator.entity.Database;
 
@@ -25,6 +30,28 @@ public class CommonUtil {
 	 */
 	private CommonUtil() {
 		
+	}
+	
+	/**
+	 * 
+	 * 得到 Spring.xml 文件中的制定 bean 的值
+	 * @author 高青
+	 * 2014-5-7
+	 * @param bean
+	 * @return object 制定 bean 的值
+	 */
+	public static Object getBeanObj(String bean){
+		Object object = null;
+		
+		//1、当 xml 文件存放在 WEB-INF 下时，使用此方法
+		BeanFactory beanFactory = new FileSystemXmlApplicationContext("WebContent/WEB-INF/codeGenerator-servlet.xml");
+		object = beanFactory.getBean(bean);
+		
+		//2、当 xml 文件存放在 classpath 下时，使用
+		/*ApplicationContext context = new ClassPathXmlApplicationContext("codeGenerator-servlet.xml");
+		object = context.getBean(bean);*/
+		
+		return object;
 	}
 	
 	/**

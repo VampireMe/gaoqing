@@ -1,7 +1,7 @@
 /**
  * 0.0.0.1
  */
-package ${package}.service.impl;
+package ${packageName}.service.impl;
 
 import java.util.List; 
 
@@ -20,42 +20,42 @@ import com.codegenerator.entity.Database;
 public class ${module}ServiceImpl implements ${module}Service{
 	
 	@Resource
-	private ${module}Dao ${moduleDao};
+	private ${module}Dao ${param}Dao;
 	
 	@Override
 	public int add${module}(${module} ${param}, Database database){
-		return this.${moduleDao}.add${module}(${param});
+		return this.${param}Dao.add${module}(${param});
 	}
 	
 	@Override
 	public int update${module}(String id, ${module} ${param}){
-		return this.${moduleDao}.update${module}(id);
+		return this.${param}Dao.update${module}(id);
 	}
 	
 	@Override
 	public int update${module}(${module} ${param}){
-		return this.${moduleDao}.update${module}(${param});
+		return this.${param}Dao.update${module}(${param});
 	}
 	
 	
 	@Override
 	public int delete(String id){
-		return this.${moduleDao}.delete(id);
+		return this.${param}Dao.delete(id);
 	}
 	
 	@Override
 	public int delete(${module} ${param}){
-		return this.${moduleDao}.delete(${param});
+		return this.${param}Dao.delete(${param});
 	}
 	
 	@Override
 	public List<${module}> select${module}List(String id){
-		return this.${moduleDao}.select${module}List(id);
+		return this.${param}Dao.select${module}List(id);
 	}
 	
 	@Override
 	public List<${module}> select${module}List(${module} ${param}){
-		return this.${moduleDao}.select${module}List(${param});
+		return this.${param}Dao.select${module}List(${param});
 	}
 
 }

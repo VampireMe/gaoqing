@@ -1,7 +1,7 @@
 /**
  * 0.0.0.1
  */
-package ${package}.dao;
+package ${packageName}.dao;
 
 import java.util.List; 
 
