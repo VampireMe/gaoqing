@@ -8,5 +8,6 @@
   <description>this is common test and projects collection place</description>
   <modules>
   	<module>ThreadPart</module>
+  	<module>CommonTest</module>
   </modules>
 </project>
