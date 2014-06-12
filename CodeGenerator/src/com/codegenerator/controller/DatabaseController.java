@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -122,7 +123,16 @@ public class DatabaseController{
 		//得到 Session 对象
 		HttpSession session = request.getSession();
 		session.setAttribute("database", database);
-				
+		session.setMaxInactiveInterval(60*60);
+		
+		//将数据库连接信息持久化到 cookie 中
+		String databaseInfoStr = database.getDatabaseType() + "_" + database.getUrl() + "_" + 
+				  database.getPort() + "_" +  database.getUser() + "_" + 
+				  database.getPassword() + "_" + database.getDatabaseName() + "_" +  database.getTable();
+		Cookie databaseInfo = new Cookie("database", databaseInfoStr);
+		databaseInfo.setMaxAge(60*60);
+		response.addCookie(databaseInfo);
+		
 		return jonArray.toString();
 	}
 	

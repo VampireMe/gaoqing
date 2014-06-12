@@ -42,7 +42,7 @@ public class ConnectionPoolTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Database.init("sqlserver", "localhost", "3306", "root", "root", "myDatabase");
+		Database.init("sqlserver", "localhost", "3306", "root", "root", "myDatabase", null);
 	}
 
 	/**
