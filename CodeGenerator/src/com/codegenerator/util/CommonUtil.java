@@ -3,6 +3,7 @@
  */
 package com.codegenerator.util;
 
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -23,6 +24,9 @@ public class CommonUtil {
 	
 	/** 日志对象 */
 	private static Logger log = Logger.getLogger(CommonUtil.class);
+	
+	/** common.properties 配置文件对象 */
+	private static ResourceBundle resourceBundle = ResourceBundle.getBundle("common");
 
 	/**
 	 * 构造方法
@@ -30,6 +34,26 @@ public class CommonUtil {
 	 */
 	private CommonUtil() {
 		
+	}
+	
+	
+	/**
+	 * 根据 key 的值，得到指定的 properties 文件中的 值
+	 * @author 高青
+	 * 2014-6-19
+	 * @param key 参数 key 
+	 * @return value key 对应的值
+	 */
+	public static String getPropertiesValeByKey(String key){
+		String value = "";
+		
+		try {
+			value = resourceBundle.getString(key);
+		} catch (Exception e) {
+			log.info("得到当前 " + key + " 的 value 时，发生异常！");
+			e.printStackTrace();
+		}
+		return value;
 	}
 	
 	/**

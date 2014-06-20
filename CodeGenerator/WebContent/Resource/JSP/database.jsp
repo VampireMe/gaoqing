@@ -33,8 +33,60 @@
 					<tr>
 						<td>表名:</td>
 						<td><input name = "table" value = "${database.table }" placeholder = "数据库中存在的表"/></td>
-						<td></td>
-						<td align="center" colspan="2"><input type = "button" name = "test" value = "测试连接数据库"/></td>
+						<td>使用过的数据库连接信息：</td>
+						<td>
+							<input id = "existDatabaseID" name = "existDatabase" value = "" />
+							<input type = "hidden" id = "databaseTypeID" name = "databaseType" value = "" />
+							<input type = "hidden" id = "databaseNameID" name = "databaseName" value = "" />
+							
+							<script type="text/javascript">
+								$(document).ready(function(){
+									//得到当前访问链接地址的主地址
+									var basePath = window.location.protocol + "//" + window.location.host + "/CodeGenerator";
+									
+									/*
+									 * 设置 使用过的数据库连接信息 为下拉框组件
+									 * （1）使用 ajax 的方式，当选中后，动态的填充选中后的数据库连接信息
+									 */
+									$("#existDatabaseID").combotree({
+										url: basePath + '/database/getSelected',
+										cascadeCheck:false,
+										animate: true,
+										checkbox: true,
+										onlyLeafCheck:true,
+										lines:true,
+										multiple: false,
+										onSelect: function(node){
+											//当点击后，将当前的数据库类型和数据库名称，传到后台，查询其值，然后返回数据
+											var tree = $(this).tree;
+											
+											//将当前选中的值，赋到隐藏项中
+											$("#databaseNameID").val(node.id);
+											
+											//判断当前选择的是否是叶子节点
+											var parent = tree("getParent", node.target);
+											//设置数据库类型
+											$("#databaseTypeID").val(parent.id);
+											
+											/*
+											* 选中之后，将选中的数据作为参数，传到后台，根据参数得到存储的数据库连接信息，
+											* 并存放到 request 、session 、cookie 中
+											*/
+											
+											//window.location.href = basePath + '/index?databaseType=' + $("#databaseTypeID").val() + "&databaseName=" + $("#databaseNameID").val();
+											window.location.href = basePath + '/database/getLocalInfo?databaseType=' + $("#databaseTypeID").val() + "&databaseName=" + $("#databaseNameID").val();
+											
+											/* $.get({
+												url: basePath + '/database/getLocalInfo?databaseType=' + $("#databaseTypeID").val() + "&databaseName=" + $("#databaseNameID").val(),
+											}); */
+											
+										}
+									});
+									
+								});
+							</script>
+						</td>
+						<td align="center"><input type = "button" name = "test" value = "测试连接数据库"/></td>
 						<td align="right"><input type = "button" name = "connect" value = "连接数据库"/></td>
 					</tr>
 				</table>
