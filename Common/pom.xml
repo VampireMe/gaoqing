@@ -9,5 +9,6 @@
   <modules>
   	<module>ThreadPart</module>
   	<module>CommonTest</module>
+  	<module>PersonDevelopModule</module>
   </modules>
 </project>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>表格样式模板</title>
+
+<style type="text/css">
+	/** 背景颜色 */
+	body{
+		font-family: 'Courier New', Courier, monospace;
+	}
+	
+	/** 表格的样式 */
+	.table{
+		width: 600px;
+		margin: 20px auto;
+		border: solid #9C9C9C 1px;
+		border-spacing: 0px;
+		border-radius: 8px;
+		padding: 0px;
+		box-shadow: 
+			1px 1px 2px 1px #CFCFCF, 
+			-1px 1px 2px 1px #CFCFCF, 
+			1px -1px 2px 1px #CFCFCF, 
+			-1px -1px 2px 1px #CFCFCF;
+	}
+	
+	/** 表头行的样式 */
+	table thead tr:first-child{
+		border-radius: 2px;
+		box-shadow: 
+			1px 1px 2px 0px #92c8a5, 
+			-1px 1px 2px 0px #92c8a5, 
+			1px -1px 2px 0px #92c8a5, 
+			-1px -1px 2px 0px #92c8a5;
+		background: -moz-linear-gradient(top,rgba(124, 205, 124,0.5), rgba( 193, 255, 193, 0.5));
+		background: -webkit-linear-gradient(top,rgba(124, 205, 124,0.5), rgba( 193, 255, 193, 0.5));
+		background: -o-linear-gradient(top,rgba(124, 205, 124,0.5), rgba( 193, 255, 193, 0.5));
+		background: linear-gradient(top,rgba(124, 205, 124,0.5), rgba( 193, 255, 193, 0.5));
+	}
+	
+	/** 除去第一列，其他的列都设置左边框 */
+	table thead tr th[class='marker']{
+		border-left: 1px #228B22 solid;
+	}
+	
+	/** 设置每行的样式 */
+	table thead tr th{
+		padding: 6px;
+	}
+	
+	/** 设置表头的样式 */
+	table tbody tr td{
+		padding: 6px;
+		border-top: 1px solid #CFCFCF;
+		border-left: 1px solid #CFCFCF;
+	}
+	
+	/** 每一行的第一个元素，没有左边框 */
+	table tr td:first-child{
+		border-left: none;
+	}
+	
+	/** 各行换色 */
+	table tbody tr:nth-child(even){
+		/**background: rgba(240, 255, 240, 0.5);*/
+		  background: -moz-linear-gradient(left top, rgba(193, 255, 193, 0.7), rgba(240, 255, 240,0.4));
+		  background: -webkit-linear-gradient(left top, rgba(193, 255, 193, 0.7), rgba(240, 255, 240,0.4));
+		  background: -o-linear-gradient(left top, rgba(193, 255, 193, 0.7), rgba(240, 255, 240,0.4));
+		  background: linear-gradient(left top, rgba(193, 255, 193, 0.7), rgba(240, 255, 240,0.4));
+	}
+	
+	/** 设置鼠标悬停效果 */
+	table tbody tr:hover{
+		/**background: rgba(245, 222, 179, 0.5); */
+		background: #f1c1b1;
+			
+		/** 设置样式过渡的效果 */
+		transition: all 0.5s ease-in-out 0.0s;
+	}
+	
+</style>
+
+</head>
+
+
+ <body>
+    <table class="table">  
+	    <thead>  
+		    <tr>  
+			    <th>#</th>  
+			    <th class = "marker">IMDB Top 10</th> 
+			    <th class = "marker">Name</th> 
+			    <th class = "marker">Year</th>  
+		    </tr>   
+	    </thead>  
+	    
+		<tbody>
+		    <tr>  
+			    <td>1</td>  
+			    <td>The Shawshank</td>  
+			    <td>gaoqing</td>
+			    <td>1994</td>  
+		    </tr>  
+		    <tr>  
+			    <td>2</td>  
+			    <td>The Godfather</td>  
+			    <td>liming</td>
+			    <td>1972</td>  
+		    </tr>  
+		    <tr>  
+			    <td>3</td>  
+			    <td>The Godfather</td>  
+			    <td>wangpeng</td>
+			    <td>1974</td>  
+		    </tr>  
+		    <tr>  
+			    <td>4</td>  
+			    <td>The Good, the</td>  
+			    <td>shiming</td>
+			    <td>1966</td>  
+		    </tr>  
+		    <tr>  
+			    <td>5</td>  
+			    <td>Pulp Fiction</td>  
+			    <td>jingyuan</td>
+			    <td>1994</td>  
+		    </tr>  
+		    <tr>  
+			    <td>6</td>  
+			    <td>12 Angry Men</td>  
+			    <td>shenming</td>
+			    <td>1957</td>  
+		    </tr>  
+		</tbody>
+   </table>  
+ </body>
+</html>

@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.common</groupId>
+    <artifactId>Common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>PersonDevelopModule</artifactId>
+  <packaging>war</packaging>
+  <name>PersonDevelopModule</name>
+  <description>this is the PersonDevelopModule!</description>
+  
+  <!-- 依赖的 jar 包 Start -->
+  <dependencies>
+  	<dependency>
+  		<artifactId>jdom2</artifactId>
+  		<groupId>org.jdom</groupId>
+  		<version>2.0.5</version>
+  	</dependency>
+		
+	<dependency>
+	  <groupId>log4j</groupId>
+	  <artifactId>log4j</artifactId>
+	  <version>1.2.17</version>
+	</dependency>
+  	
+  	
+  </dependencies>
+  <!-- 依赖的 jar 包 End -->
+  
+</project>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>后台框架</title>
+
+<style type="text/css" media="screen">
+	#outer{
+		float: left;
+		width: 1200px;
+		height: 600px;
+	}
+	
+	#left{
+		float: left;
+		display: inline;
+		width: 200px;
+		height: 500px;
+		margin: 20px 0px;
+	}
+	
+	#right{
+		border-left: 2px #1baf0e solid;
+		float: left;
+		display: inline;
+		width: 800px;
+		height: 500px;
+		margin: 0px 10px;
+	}
+	
+	#left a {
+		background: -moz-linear-gradient(top, #0dbab8, #cafcdb);
+		display: block;
+		text-decoration: none;
+		padding: 10px 10px 10px 10px;
+		outline: none;
+		letter-spacing: 1px;
+		font-size: 20px;
+		border-radius: 3px;
+		border-top: 1px #EEE9E9 solid;
+		cursor: pointer;
+	}
+	
+	#left a:first-child{
+		border-top: none;
+	}
+	
+	#left a:hover {
+		box-shadow: 
+			3px 3px 3px 3px #76987b, 
+			3px -3px 3px 3px #76987b, 	
+			-3px -3px 3px 3px  #76987b;
+		height: 25px;
+	}
+	
+	/** iframe 的样式 */
+	#iframeID{
+		frameborder: 0;
+		height:inherit;
+		width: 800px;
+		scrolling: auto;
+	}
+	
+</style>
+
+<script type="text/javascript" charset="utf-8" src = "js/jquery-1.10.2.min.js"></script>
+
+</head>
+
+
+<body>
+	
+	<div id="outer">
+		
+	  <div id="left">
+		<a id = "one" class="icon icon-data">赛程</a>
+		<!-- <hr width = 250 color = "#ECFDFE" size = "1" /> -->
+		<a id = "two" class="icon icon-data">积分榜</a>
+		<a id = "three" class="icon icon-data">表格样式</a>
+		<a id = "four" class="icon icon-data">时间转变</a>
+		<a id = "five" class="icon icon-data">职能手机</a>
+	  </div>
+	  
+	  <div id="right">
+		<iframe src = "" id = "iframeID" frameborder="0"></iframe>
+	  </div>
+	</div>
+	
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			
+			function bindEvent(bindComponet, bindURL){
+				$("#" + bindComponet).on("click", function(){
+					$("#iframeID").attr("src", bindURL);
+				});
+			}
+			
+			bindEvent("one", "tableStyle_aquamarine.html");
+			bindEvent("two", "tableStyle_green.html");
+			bindEvent("three", "tableStyle_lightSkyBlue.html");
+			bindEvent("four", "tableStyle_aquamarine.html");
+			bindEvent("five", "tableStyle_green.html");
+			
+		});
+	</script>
+	
+</body>
+</html>
