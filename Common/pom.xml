@@ -11,4 +11,23 @@
   	<module>CommonTest</module>
   	<module>PersonDevelopModule</module>
   </modules>
+  
+  	<!-- 配置 nexus Start -->
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<name>Team Nexus Repository</name>
+			<url>http://localhost:8081/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nexus</id>
+			<name>Team Nexus Repository</name>
+			<url>http://localhost:8081/nexus/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<!-- 配置 nexus End -->
+  
 </project>
