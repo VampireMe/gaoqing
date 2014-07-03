@@ -7,12 +7,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -24,13 +27,42 @@ import org.jdom2.output.XMLOutputter;
 public class XMLUtils {
 	
 	/** 日志对象 */
-	//private static Logger log = Logger.getLogger(XMLUtils.class);
+	private static Logger log = Logger.getLogger(XMLUtils.class);
 
 	/**
 	 * 构造方法
 	 */
 	public XMLUtils() {
 		
+	}
+	
+	/**
+	 * 解析 XML 文件
+	 * @author gaoqing
+	 * 2014-7-2
+	 * @param 
+	 * @return root 根元素对象
+	 */
+	public static Element analysisXML(InputStream in){
+		
+		//解析后的值
+		Element root = null;
+		
+		//得到 SAX驱动
+		SAXBuilder saxBuilder = new SAXBuilder();
+		try {
+			Document document = saxBuilder.build(in);
+			
+			//得到 root 元素
+			root = document.getRootElement();
+		} catch (JDOMException e) {
+			log.info("在得到 Document 对象时，发生异常！");
+			e.printStackTrace();
+		} catch (IOException e) {
+			log.info("文件输入流，输入时发生异常！");
+			e.printStackTrace();
+		}
+		return root;
 	}
 	
 	/**
@@ -140,16 +172,16 @@ public class XMLUtils {
 			//如果执行到此处，为发生异常，则表示执行成功
 			isSuccess = true;
 		} catch (FileNotFoundException e) {
-			//log.info("文件输出流输出到执行的文件，发生异常！");
+			log.info("文件输出流输出到执行的文件，发生异常！");
 			e.printStackTrace();
 		}catch (IOException e) {
-			//log.info("将 XML 文件写出到制定的文件中，发生异常！");
+			log.info("将 XML 文件写出到制定的文件中，发生异常！");
 			e.printStackTrace();
 		}finally{
 			try {
 				fos.close();
 			} catch (IOException e) {
-				//log.info("关闭文件输出流，发生异常！");
+				log.info("关闭文件输出流，发生异常！");
 				e.printStackTrace();
 			}
 		}
