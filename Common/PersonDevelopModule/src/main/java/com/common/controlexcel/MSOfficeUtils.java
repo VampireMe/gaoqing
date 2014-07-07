@@ -4,6 +4,7 @@
 package com.common.controlexcel;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -46,14 +49,108 @@ public class MSOfficeUtils {
 	 * @param 
 	 * @return valueList 解析后的结果集（其中内部的 List 对象，存放的是每一行的数据）
 	 */
-	public static List<List<Object>> readOffice4Excel(){
+	public static List<List<Object>> readOffice4Excel(String sheetName, String baseFolder, String fileName){
 		//初始化结果集
 		List<List<Object>> valueList = new ArrayList<List<Object>>();
 		
+		/*
+		 * 1、得到 excel 文件对象的 Workbook 
+		 * 2、根据 workbook ，得到其中，相应的值
+		 */
 		
+		//1、得到 excel 文件对象的 Workbook 
+		FileInputStream is;
+		try {
+			is = new FileInputStream(new File(baseFolder + fileName));
+			POIFSFileSystem fs = new POIFSFileSystem(is);
+			Workbook workbook = new HSSFWorkbook(fs);
+			
+			//2、根据 workbook ，得到其中，相应的值
+			Sheet sheet = null;
+			
+			//如果传递的页签名称为空，则默认取第一个页签
+			if (StringUtils.isBlank(sheetName)) {
+				sheet = workbook.getSheetAt(0);
+			}else {
+				sheet = workbook.getSheet(sheetName);
+			}
+			
+			//得到行数据
+			int lastRowNum = sheet.getLastRowNum();
+			
+			for (int i = 0; i < lastRowNum; i++) {
+				Row row = sheet.getRow(i + 1);
+				
+				//初始化单元格数据集
+				List<Object> cellList = new ArrayList<Object>();
+				
+				//得到当前行的列数
+				short lastCellNum = row.getLastCellNum();
+				for (int j = 0; j < lastCellNum; j++) {
+					Cell cell = row.getCell(j);
+					
+					Object cellValue = getCellValue(cell);
+					
+					//添加到单元格集中
+					cellList.add(cellValue);
+				}
+				//将当前行的数据，添加到所有行的集合中
+				valueList.add(cellList);
+			}
+		} catch (FileNotFoundException e) {
+			log.info("要解析的文件不存在！");
+			e.printStackTrace();
+		}catch (IOException e) {
+			log.info("得到制定的 io 流时，发生异常！");
+			e.printStackTrace();
+		}
 		return valueList;
 	}
-	
+
+	/**
+	 * 得到当前列的值
+	 * @author gaoqing
+	 * 2014-7-7
+	 * @param cell 单元格对象
+	 * @return cellValue 当前单元格中的值
+	 */
+	private static Object getCellValue(Cell cell) {
+		//初始化单元格的值
+		Object cellValue = null;
+		
+		/*
+		 * 1、得到当前单元格的数据类型
+		 * 2、使用 switch 动态判断数据类型，并返回相应的值
+		 */
+		
+		//1、得到当前单元格的数据类型
+		int cellType = cell.getCellType();
+		
+		switch (cellType) {
+		case Cell.CELL_TYPE_NUMERIC:
+			cellValue = cell.getNumericCellValue();
+			break;
+		case Cell.CELL_TYPE_STRING:
+			cellValue = cell.getStringCellValue();
+			break;
+		case Cell.CELL_TYPE_FORMULA:
+			cellValue = cell.getCellFormula();
+			break;
+		case Cell.CELL_TYPE_BOOLEAN:
+			cellValue = cell.getBooleanCellValue();
+			break;
+		case Cell.CELL_TYPE_ERROR:
+			cellValue = cell.getErrorCellValue();
+			break;
+		case Cell.CELL_TYPE_BLANK:
+			cellValue = "";
+			break;
+		default:
+			break;
+		}
+		return cellValue;
+	}
+
 	/**
 	 * 生成 Office 办公套件下的 Excel 文件<br/>
 	 * @author gaoqing
@@ -169,18 +266,8 @@ public class MSOfficeUtils {
 						if (value instanceof List) {
 							setCellValue(valueCell, ((List<Object>)dataList.get(i)).get(j));
 						}else {
-							//是 T 实体类对象
-							
-							/*
-							 * 1、使用 javabean 的方式，得到当前实体类的所有属性
-							 * 2、在默认情况下，当前类的所有属性值，都作为列的值，保存到单元格中
-							 * 3、如果，需要忽略某个字段，在后面的可变参数中，列出所有忽略的属性名
-							 * 4、原则上，表头的名称要和当前对象中属性顺序是一致的（包括忽略后的）
-							 */
-							
-							
+							log.info("当前传入的值的类型不匹配，请重试！");
 						}
-						
 					}
 				}
 				

@@ -13,24 +13,6 @@
 	<name>PersonDevelopModule</name>
 	<description>this is the PersonDevelopModule!</description>
 
-	<!-- 配置 nexus Start -->
-	<repositories>
-		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-	
-	<pluginRepositories>
-		<pluginRepository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
-	<!-- 配置 nexus End -->
-
 	<!-- 依赖的 jar 包 Start -->
 	<dependencies>
 		<dependency>
@@ -42,17 +24,13 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.3.2</version>
 		</dependency>
 
-
-		
 		<dependency>
 		  <groupId>javax.servlet</groupId>
 		  <artifactId>javax.servlet-api</artifactId>
