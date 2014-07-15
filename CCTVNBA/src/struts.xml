@@ -10,7 +10,7 @@
     <constant name="struts.devMode" value="true" />
     <!-- 开发模式配置   End -->
 
-    <package name="default" namespace="/" extends="struts-default, json-default">
+    <package name="default" namespace="/" extends="struts-default,json-default">
 
         <default-action-ref name="index" />
 		
